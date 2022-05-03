@@ -6,7 +6,9 @@ using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
 using Tenpai.Views;
@@ -35,7 +37,8 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>();
         public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>();
         public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile14 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>();
+        private bool sortflag = false;
 
         public MainWindowViewModel()
         {
@@ -52,6 +55,212 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+            Tile0.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile1.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile2.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile3.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile4.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile5.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile6.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile7.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile8.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile9.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile10.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile11.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile12.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            Tile13.Subscribe(_ =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (IsArrangingTiles.Value)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+            IsArrangingTiles.Subscribe(flag =>
+            {
+                if (sortflag)
+                    return;
+                sortflag = true;
+                if (flag)
+                    ArrangeTiles();
+                sortflag = false;
+            })
+            .AddTo(_disposables);
+        }
+
+        private void ArrangeTiles()
+        {
+            var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value }.ToList();
+            tiles = tiles.Where(x => x != null).ToList();
+            tiles.Sort();
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                var tile = tiles[i];
+                switch (i)
+                {
+                    case 0:
+                        Tile0.Value = tile;
+                        break;
+                    case 1:
+                        Tile1.Value = tile;
+                        break;
+                    case 2:
+                        Tile2.Value = tile;
+                        break;
+                    case 3:
+                        Tile3.Value = tile;
+                        break;
+                    case 4:
+                        Tile4.Value = tile;
+                        break;
+                    case 5:
+                        Tile5.Value = tile;
+                        break;
+                    case 6:
+                        Tile6.Value = tile;
+                        break;
+                    case 7:
+                        Tile7.Value = tile;
+                        break;
+                    case 8:
+                        Tile8.Value = tile;
+                        break;
+                    case 9:
+                        Tile9.Value = tile;
+                        break;
+                    case 10:
+                        Tile10.Value = tile;
+                        break;
+                    case 11:
+                        Tile11.Value = tile;
+                        break;
+                    case 12:
+                        Tile12.Value = tile;
+                        break;
+                    case 13:
+                        Tile13.Value = tile;
+                        break;
+                }
+            }
         }
 
         public ReactiveCommand<TilePlaceholder> SelectCommand { get; } = new ReactiveCommand<TilePlaceholder>();

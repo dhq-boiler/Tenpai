@@ -14,6 +14,8 @@ namespace Tenpai.Models.Tiles
     {
         private int _Rand;
 
+        internal Guid _Guid = Guid.NewGuid();
+
         public bool IsLocked { get; private set; }
 
         public void Lock()
@@ -228,7 +230,10 @@ namespace Tenpai.Models.Tiles
         {
             if (Code > other.Code) return 1;
             else if (Code < other.Code) return -1;
-            else return 0;
+            else
+            {
+                return _Guid.CompareTo(other._Guid);
+            }
         }
 
         public override bool Equals(object obj)

@@ -11,6 +11,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <DockPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <CheckBox Content="自動理牌" IsChecked="{Binding IsArrangingTiles.Value}" />
+        </DockPanel>
         <StackPanel Orientation="Horizontal">
             <views:TilePlaceholder TileType="{Binding Tile0.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
             <views:TilePlaceholder TileType="{Binding Tile1.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
