@@ -21,21 +21,21 @@ namespace Tenpai.ViewModels
         [Dependency]
         public IDialogService dialogService { get; set; }
 
-        public ReactivePropertySlim<Tile> Tile0 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile1 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile2 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile3 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile4 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile5 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile6 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile7 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile8 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile9 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile10 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile11 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile12 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile13 { get; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile14 { get; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile0 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile1 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile2 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile3 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile4 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile5 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile6 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile7 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile8 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile9 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile10 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile14 { get; set; } = new ReactivePropertySlim<Tile>();
 
         public MainWindowViewModel()
         {
@@ -48,7 +48,7 @@ namespace Tenpai.ViewModels
                 });
                 if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
                 {
-                    tp.TileType = dialogResult.Parameters.GetValue<Tile>("TileType").Display;
+                    tp.TileType = dialogResult.Parameters.GetValue<Tile>("TileType");
                 }
             })
             .AddTo(_disposables);

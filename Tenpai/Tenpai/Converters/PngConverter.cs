@@ -11,7 +11,7 @@ namespace Tenpai.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == string.Empty)
+            if (value == string.Empty || value is null)
                 return DependencyProperty.UnsetValue;
             var tile = value as Tile;
             if (tile is null)

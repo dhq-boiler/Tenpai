@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Tenpai.Models.Tiles;
 
 namespace Tenpai.Views
 {
@@ -26,7 +27,7 @@ namespace Tenpai.Views
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty TileTypeProperty = DependencyProperty.Register("TileType", typeof(string), typeof(TilePlaceholder), new PropertyMetadata(new PropertyChangedCallback((sender, args) =>
+        public static readonly DependencyProperty TileTypeProperty = DependencyProperty.Register("TileType", typeof(Tile), typeof(TilePlaceholder), new PropertyMetadata(new PropertyChangedCallback((sender, args) =>
         {
             var uc = (TilePlaceholder)sender;
             if (args.NewValue as string != string.Empty)
@@ -39,9 +40,9 @@ namespace Tenpai.Views
             }
         })));
 
-        public string TileType
+        public Tile TileType
         {
-            get { return (string)GetValue(TileTypeProperty); }
+            get { return (Tile)GetValue(TileTypeProperty); }
             set { SetValue(TileTypeProperty, value); }
         }
 

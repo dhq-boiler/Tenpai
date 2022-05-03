@@ -12,20 +12,20 @@
         Title="MainWindow" Height="450" Width="800">
     <DockPanel>
         <StackPanel Orientation="Horizontal">
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
-            <views:TilePlaceholder TileType="" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile0.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile1.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile2.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile3.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile4.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile5.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile6.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile7.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile8.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile9.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile10.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile11.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile12.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
+            <views:TilePlaceholder TileType="{Binding Tile13.Value, Mode=TwoWay}" SelectCommand="{Binding SelectCommand}" />
         </StackPanel>
     </DockPanel>
 </Window>

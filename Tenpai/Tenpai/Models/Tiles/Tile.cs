@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tenpai.Converters;
 
 #pragma warning disable 659
 namespace Tenpai.Models.Tiles
 {
+    [TypeConverter(typeof(TileTypeConverter))]
     public abstract class Tile : IComparable<Tile>
     {
         private int _Rand;
@@ -34,7 +37,7 @@ namespace Tenpai.Models.Tiles
 
         public override string ToString()
         {
-            return Display + ((this is IRedSuitedTile) ? "r" : string.Empty);
+            return Display;
         }
 
         public abstract bool IsSameType(Tile other);
