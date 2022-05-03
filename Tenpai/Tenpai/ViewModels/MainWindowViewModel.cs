@@ -57,154 +57,89 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             Tile0.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile1.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile2.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile3.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile4.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile5.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile6.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile7.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile8.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile9.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile10.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile11.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile12.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             Tile13.Subscribe(_ =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (IsArrangingTiles.Value)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
             IsArrangingTiles.Subscribe(flag =>
             {
-                if (sortflag)
-                    return;
-                sortflag = true;
-                if (flag)
-                    ArrangeTiles();
-                sortflag = false;
+                SortIf();
             })
             .AddTo(_disposables);
+        }
+
+        private void SortIf()
+        {
+            if (sortflag)
+                return;
+            sortflag = true;
+            if (IsArrangingTiles.Value)
+                ArrangeTiles();
+            sortflag = false;
         }
 
         private void ArrangeTiles()
