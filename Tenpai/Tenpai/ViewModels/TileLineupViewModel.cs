@@ -3,6 +3,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Reactive.Disposables;
+using Tenpai.Models.Tiles;
 
 namespace Tenpai.ViewModels
 {
@@ -56,259 +57,259 @@ namespace Tenpai.ViewModels
             m1Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m1");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_1>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m2Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m2");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_2>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m3Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m3");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_3>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m4Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m4");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_4>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m5Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m5");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_5>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m5rCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m5r");
+                dialogResult.Parameters.Add("TileType", Tile.CreateRedInstance<Character_5>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m6Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m6");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_6>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m7Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m7");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_7>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m8Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m8");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_8>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             m9Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "m9");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Character_9>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s1Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s1");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_1>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s2Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s2");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_2>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s3Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s3");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_3>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s4Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s4");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_4>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s5Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s5");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_5>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s5rCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s5r");
+                dialogResult.Parameters.Add("TileType", Tile.CreateRedInstance<Bamboo_5>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s6Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s6");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_6>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s7Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s7");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_7>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s8Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s8");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_8>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             s9Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "s9");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Bamboo_9>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p1Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p1");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_1>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p2Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p2");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_2>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p3Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p3");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_3>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p4Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p4");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_4>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p5Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p5");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_5>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p5rCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p5r");
+                dialogResult.Parameters.Add("TileType", Tile.CreateRedInstance<Dot_5>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p6Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p6");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_6>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p7Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p7");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_7>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p8Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p8");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_8>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             p9Command.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "p9");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dot_9>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             EastCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "東");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<East>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             SouthCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "南");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<South>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             WestCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "西");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<West>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             NorthCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "北");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<North>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             WhiteCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "白");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<White>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             GreenCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "發");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Green>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
             RedCommand.Subscribe(() =>
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
-                dialogResult.Parameters.Add("TileType", "中");
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Red>());
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);

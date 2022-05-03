@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using Tenpai.Models.Tiles;
 
 namespace Tenpai.Converters
 {
@@ -13,7 +15,12 @@ namespace Tenpai.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return new Uri(new Uri(Directory.GetCurrentDirectory() + "/net5.0-windows"), $"Assets/{value.ToString()}.png");
+            if (value == string.Empty)
+                return DependencyProperty.UnsetValue;
+            var tile = value as Tile;
+            if (tile is null)
+                tile = Tile.CreateInstance(value as string);
+            return new Uri(new Uri(Directory.GetCurrentDirectory() + "/net5.0-windows"), $"Assets/{tile.Display}.png");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
