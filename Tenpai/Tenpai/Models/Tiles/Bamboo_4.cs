@@ -15,7 +15,7 @@ namespace Tenpai.Models.Tiles
 
         public override int GetHashCode()
         {
-            return 3;
+            return 21;
         }
 
         public override Tile[] Suji()
