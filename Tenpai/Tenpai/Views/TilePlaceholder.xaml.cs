@@ -32,6 +32,10 @@ namespace Tenpai.Views
             var uc = (TilePlaceholder)sender;
             if (args.NewValue as string != string.Empty)
             {
+                uc.TileEmptyVisibility = Visibility.Visible;
+            }
+            else if (args.NewValue as string != string.Empty)
+            {
                 uc.TileEmptyVisibility = Visibility.Hidden;
             }
             else

@@ -14,6 +14,8 @@ namespace Tenpai.Converters
             if (value == string.Empty || value is null)
                 return DependencyProperty.UnsetValue;
             var tile = value as Tile;
+            if (tile is Dummy)
+                return DependencyProperty.UnsetValue;
             if (tile is null)
                 tile = Tile.CreateInstance(value as string);
             return new Uri(new Uri(Directory.GetCurrentDirectory() + "/net5.0-windows"), $"Assets/{tile.Display}.png");

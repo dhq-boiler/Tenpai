@@ -25,20 +25,20 @@ namespace Tenpai.ViewModels
         [Dependency]
         public IDialogService dialogService { get; set; }
 
-        public ReactivePropertySlim<Tile> Tile0 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile1 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile2 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile3 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile4 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile5 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile6 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile7 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile8 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile9 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile10 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>();
+        public ReactivePropertySlim<Tile> Tile0 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile1 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile2 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile3 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile4 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile5 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile6 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile7 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile8 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile9 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile10 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
@@ -66,8 +66,13 @@ namespace Tenpai.ViewModels
             {
                 sarashiCount += 3;
                 UpdateTileVisibility(args, 2);
-                var targetTiles = Tiles.Where(x => x.Equals(args));
-                SarashiHai.Add(new Triple(targetTiles.ElementAt(0), targetTiles.ElementAt(1), targetTiles.ElementAt(2)));
+                UpdateTileVisibility(new Dummy(), 1);
+                var targetTiles = Tiles.Where(x => x != null && x.Equals(args));
+                if (targetTiles.First() is IRedSuitedTile)
+                {
+
+                }
+                SarashiHai.Add(new Triple(targetTiles.ElementAt(0), targetTiles.ElementAt(1), Tile.CreateInstance(args.Code)));
             })
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
