@@ -1,5 +1,4 @@
-﻿using OpenCvSharp;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -9,9 +8,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
 using Tenpai.Views;
+using Tenpai.Yaku.Meld;
 using Unity;
 
 namespace Tenpai.ViewModels
@@ -37,11 +39,37 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>();
         public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>();
         public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>();
-        public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>();
+        public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
+        public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
+        public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
+        public ReactiveCommand<Tile> PonCommand { get; } = new ReactiveCommand<Tile>();
+        public ReactiveCollection<Meld> SarashiHai { get; } = new ReactiveCollection<Meld>();
+
+        private int sarashiCount = 0;
+
+        public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value }; } }
+
+
         private bool sortflag = false;
 
         public MainWindowViewModel()
         {
+            ContextMenuOpeningCommand.Subscribe(args =>
+            {
+                ContextMenuItems.Clear();
+                ContextMenuItems.Add(new MenuItem() { Header = "ポン", Command = PonCommand, CommandParameter = Tiles[int.Parse(args)]});
+                ContextMenuItems.Add(new MenuItem() { Header = "チー" });
+                ContextMenuItems.Add(new MenuItem() { Header = "カン" });
+            })
+            .AddTo(_disposables);
+            PonCommand.Subscribe(args =>
+            {
+                sarashiCount += 3;
+                UpdateTileVisibility(args, 2);
+                var targetTiles = Tiles.Where(x => x.Equals(args));
+                SarashiHai.Add(new Triple(targetTiles.ElementAt(0), targetTiles.ElementAt(1), targetTiles.ElementAt(2)));
+            })
+            .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
             {
                 IDialogResult dialogResult = null;
@@ -132,6 +160,43 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
         }
 
+        private void UpdateTileVisibility(Tile args, int count)
+        {
+            int processedCount = 0;
+            for (int j = 0; j < Tiles.Count(); j++)
+            {
+                var tile = GetTile(j);
+                if (tile is null)
+                    continue;
+                if (tile.Equals(args))
+                {
+                    tile.Visibility.Value = Visibility.Collapsed;
+                    processedCount++;
+                }
+                if (processedCount == count)
+                    return;
+            }
+        }
+
+        private void RemoveTiles(Tile args, int v)
+        {
+            var count = Tiles.Where(x => x != null && x.CompareTo(args) == 0).Count();
+            for (int i = 0; i < count; i++)
+            {
+                for (int j = 0; j < Tiles.Count(); j++)
+                {
+                    var targetTile = Tiles[j];
+                    if (targetTile == null)
+                        continue;
+                    if (args.CompareTo(targetTile) == 0)
+                    {
+                        SetTile(j, null);
+                    }
+                }
+                ArrangeTiles();
+            }
+        }
+
         private void SortIf()
         {
             if (sortflag)
@@ -150,57 +215,99 @@ namespace Tenpai.ViewModels
             for (int i = 0; i < tiles.Count; i++)
             {
                 var tile = tiles[i];
-                switch (i)
-                {
-                    case 0:
-                        Tile0.Value = tile;
-                        break;
-                    case 1:
-                        Tile1.Value = tile;
-                        break;
-                    case 2:
-                        Tile2.Value = tile;
-                        break;
-                    case 3:
-                        Tile3.Value = tile;
-                        break;
-                    case 4:
-                        Tile4.Value = tile;
-                        break;
-                    case 5:
-                        Tile5.Value = tile;
-                        break;
-                    case 6:
-                        Tile6.Value = tile;
-                        break;
-                    case 7:
-                        Tile7.Value = tile;
-                        break;
-                    case 8:
-                        Tile8.Value = tile;
-                        break;
-                    case 9:
-                        Tile9.Value = tile;
-                        break;
-                    case 10:
-                        Tile10.Value = tile;
-                        break;
-                    case 11:
-                        Tile11.Value = tile;
-                        break;
-                    case 12:
-                        Tile12.Value = tile;
-                        break;
-                    case 13:
-                        Tile13.Value = tile;
-                        break;
-                }
+                SetTile(i, tile);
+            }
+        }
+
+        private Tile GetTile(int i)
+        {
+            switch (i)
+            {
+                case 0:
+                    return Tile0.Value;
+                case 1:
+                    return Tile1.Value;
+                case 2:
+                    return Tile2.Value;
+                case 3:
+                    return Tile3.Value;
+                case 4:
+                    return Tile4.Value;
+                case 5:
+                    return Tile5.Value;
+                case 6:
+                    return Tile6.Value;
+                case 7:
+                    return Tile7.Value;
+                case 8:
+                    return Tile8.Value;
+                case 9:
+                    return Tile9.Value;
+                case 10:
+                    return Tile10.Value;
+                case 11:
+                    return Tile11.Value;
+                case 12:
+                    return Tile12.Value;
+                case 13:
+                    return Tile13.Value;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void SetTile(int i, Tile tile)
+        {
+            switch (i)
+            {
+                case 0:
+                    Tile0.Value = tile;
+                    break;
+                case 1:
+                    Tile1.Value = tile;
+                    break;
+                case 2:
+                    Tile2.Value = tile;
+                    break;
+                case 3:
+                    Tile3.Value = tile;
+                    break;
+                case 4:
+                    Tile4.Value = tile;
+                    break;
+                case 5:
+                    Tile5.Value = tile;
+                    break;
+                case 6:
+                    Tile6.Value = tile;
+                    break;
+                case 7:
+                    Tile7.Value = tile;
+                    break;
+                case 8:
+                    Tile8.Value = tile;
+                    break;
+                case 9:
+                    Tile9.Value = tile;
+                    break;
+                case 10:
+                    Tile10.Value = tile;
+                    break;
+                case 11:
+                    Tile11.Value = tile;
+                    break;
+                case 12:
+                    Tile12.Value = tile;
+                    break;
+                case 13:
+                    Tile13.Value = tile;
+                    break;
             }
         }
 
         public ReactiveCommand<TilePlaceholder> SelectCommand { get; } = new ReactiveCommand<TilePlaceholder>();
 
-        private static unsafe void Paste(Mat target, Mat pasting, Rect rect)
+        private static unsafe void Paste(OpenCvSharp.Mat target, OpenCvSharp.Mat pasting, Rect rect)
         {
             Debug.Assert(pasting.Width == rect.Width);
             Debug.Assert(pasting.Height == rect.Height);
@@ -230,27 +337,27 @@ namespace Tenpai.ViewModels
             }
         }
 
-        private Mat getHomography(KeyPoint[] kpsA, KeyPoint[] kpsB, Mat featuresA, Mat featuresB, DMatch[] matches, int reprojThresh)
+        private OpenCvSharp.Mat getHomography(OpenCvSharp.KeyPoint[] kpsA, OpenCvSharp.KeyPoint[] kpsB, OpenCvSharp.Mat featuresA, OpenCvSharp.Mat featuresB, OpenCvSharp.DMatch[] matches, int reprojThresh)
         {
             //# convert the keypoints to numpy arrays
             if (matches.Length > 4)
             {
-                List<Point2f> PtA = new List<Point2f>(matches.Length);
-                List<Point2f> PtB = new List<Point2f>(matches.Length);
+                List<OpenCvSharp.Point2f> PtA = new List<OpenCvSharp.Point2f>(matches.Length);
+                List<OpenCvSharp.Point2f> PtB = new List<OpenCvSharp.Point2f>(matches.Length);
                 foreach (var m in matches)
                 {
-                    KeyPoint kpsAI = kpsA[m.QueryIdx];
-                    KeyPoint kpsBI = kpsB[m.TrainIdx];
+                    OpenCvSharp.KeyPoint kpsAI = kpsA[m.QueryIdx];
+                    OpenCvSharp.KeyPoint kpsBI = kpsB[m.TrainIdx];
 
-                    PtA.Add(new Point2f(kpsAI.Pt.X, kpsAI.Pt.Y));
-                    PtB.Add(new Point2f(kpsBI.Pt.X, kpsBI.Pt.Y));
+                    PtA.Add(new OpenCvSharp.Point2f(kpsAI.Pt.X, kpsAI.Pt.Y));
+                    PtB.Add(new OpenCvSharp.Point2f(kpsBI.Pt.X, kpsBI.Pt.Y));
                 }
-                InputArray ptsA = InputArray.Create(PtA);
-                InputArray ptsB = InputArray.Create(PtB);
+                OpenCvSharp.InputArray ptsA = OpenCvSharp.InputArray.Create(PtA);
+                OpenCvSharp.InputArray ptsB = OpenCvSharp.InputArray.Create(PtB);
 
                 //# estimate the homography between the sets of points
                 //step 1: find the homography H with findHomography you will get a classic structure for homography
-                Mat H = Cv2.FindHomography(ptsA, ptsB, HomographyMethods.Ransac, reprojThresh);
+                OpenCvSharp.Mat H = OpenCvSharp.Cv2.FindHomography(ptsA, ptsB, OpenCvSharp.HomographyMethods.Ransac, reprojThresh);
 
                 Console.WriteLine("Homography:");
                 for (var rowIndex = 0; rowIndex < H.Rows; rowIndex++)
@@ -269,7 +376,7 @@ namespace Tenpai.ViewModels
                 return null;
         }
 
-        private unsafe static Mat Negate(Mat target)
+        private unsafe static OpenCvSharp.Mat Negate(OpenCvSharp.Mat target)
         {
             var mat = target.Clone();
 
@@ -288,7 +395,7 @@ namespace Tenpai.ViewModels
             return mat;
         }
 
-        private unsafe static void Mask(Mat clientRectPool, Mat m, Mat white)
+        private unsafe static void Mask(OpenCvSharp.Mat clientRectPool, OpenCvSharp.Mat m, OpenCvSharp.Mat white)
         {
             Debug.Assert(clientRectPool.Size() == m.Size());
             Debug.Assert(clientRectPool.Size() == white.Size());
@@ -309,9 +416,9 @@ namespace Tenpai.ViewModels
             }
         }
 
-        private unsafe bool AreEqual(Mat m, Mat target)
+        private unsafe bool AreEqual(OpenCvSharp.Mat m, OpenCvSharp.Mat target)
         {
-            using (Mat temp = new Mat())
+            using (OpenCvSharp.Mat temp = new OpenCvSharp.Mat())
             {
                 if (m.Size() != target.Size())
                     return false;
@@ -341,9 +448,9 @@ namespace Tenpai.ViewModels
             return true;
         }
 
-        private unsafe Mat Fill(Mat target, int fromInclusive, int toExclusive, bool vertical, Scalar fillColor)
+        private unsafe OpenCvSharp.Mat Fill(OpenCvSharp.Mat target, int fromInclusive, int toExclusive, bool vertical, OpenCvSharp.Scalar fillColor)
         {
-            var mat = new Mat(target, new Rect(0, 0, target.Width, target.Height));
+            var mat = new OpenCvSharp.Mat(target, new OpenCvSharp.Rect(0, 0, target.Width, target.Height));
             int channels = mat.Channels();
             byte* p;
             for (int y = 0; y < mat.Height; y++)
@@ -375,13 +482,13 @@ namespace Tenpai.ViewModels
             return mat;
         }
 
-        private unsafe Mat Subtract(Mat previous, Mat roi)
+        private unsafe OpenCvSharp.Mat Subtract(OpenCvSharp.Mat previous, OpenCvSharp.Mat roi)
         {
             Debug.Assert(roi.Channels() == previous.Channels());
             Debug.Assert(roi.Size() == previous.Size());
             Debug.Assert(roi.Depth() == previous.Depth());
 
-            var ret = new Mat(roi.Rows, roi.Cols, roi.Type());
+            var ret = new OpenCvSharp.Mat(roi.Rows, roi.Cols, roi.Type());
             int channels = roi.Channels();
             for (int y = 0; y < roi.Rows; y++)
             {

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Reactive.Bindings;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Tenpai.Converters;
 
 #pragma warning disable 659
@@ -32,6 +34,7 @@ namespace Tenpai.Models.Tiles
                 _Rand = value;
             }
         }
+        public ReactivePropertySlim<Visibility> Visibility { get; } = new ReactivePropertySlim<Visibility>();
 
         public abstract string Display { get; }
 

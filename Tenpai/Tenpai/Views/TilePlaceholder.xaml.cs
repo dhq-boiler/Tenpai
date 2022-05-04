@@ -61,5 +61,13 @@ namespace Tenpai.Views
             get { return (ICommand)GetValue(SelectCommandProperty); }
             set { SetValue(SelectCommandProperty, value); }
         }
+
+        public static readonly DependencyProperty BackVisibilityProperty = DependencyProperty.Register("BackVisibility", typeof(Visibility), typeof(TilePlaceholder), new PropertyMetadata(Visibility.Collapsed));
+
+        public Visibility BackVisibility
+        {
+            get { return (Visibility)GetValue(BackVisibilityProperty); }
+            set { SetValue(BackVisibilityProperty, value); }
+        }
     }
 }

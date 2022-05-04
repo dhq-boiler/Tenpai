@@ -27,6 +27,13 @@
             <Image Source="{Binding TileType, Converter={StaticResource Png}, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type local:TilePlaceholder}}}"
                    Width="45"
                    Height="67" />
+            <Rectangle x:Name="Ankan"
+                       Visibility="{Binding BackVisibility, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType={x:Type local:TilePlaceholder}}}"
+                       Width="45"
+                       Height="67"
+                       RadiusX="3"
+                       RadiusY="3"
+                       Fill="#c97f26" />
         </Grid>
     </Button>
 </UserControl>
