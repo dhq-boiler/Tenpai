@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 using Tenpai.Converters;
 
 #pragma warning disable 659
@@ -30,6 +31,11 @@ namespace Tenpai.Models.Tiles
                 _Rand = value;
             }
         }
+
+        public EOpponent CallFrom { get; set; }
+
+        public RotateTransform Rotate { get; set; }
+
         public ReactivePropertySlim<Visibility> Visibility { get; } = new ReactivePropertySlim<Visibility>();
 
         public abstract string Display { get; }

@@ -43,7 +43,7 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
-        public ReactiveCommand<Tile> PonCommand { get; } = new ReactiveCommand<Tile>();
+        public ReactiveCommand<Call> PonCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Meld> ChiCommand { get; } = new ReactiveCommand<Meld>();
         public ReactiveCollection<Meld> SarashiHai { get; } = new ReactiveCollection<Meld>();
 
@@ -59,8 +59,14 @@ namespace Tenpai.ViewModels
             ContextMenuOpeningCommand.Subscribe(args =>
             {
                 ContextMenuItems.Clear();
-                
-                ContextMenuItems.Add(new MenuItem() { Header = "ポン", Command = PonCommand, CommandParameter = Tiles[int.Parse(args)]});
+                var pon = new MenuItem() { Header = "ポン" };
+                var kamicha = new MenuItem() { Header = "上家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Kamicha) };
+                var toimen = new MenuItem() { Header = "対面から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Toimen) };
+                var shimocha = new MenuItem() { Header = "下家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Shimocha) };
+                pon.Items.Add(kamicha);
+                pon.Items.Add(toimen);
+                pon.Items.Add(shimocha);
+                ContextMenuItems.Add(pon);
 
                 var chi = new MenuItem() { Header = "チー" };
                 var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
@@ -87,14 +93,30 @@ namespace Tenpai.ViewModels
             PonCommand.Subscribe(args =>
             {
                 sarashiCount += 3;
-                UpdateTileVisibility(args, 2);
+                UpdateTileVisibility(args.Target, 2);
                 UpdateTileVisibility(new Dummy(), 1);
-                var targetTiles = Tiles.Where(x => x != null && x.Equals(args));
+                UpdateTile(new Dummy(), args.Target, 1);
+                var targetTiles = Tiles.Where(x => x != null && x.Equals(args.Target));
                 if (targetTiles.First() is IRedSuitedTile)
                 {
 
                 }
-                SarashiHai.Add(new Triple(targetTiles.ElementAt(0), targetTiles.ElementAt(1), Tile.CreateInstance(args.Code)));
+
+                var rotate = args.Target;
+                rotate.CallFrom = args.CallFrom;
+                rotate.Rotate = new System.Windows.Media.RotateTransform(90);
+                switch (args.CallFrom)
+                {
+                    case EOpponent.Kamicha:
+                        SarashiHai.Add(new Triple(rotate, targetTiles.ElementAt(0), targetTiles.ElementAt(1)));
+                        break;
+                    case EOpponent.Toimen:
+                        SarashiHai.Add(new Triple(targetTiles.ElementAt(0), rotate, targetTiles.ElementAt(1)));
+                        break;
+                    case EOpponent.Shimocha:
+                        SarashiHai.Add(new Triple(targetTiles.ElementAt(0), targetTiles.ElementAt(1), rotate));
+                        break;
+                }
             })
             .AddTo(_disposables);
             ChiCommand.Subscribe(args =>
@@ -196,6 +218,24 @@ namespace Tenpai.ViewModels
                 SortIf();
             })
             .AddTo(_disposables);
+        }
+
+        private void UpdateTile(Dummy dummy, Tile target, int count)
+        {
+            int processedCount = 0;
+            for (int j = 0; j < Tiles.Count(); j++)
+            {
+                var tile = GetTile(j);
+                if (tile is null)
+                    continue;
+                if (tile.Equals(dummy))
+                {
+                    SetTile(j, target);
+                    processedCount++;
+                }
+                if (processedCount == count)
+                    return;
+            }
         }
 
         private Meld[] ConvertToCompletedMeld(IEnumerable<IncompletedMeld> incompletedMelds)
