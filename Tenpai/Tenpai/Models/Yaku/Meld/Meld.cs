@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Tenpai.Models.Tiles;
-using Tenpai.Tiles;
 
 namespace Tenpai.Yaku.Meld
 {

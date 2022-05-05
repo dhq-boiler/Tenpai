@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -18,18 +17,18 @@ using Tenpai.Models.Tiles;
 namespace Tenpai.Views
 {
     /// <summary>
-    /// TilePlaceholder.xaml の相互作用ロジック
+    /// ReadOnlyTilePlaceholder.xaml の相互作用ロジック
     /// </summary>
-    public partial class TilePlaceholder : UserControl
+    public partial class ReadOnlyTilePlaceholder : UserControl
     {
-        public TilePlaceholder()
+        public ReadOnlyTilePlaceholder()
         {
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty TileTypeProperty = DependencyProperty.Register("TileType", typeof(Tile), typeof(TilePlaceholder), new PropertyMetadata(new PropertyChangedCallback((sender, args) =>
+        public static readonly DependencyProperty TileTypeProperty = DependencyProperty.Register("TileType", typeof(Tile), typeof(ReadOnlyTilePlaceholder), new PropertyMetadata(new PropertyChangedCallback((sender, args) =>
         {
-            var uc = (TilePlaceholder)sender;
+            var uc = (ReadOnlyTilePlaceholder)sender;
             if (args.NewValue as string != string.Empty && args.NewValue is Dummy)
             {
                 uc.TileEmptyVisibility = Visibility.Visible;
@@ -50,7 +49,7 @@ namespace Tenpai.Views
             set { SetValue(TileTypeProperty, value); }
         }
 
-        public static readonly DependencyProperty TileEmptyVisibilityProperty = DependencyProperty.Register("TileEmptyVisibility", typeof(Visibility), typeof(TilePlaceholder));
+        public static readonly DependencyProperty TileEmptyVisibilityProperty = DependencyProperty.Register("TileEmptyVisibility", typeof(Visibility), typeof(ReadOnlyTilePlaceholder));
 
         public Visibility TileEmptyVisibility
         {
@@ -58,15 +57,7 @@ namespace Tenpai.Views
             set { SetValue(TileEmptyVisibilityProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectCommandProperty = DependencyProperty.Register("SelectCommand", typeof(ICommand), typeof(TilePlaceholder));
-
-        public ICommand SelectCommand
-        {
-            get { return (ICommand)GetValue(SelectCommandProperty); }
-            set { SetValue(SelectCommandProperty, value); }
-        }
-
-        public static readonly DependencyProperty BackVisibilityProperty = DependencyProperty.Register("BackVisibility", typeof(Visibility), typeof(TilePlaceholder), new PropertyMetadata(Visibility.Collapsed));
+        public static readonly DependencyProperty BackVisibilityProperty = DependencyProperty.Register("BackVisibility", typeof(Visibility), typeof(ReadOnlyTilePlaceholder), new PropertyMetadata(Visibility.Collapsed));
 
         public Visibility BackVisibility
         {

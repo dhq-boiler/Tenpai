@@ -14,6 +14,7 @@ using Tenpai.Models;
 using Tenpai.Models.Tiles;
 using Tenpai.Views;
 using Tenpai.Yaku.Meld;
+using Tenpai.Yaku.Meld.Detector;
 using Unity;
 
 namespace Tenpai.ViewModels
@@ -43,6 +44,7 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
         public ReactiveCommand<Tile> PonCommand { get; } = new ReactiveCommand<Tile>();
+        public ReactiveCommand<Meld> ChiCommand { get; } = new ReactiveCommand<Meld>();
         public ReactiveCollection<Meld> SarashiHai { get; } = new ReactiveCollection<Meld>();
 
         private int sarashiCount = 0;
@@ -57,8 +59,28 @@ namespace Tenpai.ViewModels
             ContextMenuOpeningCommand.Subscribe(args =>
             {
                 ContextMenuItems.Clear();
+                
                 ContextMenuItems.Add(new MenuItem() { Header = "ポン", Command = PonCommand, CommandParameter = Tiles[int.Parse(args)]});
-                ContextMenuItems.Add(new MenuItem() { Header = "チー" });
+
+                var chi = new MenuItem() { Header = "チー" };
+                var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
+                var completedMelds = ConvertToCompletedMeld(incompletedMelds).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
+                foreach (var completedMeld in completedMelds)
+                {
+                    var chiCandidate = new ChiCandidate()
+                    {
+                        DataContext = completedMeld,
+                    };
+                    var chiCandidateMenuItem = new MenuItem()
+                    {
+                        Header = chiCandidate,
+                        Command = ChiCommand,
+                        CommandParameter = completedMeld,
+                    };
+                    chi.Items.Add(chiCandidateMenuItem);
+                }
+                ContextMenuItems.Add(chi);
+                
                 ContextMenuItems.Add(new MenuItem() { Header = "カン" });
             })
             .AddTo(_disposables);
@@ -73,6 +95,17 @@ namespace Tenpai.ViewModels
 
                 }
                 SarashiHai.Add(new Triple(targetTiles.ElementAt(0), targetTiles.ElementAt(1), Tile.CreateInstance(args.Code)));
+            })
+            .AddTo(_disposables);
+            ChiCommand.Subscribe(args =>
+            {
+                sarashiCount += 3;
+                foreach (var tile in args.Tiles)
+                {
+                    UpdateTileVisibility(tile, 1);
+                }
+                UpdateTileVisibility(new Dummy(), 1);
+                SarashiHai.Add(args);
             })
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
@@ -163,6 +196,42 @@ namespace Tenpai.ViewModels
                 SortIf();
             })
             .AddTo(_disposables);
+        }
+
+        private Meld[] ConvertToCompletedMeld(IEnumerable<IncompletedMeld> incompletedMelds)
+        {
+            var melds = new List<Meld>();
+            foreach (var incompletedMeld in incompletedMelds)
+            {
+                if (incompletedMeld is OpenWait o)
+                {
+                    foreach (var wait in o.WaitTiles)
+                    {
+                        var tiles = new[] { o.Tiles[0], o.Tiles[1], wait }.ToList();
+                        tiles.Sort();
+                        melds.Add(new Run(tiles[0], tiles[1], tiles[2]));
+                    }
+                }
+                else if (incompletedMeld is ClosedWait c)
+                {
+                    foreach (var wait in c.WaitTiles)
+                    {
+                        var tiles = new[] { c.Tiles[0], c.Tiles[1], wait }.ToList();
+                        tiles.Sort();
+                        melds.Add(new Run(tiles[0], tiles[1], tiles[2]));
+                    }
+                }
+                else if (incompletedMeld is EdgeWait e)
+                {
+                    foreach (var wait in e.WaitTiles)
+                    {
+                        var tiles = new[] { e.Tiles[0], e.Tiles[1], wait }.ToList();
+                        tiles.Sort();
+                        melds.Add(new Run(tiles[0], tiles[1], tiles[2]));
+                    }
+                }
+            }
+            return melds.Distinct().ToArray();
         }
 
         private void UpdateTileVisibility(Tile args, int count)

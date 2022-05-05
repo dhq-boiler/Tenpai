@@ -23,7 +23,7 @@ namespace Tenpai.Yaku.Meld
         {
             _Set.Add(have1);
             _Set.Add(have2);
-            ComputeWaitTiles();
+            //ComputeWaitTiles();
         }
 
         public OpenWait(Tile wait1, Tile have1, Tile have2, Tile wait2)
@@ -44,13 +44,35 @@ namespace Tenpai.Yaku.Meld
             _Waiting.Clear();
             if (_Set[0].Code < _Set[1].Code)
             {
-                _Waiting.Add(Tile.CreateInstance(_Set[0].Code - 1));
-                _Waiting.Add(Tile.CreateInstance(_Set[1].Code + 1));
+                var tile1 = Tile.CreateInstance(_Set[0].Code - 1);
+                _Waiting.Add(tile1);
+                if (tile1 is IRedSuitedTile r1)
+                {
+                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code));
+                }
+
+                var tile2 = Tile.CreateInstance(_Set[1].Code + 1);
+                _Waiting.Add(tile2);
+                if (tile2 is IRedSuitedTile r2)
+                {
+                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code));
+                }
             }
             else
             {
-                _Waiting.Add(Tile.CreateInstance(_Set[1].Code - 1));
-                _Waiting.Add(Tile.CreateInstance(_Set[0].Code + 1));
+                var tile1 = Tile.CreateInstance(_Set[1].Code - 1);
+                _Waiting.Add(tile1);
+                if (tile1 is IRedSuitedTile r1)
+                {
+                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code));
+                }
+
+                var tile2 = Tile.CreateInstance(_Set[0].Code + 1);
+                _Waiting.Add(tile2);
+                if (tile2 is IRedSuitedTile r2)
+                {
+                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code));
+                }
             }
         }
 
@@ -68,6 +90,14 @@ namespace Tenpai.Yaku.Meld
         public override string ToString()
         {
             return base.ToString();
+        }
+        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        {
+            var newObj = new OpenWait(status);
+            newObj._Set = new TileCollection(_Set);
+            newObj._Existed = new TileCollection(_Existed);
+            newObj._Waiting = new TileCollection(_Waiting);
+            return newObj;
         }
     }
 

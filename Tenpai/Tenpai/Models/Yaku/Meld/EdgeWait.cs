@@ -57,6 +57,14 @@ namespace Tenpai.Yaku.Meld
             return base.GetHashCode();
         }
 
+        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        {
+            var newObj = new EdgeWait(status);
+            newObj._Set = new TileCollection(_Set);
+            newObj._Existed = new TileCollection(_Existed);
+            newObj._Waiting = new TileCollection(_Waiting);
+            return newObj;
+        }
     }
 
     public class EdgeWait<T1, T2, W1> : EdgeWait

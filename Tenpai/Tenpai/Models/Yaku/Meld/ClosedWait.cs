@@ -23,7 +23,6 @@ namespace Tenpai.Yaku.Meld
         {
             _Set.Add(have1);
             _Set.Add(have2);
-            ComputeWaitTiles();
         }
 
         public ClosedWait(Tile have1, Tile wait1, Tile have2)
@@ -39,7 +38,13 @@ namespace Tenpai.Yaku.Meld
             Debug.Assert(_Set.Count() == 2);
             var tiles = _Set.ToArray();
             _Waiting.Clear();
-            _Waiting.Add(Tile.CreateInstance((int)tiles.Average(a => a.Code)));
+            var tile = Tile.CreateInstance((int)tiles.Average(a => a.Code));
+            _Waiting.Add(tile);
+            if (tile is IRedSuitedTile r)
+            {
+                tile = Tile.CreateRedInstance(tile.Code);
+                _Waiting.Add(tile);
+            }
         }
 
         public override bool Equals(object obj)
@@ -51,6 +56,15 @@ namespace Tenpai.Yaku.Meld
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        {
+            var newObj = new ClosedWait(status);
+            newObj._Set = new TileCollection(_Set);
+            newObj._Existed = new TileCollection(_Existed);
+            newObj._Waiting = new TileCollection(_Waiting);
+            return newObj;
         }
 
     }

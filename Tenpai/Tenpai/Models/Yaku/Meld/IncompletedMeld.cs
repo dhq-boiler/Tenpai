@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Tenpai.Models.Tiles;
-using Tenpai.Tiles;
 
 namespace Tenpai.Yaku.Meld
 {
@@ -45,9 +44,19 @@ namespace Tenpai.Yaku.Meld
         {
             get
             {
-                _Waiting.Clear();
-                ComputeWaitTiles();
                 return _Waiting;
+            }
+        }
+
+        public TileCollection AllTiles
+        {
+            get
+            {
+                var list = new List<Tile>();
+                list.AddRange(_Set);
+                list.AddRange(_Waiting);
+                list.Sort();
+                return new TileCollection(list);
             }
         }
 
@@ -136,5 +145,7 @@ namespace Tenpai.Yaku.Meld
 
             return str;
         }
+
+        public abstract IncompletedMeld Clone(MeldStatus status);
     }
 }

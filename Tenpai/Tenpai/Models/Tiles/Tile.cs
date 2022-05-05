@@ -52,59 +52,59 @@ namespace Tenpai.Models.Tiles
             switch (hashCode)
             {
                 case 0:
-                    return CreateInstance<Bamboo_1>();
-                case 1:
-                    return CreateInstance<Bamboo_2>();
-                case 2:
-                    return CreateInstance<Bamboo_3>();
-                case 3:
-                    return CreateInstance<Bamboo_4>();
-                case 4:
-                    return CreateInstance<Bamboo_5>();
-                case 5:
-                    return CreateInstance<Bamboo_6>();
-                case 6:
-                    return CreateInstance<Bamboo_7>();
-                case 7:
-                    return CreateInstance<Bamboo_8>();
-                case 8:
-                    return CreateInstance<Bamboo_9>();
-                case 9:
                     return CreateInstance<Character_1>();
-                case 10:
+                case 1:
                     return CreateInstance<Character_2>();
-                case 11:
+                case 2:
                     return CreateInstance<Character_3>();
-                case 12:
+                case 3:
                     return CreateInstance<Character_4>();
-                case 13:
+                case 4:
                     return CreateInstance<Character_5>();
-                case 14:
+                case 5:
                     return CreateInstance<Character_6>();
-                case 15:
+                case 6:
                     return CreateInstance<Character_7>();
-                case 16:
+                case 7:
                     return CreateInstance<Character_8>();
-                case 17:
+                case 8:
                     return CreateInstance<Character_9>();
-                case 18:
+                case 9:
                     return CreateInstance<Dot_1>();
-                case 19:
+                case 10:
                     return CreateInstance<Dot_2>();
-                case 20:
+                case 11:
                     return CreateInstance<Dot_3>();
-                case 21:
+                case 12:
                     return CreateInstance<Dot_4>();
-                case 22:
+                case 13:
                     return CreateInstance<Dot_5>();
-                case 23:
+                case 14:
                     return CreateInstance<Dot_6>();
-                case 24:
+                case 15:
                     return CreateInstance<Dot_7>();
-                case 25:
+                case 16:
                     return CreateInstance<Dot_8>();
-                case 26:
+                case 17:
                     return CreateInstance<Dot_9>();
+                case 18:
+                    return CreateInstance<Bamboo_1>();
+                case 19:
+                    return CreateInstance<Bamboo_2>();
+                case 20:
+                    return CreateInstance<Bamboo_3>();
+                case 21:
+                    return CreateInstance<Bamboo_4>();
+                case 22:
+                    return CreateInstance<Bamboo_5>();
+                case 23:
+                    return CreateInstance<Bamboo_6>();
+                case 24:
+                    return CreateInstance<Bamboo_7>();
+                case 25:
+                    return CreateInstance<Bamboo_8>();
+                case 26:
+                    return CreateInstance<Bamboo_9>();
                 case 27:
                     return CreateInstance<East>();
                 case 28:
@@ -224,6 +224,21 @@ namespace Tenpai.Models.Tiles
             return tile;
         }
 
+        public static Tile CreateRedInstance(int hashCode)
+        {
+            switch (hashCode)
+            {
+                case 4:
+                    return CreateRedInstance<Character_5>();
+                case 13:
+                    return CreateRedInstance<Dot_5>();
+                case 22:
+                    return CreateRedInstance<Bamboo_5>();
+                default:
+                    throw new NotSupportedException("No corresponding Tile");
+            }
+        }
+
         public static Tile CreateInstance(Tile clone)
         {
             return CreateInstance(clone.Code);
@@ -242,7 +257,7 @@ namespace Tenpai.Models.Tiles
         public override bool Equals(object obj)
         {
             if (!(obj is Tile)) return false;
-            return Code == (obj as Tile).Code;
+            return Code == (obj as Tile).Code && ((this is IRedSuitedTile rthis && obj is IRedSuitedTile r && rthis.IsRedSuited == r.IsRedSuited) || !(this is IRedSuitedTile && obj is IRedSuitedTile));
         }
     }
 }

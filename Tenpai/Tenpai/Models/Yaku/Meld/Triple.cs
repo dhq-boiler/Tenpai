@@ -65,6 +65,14 @@ namespace Tenpai.Yaku.Meld
             }
             return ret;
         }
+        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        {
+            var newObj = new Triple(status);
+            newObj._Set = new TileCollection(_Set);
+            newObj._Existed = new TileCollection(_Existed);
+            newObj._Waiting = new TileCollection(_Waiting);
+            return newObj;
+        }
     }
 
     public class Triple<T> : Triple

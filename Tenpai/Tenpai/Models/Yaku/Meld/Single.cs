@@ -41,6 +41,15 @@ namespace Tenpai.Yaku.Meld
             _Waiting.Clear();
             _Waiting.Add(_Set.Single());
         }
+
+        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        {
+            var newObj = new Single(status);
+            newObj._Set = new TileCollection(_Set);
+            newObj._Existed = new TileCollection(_Existed);
+            newObj._Waiting = new TileCollection(_Waiting);
+            return newObj;
+        }
     }
 
     public class Single<T> : Single

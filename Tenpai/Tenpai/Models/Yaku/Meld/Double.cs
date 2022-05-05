@@ -42,7 +42,14 @@ namespace Tenpai.Yaku.Meld
         {
             return base.GetHashCode();
         }
-               
+        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        {
+            var newObj = new Double(status);
+            newObj._Set = new TileCollection(_Set);
+            newObj._Existed = new TileCollection(_Existed);
+            newObj._Waiting = new TileCollection(_Waiting);
+            return newObj;
+        }
     }
 
     public class Double<T> : Double
