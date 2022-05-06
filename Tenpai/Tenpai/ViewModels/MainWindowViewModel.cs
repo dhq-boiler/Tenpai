@@ -90,7 +90,9 @@ namespace Tenpai.ViewModels
                 ContextMenuItems.Add(new MenuItem() { Header = "カン" });
             })
             .AddTo(_disposables);
-            PonCommand.Subscribe(args =>
+            PonCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 2)
+                      .Select(x => x)
+                      .Subscribe(args =>
             {
                 var exist = args.Target;
                 var target = args.Target;
@@ -121,7 +123,7 @@ namespace Tenpai.ViewModels
 
                 sarashiCount += 3;
 
-                var rotate = target;
+                var rotate = target.Clone() as Tile;
                 rotate.CallFrom = args.CallFrom;
                 rotate.Rotate = new System.Windows.Media.RotateTransform(90);
 

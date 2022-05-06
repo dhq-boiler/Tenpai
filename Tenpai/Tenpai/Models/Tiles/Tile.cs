@@ -9,7 +9,7 @@ using Tenpai.Converters;
 namespace Tenpai.Models.Tiles
 {
     [TypeConverter(typeof(TileTypeConverter))]
-    public abstract class Tile : IComparable<Tile>
+    public abstract class Tile : IComparable<Tile>, ICloneable
     {
         private int _Rand;
 
@@ -282,10 +282,24 @@ namespace Tenpai.Models.Tiles
             }
         }
 
+        public bool EqualsRedSuitedTileIncluding(object obj)
+        {
+            if (!(obj is Tile)) return false;
+            return Code == (obj as Tile).Code;
+        }
+
         public override bool Equals(object obj)
         {
             if (!(obj is Tile)) return false;
             return Code == (obj as Tile).Code && ((this is IRedSuitedTile rthis && obj is IRedSuitedTile r && rthis.IsRedSuited == r.IsRedSuited) || !(this is IRedSuitedTile && obj is IRedSuitedTile));
+        }
+
+        public object Clone()
+        {
+            if (this is IRedSuitedTile r && r.IsRedSuited)
+                return CreateRedInstance(Code);
+            else
+                return CreateInstance(Code);
         }
     }
 }
