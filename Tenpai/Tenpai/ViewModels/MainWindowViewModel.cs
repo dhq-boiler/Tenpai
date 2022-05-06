@@ -59,34 +59,41 @@ namespace Tenpai.ViewModels
             ContextMenuOpeningCommand.Subscribe(args =>
             {
                 ContextMenuItems.Clear();
-                var pon = new MenuItem() { Header = "ポン" };
-                var kamicha = new MenuItem() { Header = "上家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Kamicha) };
-                var toimen = new MenuItem() { Header = "対面から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Toimen) };
-                var shimocha = new MenuItem() { Header = "下家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Shimocha) };
-                pon.Items.Add(kamicha);
-                pon.Items.Add(toimen);
-                pon.Items.Add(shimocha);
-                ContextMenuItems.Add(pon);
 
-                var chi = new MenuItem() { Header = "チー" };
+                if (Tiles.Count(x => x.EqualsRedSuitedTileIncluding(Tiles[int.Parse(args)])) == 2)
+                {
+                    var pon = new MenuItem() { Header = "ポン" };
+                    var kamicha = new MenuItem() { Header = "上家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Kamicha) };
+                    var toimen = new MenuItem() { Header = "対面から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Toimen) };
+                    var shimocha = new MenuItem() { Header = "下家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Shimocha) };
+                    pon.Items.Add(kamicha);
+                    pon.Items.Add(toimen);
+                    pon.Items.Add(shimocha);
+                    ContextMenuItems.Add(pon);
+                }
+
                 var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
                 var completedMelds = ConvertToCompletedMeld(incompletedMelds).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
-                foreach (var completedMeld in completedMelds)
+                if (completedMelds.Any())
                 {
-                    var chiCandidate = new ChiCandidate()
+                    var chi = new MenuItem() { Header = "チー" };
+                    foreach (var completedMeld in completedMelds)
                     {
-                        DataContext = completedMeld,
-                    };
-                    var chiCandidateMenuItem = new MenuItem()
-                    {
-                        Header = chiCandidate,
-                        Command = ChiCommand,
-                        CommandParameter = new Call(Tiles[int.Parse(args)], completedMeld.CallFrom.Value, completedMeld),
-                    };
-                    chi.Items.Add(chiCandidateMenuItem);
+                        var chiCandidate = new ChiCandidate()
+                        {
+                            DataContext = completedMeld,
+                        };
+                        var chiCandidateMenuItem = new MenuItem()
+                        {
+                            Header = chiCandidate,
+                            Command = ChiCommand,
+                            CommandParameter = new Call(Tiles[int.Parse(args)], completedMeld.CallFrom.Value, completedMeld),
+                        };
+                        chi.Items.Add(chiCandidateMenuItem);
+                    }
+                    ContextMenuItems.Add(chi);
                 }
-                ContextMenuItems.Add(chi);
-                
+
                 ContextMenuItems.Add(new MenuItem() { Header = "カン" });
             })
             .AddTo(_disposables);
