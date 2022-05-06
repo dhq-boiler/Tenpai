@@ -152,7 +152,7 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
-            PonCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 2)
+            PonCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) >= 2 && Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) <= 3)
                       .Select(x => x)
                       .Subscribe(args =>
             {
