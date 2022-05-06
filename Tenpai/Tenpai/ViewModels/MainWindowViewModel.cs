@@ -75,7 +75,14 @@ namespace Tenpai.ViewModels
                     pon.Items.Add(kamicha);
                     pon.Items.Add(toimen);
                     pon.Items.Add(shimocha);
-                    ContextMenuItems.Add(pon);
+                    try
+                    {
+                        ContextMenuItems.Add(pon);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+
+                    }
                 }
 
                 var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
@@ -97,7 +104,14 @@ namespace Tenpai.ViewModels
                         };
                         chi.Items.Add(chiCandidateMenuItem);
                     }
-                    ContextMenuItems.Add(chi);
+                    try
+                    {
+                        ContextMenuItems.Add(chi);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+
+                    }
                 }
 
                 var quads = MeldDetector.FindQuads(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
@@ -118,7 +132,14 @@ namespace Tenpai.ViewModels
                         };
                         kan.Items.Add(ankanCandidateMenuItem);
                     }
-                    ContextMenuItems.Add(kan);
+                    try
+                    {
+                        ContextMenuItems.Add(kan);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+
+                    }
                 }
             })
             .AddTo(_disposables);
