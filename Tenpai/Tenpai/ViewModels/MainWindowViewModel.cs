@@ -44,7 +44,7 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
         public ReactiveCommand<Call> PonCommand { get; } = new ReactiveCommand<Call>();
-        public ReactiveCommand<Meld> ChiCommand { get; } = new ReactiveCommand<Meld>();
+        public ReactiveCommand<Call> ChiCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<Meld> SarashiHai { get; } = new ReactiveCollection<Meld>();
 
         private int sarashiCount = 0;
@@ -81,7 +81,7 @@ namespace Tenpai.ViewModels
                     {
                         Header = chiCandidate,
                         Command = ChiCommand,
-                        CommandParameter = completedMeld,
+                        CommandParameter = new Call(Tiles[int.Parse(args)], completedMeld.CallFrom.Value, completedMeld),
                     };
                     chi.Items.Add(chiCandidateMenuItem);
                 }
@@ -119,7 +119,6 @@ namespace Tenpai.ViewModels
                     }
                 }
 
-
                 sarashiCount += 3;
 
                 var rotate = target;
@@ -147,12 +146,12 @@ namespace Tenpai.ViewModels
             ChiCommand.Subscribe(args =>
             {
                 sarashiCount += 3;
-                foreach (var tile in args.Tiles)
+                foreach (var tile in args.Meld.Tiles.Where(x => x.CallFrom == EOpponent.Unknown))
                 {
                     UpdateTileVisibility(tile, 1);
                 }
                 UpdateTileVisibility(new Dummy(), 1);
-                SarashiHai.Add(args);
+                SarashiHai.Add(args.Meld);
             })
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
@@ -275,6 +274,8 @@ namespace Tenpai.ViewModels
 
         private Meld[] ConvertToCompletedMeld(IEnumerable<IncompletedMeld> incompletedMelds)
         {
+            var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
+
             var melds = new List<Meld>();
             foreach (var incompletedMeld in incompletedMelds)
             {
@@ -282,27 +283,69 @@ namespace Tenpai.ViewModels
                 {
                     foreach (var wait in o.WaitTiles)
                     {
-                        var tiles = new[] { o.Tiles[0], o.Tiles[1], wait }.ToList();
-                        tiles.Sort();
-                        melds.Add(new Run(tiles[0], tiles[1], tiles[2]));
+                        foreach (var callFrom in callFroms)
+                        {
+                            wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            wait.CallFrom = callFrom;
+                            switch (wait.CallFrom)
+                            {
+                                case EOpponent.Kamicha:
+                                    melds.Add(new Run(wait, o.Tiles[0], o.Tiles[1]));
+                                    break;
+                                case EOpponent.Toimen:
+                                    melds.Add(new Run(o.Tiles[0], wait, o.Tiles[1]));
+                                    break;
+                                case EOpponent.Shimocha:
+                                    melds.Add(new Run(o.Tiles[0], o.Tiles[1], wait));
+                                    break;
+                            }
+                        }
                     }
                 }
                 else if (incompletedMeld is ClosedWait c)
                 {
                     foreach (var wait in c.WaitTiles)
                     {
-                        var tiles = new[] { c.Tiles[0], c.Tiles[1], wait }.ToList();
-                        tiles.Sort();
-                        melds.Add(new Run(tiles[0], tiles[1], tiles[2]));
+                        foreach (var callFrom in callFroms)
+                        {
+                            wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            wait.CallFrom = callFrom;
+                            switch (wait.CallFrom)
+                            {
+                                case EOpponent.Kamicha:
+                                    melds.Add(new Run(wait, c.Tiles[0], c.Tiles[1]));
+                                    break;
+                                case EOpponent.Toimen:
+                                    melds.Add(new Run(c.Tiles[0], wait, c.Tiles[1]));
+                                    break;
+                                case EOpponent.Shimocha:
+                                    melds.Add(new Run(c.Tiles[0], c.Tiles[1], wait));
+                                    break;
+                            }
+                        }
                     }
                 }
                 else if (incompletedMeld is EdgeWait e)
                 {
                     foreach (var wait in e.WaitTiles)
                     {
-                        var tiles = new[] { e.Tiles[0], e.Tiles[1], wait }.ToList();
-                        tiles.Sort();
-                        melds.Add(new Run(tiles[0], tiles[1], tiles[2]));
+                        foreach (var callFrom in callFroms)
+                        {
+                            wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            wait.CallFrom = callFrom;
+                            switch (wait.CallFrom)
+                            {
+                                case EOpponent.Kamicha:
+                                    melds.Add(new Run(wait, e.Tiles[0], e.Tiles[1]));
+                                    break;
+                                case EOpponent.Toimen:
+                                    melds.Add(new Run(e.Tiles[0], wait, e.Tiles[1]));
+                                    break;
+                                case EOpponent.Shimocha:
+                                    melds.Add(new Run(e.Tiles[0], e.Tiles[1], wait));
+                                    break;
+                            }
+                        }
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Tenpai.Models;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Yaku.Meld
@@ -27,6 +28,14 @@ namespace Tenpai.Yaku.Meld
         }
 
         public TileCollection Tiles { get { return _Set; } }
+
+        public EOpponent? CallFrom
+        {
+            get
+            {
+                return Tiles.FirstOrDefault(x => x.CallFrom != null)?.CallFrom;
+            }
+        }
 
 
         public virtual int TextWidth()

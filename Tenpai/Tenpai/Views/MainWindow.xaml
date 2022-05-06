@@ -20,9 +20,9 @@
                             <helper:MeldItemTemplateSelector>
                                 <DataTemplate DataType="{x:Type meld:Run}">
                                     <StackPanel Orientation="Horizontal">
-                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
-                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
-                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" />
+                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
                                     </StackPanel>
                                 </DataTemplate>
                                 <DataTemplate DataType="{x:Type meld:Triple}">

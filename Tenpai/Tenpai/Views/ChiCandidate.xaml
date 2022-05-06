@@ -8,9 +8,9 @@
              mc:Ignorable="d">
     <DockPanel>
         <StackPanel Orientation="Horizontal">
-            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[0]}" />
-            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[1]}" />
-            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[2]}" />
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
         </StackPanel>
     </DockPanel>
 </UserControl>
