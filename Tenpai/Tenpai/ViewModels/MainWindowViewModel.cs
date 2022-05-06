@@ -57,7 +57,6 @@ namespace Tenpai.ViewModels
 
         public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, Tile17.Value }; } }
 
-
         private bool sortflag = false;
 
         public MainWindowViewModel()
@@ -66,15 +65,25 @@ namespace Tenpai.ViewModels
             {
                 ContextMenuItems.Clear();
 
-                if (Tiles.Count(x => x.EqualsRedSuitedTileIncluding(Tiles[int.Parse(args)])) == 2)
+                if (Tiles.Count(x => x.EqualsRedSuitedTileIncluding(Tiles[int.Parse(args)])) >= 2 && Tiles.Count(x => x.EqualsRedSuitedTileIncluding(Tiles[int.Parse(args)])) <= 3)
                 {
                     var pon = new MenuItem() { Header = "ポン" };
-                    var kamicha = new MenuItem() { Header = "上家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Kamicha) };
-                    var toimen = new MenuItem() { Header = "対面から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Toimen) };
-                    var shimocha = new MenuItem() { Header = "下家から", Command = PonCommand, CommandParameter = new Call(Tiles[int.Parse(args)], EOpponent.Shimocha) };
-                    pon.Items.Add(kamicha);
-                    pon.Items.Add(toimen);
-                    pon.Items.Add(shimocha);
+                    var ponIncompletedMelds = IncompletedMeldDetector.FindIncompletedTriple(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
+                    var ponCompletedMelds = ConvertToCompletedTriple(ponIncompletedMelds).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
+                    foreach (var completedMeld in ponCompletedMelds)
+                    {
+                        var ponCandidate = new PonCandidate()
+                        {
+                            DataContext = completedMeld,
+                        };
+                        var ponCandidateMenuItem = new MenuItem()
+                        {
+                            Header = ponCandidate,
+                            Command = PonCommand,
+                            CommandParameter = new Call(Tiles[int.Parse(args)], completedMeld.CallFrom.Value, completedMeld),
+                        };
+                        pon.Items.Add(ponCandidateMenuItem);
+                    }
                     try
                     {
                         ContextMenuItems.Add(pon);
@@ -327,6 +336,42 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+        }
+
+        private Meld[] ConvertToCompletedTriple(IEnumerable<IncompletedMeld> ponIncompletedMelds)
+        {
+            var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
+
+            var melds = new List<Meld>();
+            foreach (var incompletedMeld in ponIncompletedMelds)
+            {
+                if (incompletedMeld is Yaku.Meld.Double d)
+                {
+                    d.ComputeWaitTiles();
+                    foreach (var wait in d.WaitTiles)
+                    {
+                        foreach (var callFrom in callFroms)
+                        {
+                            var _wait = wait.Clone() as Tile;
+                            _wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            _wait.CallFrom = callFrom;
+                            switch (_wait.CallFrom)
+                            {
+                                case EOpponent.Kamicha:
+                                    melds.Add(new Triple(_wait, d.Tiles[0], d.Tiles[1]));
+                                    break;
+                                case EOpponent.Toimen:
+                                    melds.Add(new Triple(d.Tiles[0], _wait, d.Tiles[1]));
+                                    break;
+                                case EOpponent.Shimocha:
+                                    melds.Add(new Triple(d.Tiles[0], d.Tiles[1], _wait));
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            return melds.ToArray();
         }
 
         private bool ContainsRedTile(IEnumerable<Tile> targetTiles)

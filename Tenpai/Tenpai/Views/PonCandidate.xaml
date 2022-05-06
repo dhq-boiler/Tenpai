@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Tenpai.Views.PonCandidate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Tenpai.Views"
+             xmlns:views="clr-namespace:Tenpai.Views"
+             mc:Ignorable="d">
+    <DockPanel>
+        <StackPanel Orientation="Horizontal">
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

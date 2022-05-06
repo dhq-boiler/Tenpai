@@ -33,7 +33,7 @@ namespace Tenpai.Yaku.Meld
         {
             get
             {
-                return Tiles.FirstOrDefault(x => x.CallFrom != null)?.CallFrom;
+                return Tiles.FirstOrDefault(x => x.CallFrom != EOpponent.Unknown)?.CallFrom;
             }
         }
 
