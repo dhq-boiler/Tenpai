@@ -73,7 +73,7 @@ namespace Tenpai.ViewModels
                 }
 
                 var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
-                var completedMelds = ConvertToCompletedMeld(incompletedMelds).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
+                var completedMelds = ConvertToCompletedRuns(incompletedMelds).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
                 if (completedMelds.Any())
                 {
                     var chi = new MenuItem() { Header = "チー" };
@@ -281,7 +281,7 @@ namespace Tenpai.ViewModels
             }
         }
 
-        private Meld[] ConvertToCompletedMeld(IEnumerable<IncompletedMeld> incompletedMelds)
+        private Meld[] ConvertToCompletedRuns(IEnumerable<IncompletedMeld> incompletedMelds)
         {
             var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
 
