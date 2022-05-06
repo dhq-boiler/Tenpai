@@ -308,40 +308,6 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
         }
 
-        //private Meld[] ConvertToCompletedTriples(IEnumerable<IncompletedMeld> incompletedMelds)
-        //{
-        //    var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
-
-        //    var melds = new List<Meld>();
-        //    foreach (var incompletedMeld in incompletedMelds)
-        //    {
-        //        if (incompletedMeld is Triple t)
-        //        {
-        //            foreach (var wait in t.WaitTiles)
-        //            {
-        //                foreach (var callFrom in callFroms)
-        //                {
-        //                    wait.Rotate = new System.Windows.Media.RotateTransform(90);
-        //                    wait.CallFrom = callFrom;
-        //                    switch (wait.CallFrom)
-        //                    {
-        //                        case EOpponent.Kamicha:
-        //                            melds.Add(new Quad(wait, t.Tiles[0], t.Tiles[1]));
-        //                            break;
-        //                        case EOpponent.Toimen:
-        //                            melds.Add(new Triple(t.Tiles[0], wait, t.Tiles[1]));
-        //                            break;
-        //                        case EOpponent.Shimocha:
-        //                            melds.Add(new Triple(t.Tiles[0], t.Tiles[1], wait));
-        //                            break;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return melds.Distinct().ToArray();
-        //}
-
         private bool ContainsRedTile(IEnumerable<Tile> targetTiles)
         {
             foreach (var tile in targetTiles)
