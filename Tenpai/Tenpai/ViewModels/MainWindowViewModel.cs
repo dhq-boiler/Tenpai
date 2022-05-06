@@ -92,19 +92,43 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             PonCommand.Subscribe(args =>
             {
-                sarashiCount += 3;
-                UpdateTileVisibility(args.Target, 2);
-                UpdateTileVisibility(new Dummy(), 1);
-                UpdateTile(new Dummy(), args.Target, 1);
-                var targetTiles = Tiles.Where(x => x != null && x.Equals(args.Target));
+                var exist = args.Target;
+                var target = args.Target;
+                var targetTiles = Tiles.Where(x => x != null && x.Code == target.Code);
                 if (targetTiles.First() is IRedSuitedTile)
                 {
-
+                    if (!ContainsRedTile(targetTiles))
+                    {
+                        IDialogResult dialogResult = null;
+                        dialogService.ShowDialog(nameof(SelectRedTileOrNot), new DialogParameters() { { "Tile", Tile.CreateInstance(targetTiles.First()) }, { "RedTile", Tile.CreateRedInstance(targetTiles.First().Code) } }, (result) =>
+                         {
+                             dialogResult = result;
+                         });
+                        if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
+                        {
+                            target = dialogResult.Parameters.GetValue<Tile>("Result");
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        target = Tile.CreateInstance(args.Target.Code);
+                    }
                 }
 
-                var rotate = args.Target;
+
+                sarashiCount += 3;
+
+                var rotate = target;
                 rotate.CallFrom = args.CallFrom;
                 rotate.Rotate = new System.Windows.Media.RotateTransform(90);
+
+                UpdateTile(new Dummy(), rotate, 1);
+                UpdateTileVisibilityToCollapsed(rotate.Code, 3);
+                
                 switch (args.CallFrom)
                 {
                     case EOpponent.Kamicha:
@@ -117,6 +141,7 @@ namespace Tenpai.ViewModels
                         SarashiHai.Add(new Triple(targetTiles.ElementAt(0), targetTiles.ElementAt(1), rotate));
                         break;
                 }
+                SortIf();
             })
             .AddTo(_disposables);
             ChiCommand.Subscribe(args =>
@@ -220,15 +245,25 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
         }
 
-        private void UpdateTile(Dummy dummy, Tile target, int count)
+        private bool ContainsRedTile(IEnumerable<Tile> targetTiles)
+        {
+            foreach (var tile in targetTiles)
+            {
+                if (tile is IRedSuitedTile r && r.IsRedSuited == true)
+                    return true;
+            }
+            return false;
+        }
+
+        private void UpdateTile(Tile replaced, Tile target, int count)
         {
             int processedCount = 0;
             for (int j = 0; j < Tiles.Count(); j++)
             {
                 var tile = GetTile(j);
-                if (tile is null)
+                if (tile is null || tile.Visibility.Value == Visibility.Collapsed)
                     continue;
-                if (tile.Equals(dummy))
+                if (tile.Equals(replaced) && tile.Visibility.Value != Visibility.Collapsed)
                 {
                     SetTile(j, target);
                     processedCount++;
@@ -282,7 +317,25 @@ namespace Tenpai.ViewModels
                 var tile = GetTile(j);
                 if (tile is null)
                     continue;
-                if (tile.Equals(args))
+                if (tile.Equals(args) && tile.Visibility.Value != Visibility.Collapsed)
+                {
+                    tile.Visibility.Value = Visibility.Collapsed;
+                    processedCount++;
+                }
+                if (processedCount == count)
+                    return;
+            }
+        }
+
+        private void UpdateTileVisibilityToCollapsed(int code, int count)
+        {
+            int processedCount = 0;
+            for (int j = 0; j < Tiles.Count(); j++)
+            {
+                var tile = GetTile(j);
+                if (tile is null)
+                    continue;
+                if (tile.Code == code && tile.Visibility.Value != Visibility.Collapsed)
                 {
                     tile.Visibility.Value = Visibility.Collapsed;
                     processedCount++;
@@ -375,45 +428,59 @@ namespace Tenpai.ViewModels
             switch (i)
             {
                 case 0:
+                    Console.WriteLine($"Tile{i}: {Tile0.Value} = {tile}");
                     Tile0.Value = tile;
                     break;
                 case 1:
+                    Console.WriteLine($"Tile{i}: {Tile1.Value} = {tile}");
                     Tile1.Value = tile;
                     break;
                 case 2:
+                    Console.WriteLine($"Tile{i}: {Tile2.Value} = {tile}");
                     Tile2.Value = tile;
                     break;
                 case 3:
+                    Console.WriteLine($"Tile{i}: {Tile3.Value} = {tile}");
                     Tile3.Value = tile;
                     break;
                 case 4:
+                    Console.WriteLine($"Tile{i}: {Tile4.Value} = {tile}");
                     Tile4.Value = tile;
                     break;
                 case 5:
+                    Console.WriteLine($"Tile{i}: {Tile5.Value} = {tile}");
                     Tile5.Value = tile;
                     break;
                 case 6:
+                    Console.WriteLine($"Tile{i}: {Tile6.Value} = {tile}");
                     Tile6.Value = tile;
                     break;
                 case 7:
+                    Console.WriteLine($"Tile{i}: {Tile7.Value} = {tile}");
                     Tile7.Value = tile;
                     break;
                 case 8:
+                    Console.WriteLine($"Tile{i}: {Tile8.Value} = {tile}");
                     Tile8.Value = tile;
                     break;
                 case 9:
+                    Console.WriteLine($"Tile{i}: {Tile9.Value} = {tile}");
                     Tile9.Value = tile;
                     break;
                 case 10:
+                    Console.WriteLine($"Tile{i}: {Tile10.Value} = {tile}");
                     Tile10.Value = tile;
                     break;
                 case 11:
+                    Console.WriteLine($"Tile{i}: {Tile11.Value} = {tile}");
                     Tile11.Value = tile;
                     break;
                 case 12:
+                    Console.WriteLine($"Tile{i}: {Tile12.Value} = {tile}");
                     Tile12.Value = tile;
                     break;
                 case 13:
+                    Console.WriteLine($"Tile{i}: {Tile13.Value} = {tile}");
                     Tile13.Value = tile;
                     break;
             }

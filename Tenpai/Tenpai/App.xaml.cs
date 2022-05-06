@@ -24,6 +24,7 @@ namespace Tenpai
         protected override void RegisterTypes(IContainerRegistry cr)
         {
             cr.RegisterDialog<Views.TileLineup, ViewModels.TileLineupViewModel>();
+            cr.RegisterDialog<Views.SelectRedTileOrNot, ViewModels.SelectRedTileOrNotViewModel>();
         }
     }
 }

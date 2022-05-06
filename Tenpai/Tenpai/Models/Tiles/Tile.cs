@@ -248,6 +248,32 @@ namespace Tenpai.Models.Tiles
 
         public int CompareTo(Tile other)
         {
+            if (this is IRedSuitedTile t && other is IRedSuitedTile o)
+            {
+                if (this.Code > other.Code)
+                {
+                    return 1;
+                }
+                else if (this.Code < other.Code)
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (t.IsRedSuited && o.IsRedSuited)
+                    {
+                        return 0;
+                    }
+                    else if (t.IsRedSuited)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+            }
             if (Code > other.Code) return 1;
             else if (Code < other.Code) return -1;
             else
