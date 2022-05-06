@@ -40,16 +40,22 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile14 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
+        public ReactivePropertySlim<Tile> Tile15 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
+        public ReactivePropertySlim<Tile> Tile16 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
+        public ReactivePropertySlim<Tile> Tile17 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
         public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
         public ReactiveCommand<Call> PonCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> ChiCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<Meld> SarashiHai { get; } = new ReactiveCollection<Meld>();
+        public ReactiveCommand<Call> AnkanCommand { get; } = new ReactiveCommand<Call>();
+        public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
 
         private int sarashiCount = 0;
 
-        public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value }; } }
+        public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, Tile17.Value }; } }
 
 
         private bool sortflag = false;
@@ -94,7 +100,26 @@ namespace Tenpai.ViewModels
                     ContextMenuItems.Add(chi);
                 }
 
-                ContextMenuItems.Add(new MenuItem() { Header = "カン" });
+                var quads = MeldDetector.FindQuads(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
+                if (quads.Any())
+                {
+                    var kan = new MenuItem() { Header = "カン" };
+                    foreach (var quad in quads)
+                    {
+                        var ankanCandidate = new AnkanCandidate()
+                        {
+                            DataContext = quad,
+                        };
+                        var ankanCandidateMenuItem = new MenuItem()
+                        {
+                            Header = ankanCandidate,
+                            Command = AnkanCommand,
+                            CommandParameter = new Call(Tiles[int.Parse(args)], quad)
+                        };
+                        kan.Items.Add(ankanCandidateMenuItem);
+                    }
+                    ContextMenuItems.Add(kan);
+                }
             })
             .AddTo(_disposables);
             PonCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 2)
@@ -160,6 +185,17 @@ namespace Tenpai.ViewModels
                     UpdateTileVisibility(tile, 1);
                 }
                 UpdateTileVisibility(new Dummy(), 1);
+                SarashiHai.Add(args.Meld);
+            })
+            .AddTo(_disposables);
+            AnkanCommand.Subscribe(args =>
+            {
+                sarashiCount += 4;
+                tileCount.Value++;
+                for (int i = 0; i < 4; i++)
+                {
+                    UpdateTileVisibility(args.Meld.Tiles[i], 1);
+                }
                 SarashiHai.Add(args.Meld);
             })
             .AddTo(_disposables);
@@ -251,7 +287,60 @@ namespace Tenpai.ViewModels
                 SortIf();
             })
             .AddTo(_disposables);
+            tileCount.Subscribe(count =>
+            {
+                switch (count)
+                {
+                    case 15:
+                        Tile14.Value.Visibility.Value = Visibility.Visible;
+                        break;
+                    case 16:
+                        Tile15.Value.Visibility.Value = Visibility.Visible;
+                        break;
+                    case 17:
+                        Tile16.Value.Visibility.Value = Visibility.Visible;
+                        break;
+                    case 18:
+                        Tile17.Value.Visibility.Value = Visibility.Visible;
+                        break;
+                }
+            })
+            .AddTo(_disposables);
         }
+
+        //private Meld[] ConvertToCompletedTriples(IEnumerable<IncompletedMeld> incompletedMelds)
+        //{
+        //    var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
+
+        //    var melds = new List<Meld>();
+        //    foreach (var incompletedMeld in incompletedMelds)
+        //    {
+        //        if (incompletedMeld is Triple t)
+        //        {
+        //            foreach (var wait in t.WaitTiles)
+        //            {
+        //                foreach (var callFrom in callFroms)
+        //                {
+        //                    wait.Rotate = new System.Windows.Media.RotateTransform(90);
+        //                    wait.CallFrom = callFrom;
+        //                    switch (wait.CallFrom)
+        //                    {
+        //                        case EOpponent.Kamicha:
+        //                            melds.Add(new Quad(wait, t.Tiles[0], t.Tiles[1]));
+        //                            break;
+        //                        case EOpponent.Toimen:
+        //                            melds.Add(new Triple(t.Tiles[0], wait, t.Tiles[1]));
+        //                            break;
+        //                        case EOpponent.Shimocha:
+        //                            melds.Add(new Triple(t.Tiles[0], t.Tiles[1], wait));
+        //                            break;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return melds.Distinct().ToArray();
+        //}
 
         private bool ContainsRedTile(IEnumerable<Tile> targetTiles)
         {
@@ -470,6 +559,14 @@ namespace Tenpai.ViewModels
                     return Tile12.Value;
                 case 13:
                     return Tile13.Value;
+                case 14:
+                    return Tile14.Value;
+                case 15:
+                    return Tile15.Value;
+                case 16:
+                    return Tile16.Value;
+                case 17:
+                    return Tile17.Value;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -534,6 +631,22 @@ namespace Tenpai.ViewModels
                 case 13:
                     Console.WriteLine($"Tile{i}: {Tile13.Value} = {tile}");
                     Tile13.Value = tile;
+                    break;
+                case 14:
+                    Console.WriteLine($"Tile{i}: {Tile14.Value} = {tile}");
+                    Tile14.Value = tile;
+                    break;
+                case 15:
+                    Console.WriteLine($"Tile{i}: {Tile15.Value} = {tile}");
+                    Tile15.Value = tile;
+                    break;
+                case 16:
+                    Console.WriteLine($"Tile{i}: {Tile16.Value} = {tile}");
+                    Tile16.Value = tile;
+                    break;
+                case 17:
+                    Console.WriteLine($"Tile{i}: {Tile17.Value} = {tile}");
+                    Tile17.Value = tile;
                     break;
             }
         }

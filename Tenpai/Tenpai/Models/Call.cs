@@ -26,5 +26,11 @@ namespace Tenpai.Models
         {
             this.Meld = meld;
         }
+
+        public Call(Tile target, Meld meld)
+        {
+            Target = target;
+            this.Meld = meld;
+        }
     }
 }

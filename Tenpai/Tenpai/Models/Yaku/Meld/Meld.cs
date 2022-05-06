@@ -67,5 +67,19 @@ namespace Tenpai.Yaku.Meld
             }
             return hashcode;
         }
+        private string ToStringCompleted()
+        {
+            string ret = "";
+            foreach (var tile in Tiles)
+            {
+                ret += tile.ToString();
+            }
+            return ret;
+        }
+
+        public override string ToString()
+        {
+            return ToStringCompleted();
+        }
     }
 }

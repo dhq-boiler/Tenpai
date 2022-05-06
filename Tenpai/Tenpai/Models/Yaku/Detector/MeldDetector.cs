@@ -504,7 +504,7 @@ namespace Tenpai.Yaku.Meld.Detector
 
                 if (first.Equals(second) && first.Equals(third) && first.Equals(fourth))
                 {
-                    var quad = new Quad(first);
+                    var quad = new Quad(first, second, third, fourth);
                     ret.Add(quad);
                 }
             }

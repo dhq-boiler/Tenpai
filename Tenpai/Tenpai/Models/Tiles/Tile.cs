@@ -218,6 +218,13 @@ namespace Tenpai.Models.Tiles
             return new T();
         }
 
+        public static Tile CreateInstance<T>(Visibility visibility) where T : Tile, new()
+        {
+            var t = new T();
+            t.Visibility.Value = visibility;
+            return t;
+        }
+
         public static Tile CreateRedInstance<T>() where T : Tile, IRedSuitedTile, new()
         {
             var tile = new T();

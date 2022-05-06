@@ -13,17 +13,17 @@ namespace Tenpai.Yaku.Meld
         /// 暗槓用コンストラクタ
         /// </summary>
         /// <param name="t"></param>
-        public Quad(Tile t)
+        public Quad(Tile t1, Tile t2, Tile t3, Tile t4)
             : base()
         {
-            _Existed.Add(t);
-            _Existed.Add(t);
-            _Existed.Add(t);
-            _Existed.Add(t);
-            _Set.Add(t);
-            _Set.Add(t);
-            _Set.Add(t);
-            _Set.Add(t);
+            _Existed.Add(t1);
+            _Existed.Add(t2);
+            _Existed.Add(t3);
+            _Existed.Add(t4);
+            _Set.Add(t1);
+            _Set.Add(t2);
+            _Set.Add(t3);
+            _Set.Add(t4);
             this.Type = KongType.ConcealedKong;
         }
 

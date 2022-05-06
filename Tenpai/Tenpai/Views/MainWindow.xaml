@@ -261,6 +261,66 @@
                         </ContextMenu>
                     </views:TilePlaceholder.ContextMenu>
                 </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile14.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile14.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile15.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile15.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile16.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile16.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile17.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile17.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
             </StackPanel>
         </DockPanel>
     </DockPanel>
