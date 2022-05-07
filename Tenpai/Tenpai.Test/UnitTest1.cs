@@ -4,7 +4,6 @@ using Prism.Services.Dialogs;
 using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
 using Tenpai.ViewModels;
