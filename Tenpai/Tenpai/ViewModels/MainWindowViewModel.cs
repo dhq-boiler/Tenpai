@@ -270,6 +270,7 @@ namespace Tenpai.ViewModels
                           var targetTiles = Tiles.Where(x => x != null && x.Code == target.Code);
                           
                           sarashiCount += 4;
+                          tileCount.Value++;
 
                           var rotate = target.Clone() as Tile;
                           rotate.CallFrom = args.CallFrom;
@@ -291,7 +292,7 @@ namespace Tenpai.ViewModels
                                   SarashiHai.Add(quad);
                                   break;
                               case EOpponent.Shimocha:
-                                  quad = new Quad(targetTiles.ElementAt(0), targetTiles.ElementAt(1), rotate, targetTiles.ElementAt(2));
+                                  quad = new Quad(targetTiles.ElementAt(0), targetTiles.ElementAt(1), targetTiles.ElementAt(2), rotate);
                                   quad.Type = Models.Yaku.Meld.KongType.LargeMeldedKong;
                                   SarashiHai.Add(quad);
                                   break;
