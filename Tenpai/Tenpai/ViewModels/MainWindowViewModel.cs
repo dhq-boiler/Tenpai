@@ -51,6 +51,8 @@ namespace Tenpai.ViewModels
         public ReactiveCommand<Call> ChiCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<Meld> SarashiHai { get; } = new ReactiveCollection<Meld>();
         public ReactiveCommand<Call> AnkanCommand { get; } = new ReactiveCommand<Call>();
+        public ReactiveCommand<Call> DaiminkanCommand { get; } = new ReactiveCommand<Call>();
+
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
 
         private int sarashiCount = 0;
@@ -124,23 +126,49 @@ namespace Tenpai.ViewModels
                 }
 
                 var quads = MeldDetector.FindQuads(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
-                if (quads.Any())
+                var incompletedQuads = IncompletedMeldDetector.FindIncompletedQuad(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
+                var daiminkanCompletedQuads = ConvertToCompletedQuads(incompletedQuads).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
+                if (quads.Any() || daiminkanCompletedQuads.Any())
                 {
                     var kan = new MenuItem() { Header = "カン" };
-                    foreach (var quad in quads)
+                    if (quads.Any())
                     {
-                        var ankanCandidate = new AnkanCandidate()
+                        foreach (var quad in quads)
                         {
-                            DataContext = quad,
-                        };
-                        var ankanCandidateMenuItem = new MenuItem()
-                        {
-                            Header = ankanCandidate,
-                            Command = AnkanCommand,
-                            CommandParameter = new Call(quad)
-                        };
-                        kan.Items.Add(ankanCandidateMenuItem);
+                            (quad as Quad).Type = Models.Yaku.Meld.KongType.ConcealedKong;
+                            var ankanCandidate = new AnkanCandidate()
+                            {
+                                DataContext = quad,
+                            };
+                            var ankanCandidateMenuItem = new MenuItem()
+                            {
+                                Header = ankanCandidate,
+                                Command = AnkanCommand,
+                                CommandParameter = new Call(quad)
+                            };
+                            kan.Items.Add(ankanCandidateMenuItem);
+                        }
                     }
+
+                    if (daiminkanCompletedQuads.Any())
+                    {
+                        foreach (var daiminkanQuad in daiminkanCompletedQuads)
+                        {
+                            (daiminkanQuad as Quad).Type = Models.Yaku.Meld.KongType.LargeMeldedKong;
+                            var daiminkanCandidate = new DaiminkanCandidate()
+                            {
+                                DataContext = daiminkanQuad,
+                            };
+                            var daiminkanCandidateMenuItem = new MenuItem()
+                            {
+                                Header = daiminkanCandidate,
+                                Command = DaiminkanCommand,
+                                CommandParameter = new Call(Tiles[int.Parse(args)], daiminkanQuad.CallFrom.Value, daiminkanQuad)
+                            };
+                            kan.Items.Add(daiminkanCandidateMenuItem);
+                        }
+                    }
+
                     try
                     {
                         ContextMenuItems.Add(kan);
@@ -232,6 +260,44 @@ namespace Tenpai.ViewModels
                 }
                 SarashiHai.Add(args.Meld);
             })
+            .AddTo(_disposables);
+            DaiminkanCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 3)
+                      .Select(x => x)
+                      .Subscribe(args =>
+                      {
+                          var exist = args.Target;
+                          var target = args.Target;
+                          var targetTiles = Tiles.Where(x => x != null && x.Code == target.Code);
+                          
+                          sarashiCount += 4;
+
+                          var rotate = target.Clone() as Tile;
+                          rotate.CallFrom = args.CallFrom;
+                          rotate.Rotate = new System.Windows.Media.RotateTransform(90);
+
+                          UpdateTile(new Dummy(), rotate, 1);
+                          UpdateTileVisibilityToCollapsed(rotate.Code, 4);
+                          Quad quad = null;
+                          switch (args.CallFrom)
+                          {
+                              case EOpponent.Kamicha:
+                                  quad = new Quad(rotate, targetTiles.ElementAt(0), targetTiles.ElementAt(1), targetTiles.ElementAt(2));
+                                  quad.Type = Models.Yaku.Meld.KongType.LargeMeldedKong;
+                                  SarashiHai.Add(quad);
+                                  break;
+                              case EOpponent.Toimen:
+                                  quad = new Quad(targetTiles.ElementAt(0), rotate, targetTiles.ElementAt(1), targetTiles.ElementAt(2));
+                                  quad.Type = Models.Yaku.Meld.KongType.LargeMeldedKong;
+                                  SarashiHai.Add(quad);
+                                  break;
+                              case EOpponent.Shimocha:
+                                  quad = new Quad(targetTiles.ElementAt(0), targetTiles.ElementAt(1), rotate, targetTiles.ElementAt(2));
+                                  quad.Type = Models.Yaku.Meld.KongType.LargeMeldedKong;
+                                  SarashiHai.Add(quad);
+                                  break;
+                          }
+                          SortIf();
+                      })
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
             {
@@ -340,6 +406,42 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+        }
+
+        private Meld[] ConvertToCompletedQuads(IEnumerable<IncompletedMeld> incompletedQuads)
+        {
+            var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
+
+            var melds = new List<Meld>();
+            foreach (var incompletedQuad in incompletedQuads)
+            {
+                if (incompletedQuad is Yaku.Meld.Triple t)
+                {
+                    t.ComputeWaitTiles();
+                    foreach (var wait in t.WaitTiles)
+                    {
+                        foreach (var callFrom in callFroms)
+                        {
+                            var _wait = wait.Clone() as Tile;
+                            _wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            _wait.CallFrom = callFrom;
+                            switch (_wait.CallFrom)
+                            {
+                                case EOpponent.Kamicha:
+                                    melds.Add(new Quad(_wait, t.Tiles[0], t.Tiles[1], t.Tiles[2]));
+                                    break;
+                                case EOpponent.Toimen:
+                                    melds.Add(new Quad(t.Tiles[0], _wait, t.Tiles[1], t.Tiles[2]));
+                                    break;
+                                case EOpponent.Shimocha:
+                                    melds.Add(new Quad(t.Tiles[0], t.Tiles[1], t.Tiles[2], _wait));
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            return melds.ToArray();
         }
 
         private Meld[] ConvertToCompletedTriple(IEnumerable<IncompletedMeld> ponIncompletedMelds)

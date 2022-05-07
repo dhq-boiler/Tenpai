@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku.Meld;
 
 namespace Tenpai.Yaku.Meld
 {
@@ -9,10 +10,6 @@ namespace Tenpai.Yaku.Meld
     /// </summary>
     public class Quad : Meld
     {
-        /// <summary>
-        /// 暗槓用コンストラクタ
-        /// </summary>
-        /// <param name="t"></param>
         public Quad(Tile t1, Tile t2, Tile t3, Tile t4)
             : base()
         {
@@ -24,56 +21,11 @@ namespace Tenpai.Yaku.Meld
             _Set.Add(t2);
             _Set.Add(t3);
             _Set.Add(t4);
-            this.Type = KongType.ConcealedKong;
         }
 
-        ///// <summary>
-        ///// 大明槓用コンストラクタ
-        ///// </summary>
-        ///// <param name="discaded"></param>
-        ///// <param name="from"></param>
-        //public Quad(Tile discaded, EOpponent from)
-        //    : base()
-        //{
-        //    _Existed.Add(discaded);
-        //    _Existed.Add(discaded);
-        //    _Existed.Add(discaded);
-        //    _Set.Add(discaded);
-        //    _Set.Add(discaded);
-        //    _Set.Add(discaded);
-        //    RotatedTile = discaded;
-        //    GetFrom = from;
-        //    this.Type = KongType.LargeMeldedKong;
-        //}
+        public KongType Type { get; set; }
 
-        ///// <summary>
-        ///// 小明槓用コンストラクタ
-        ///// </summary>
-        ///// <param name="add"></param>
-        ///// <param name="pung"></param>
-        //public Quad(Tile add, Triple pung)
-        //    :base()
-        //{
-        //    _Existed.Add(pung.Tiles[0]);
-        //    _Existed.Add(pung.Tiles[1]);
-        //    _Existed.Add(pung.Tiles[2]);
-        //    _Set.Add(pung.Tiles[0]);
-        //    _Set.Add(pung.Tiles[1]);
-        //    _Set.Add(pung.Tiles[2]);
-        //    _Set.Add(add);
-        //    RotatedTile = pung.RotatedTile;
-        //    GetFrom = pung.GetFrom;
-        //    this.Type = KongType.SmallMeldedKong;
-        //}
-
-        public KongType Type { get; private set; }
-
-        public enum KongType
-        {
-            ConcealedKong,
-            LargeMeldedKong,
-            SmallMeldedKong
-        }
+        public int TypeAsInt { get { return (int)Type; } }
 
         public override int TextWidth()
         {
