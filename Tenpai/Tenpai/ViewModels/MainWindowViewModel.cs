@@ -218,7 +218,7 @@ namespace Tenpai.ViewModels
                 {
                     UpdateTileVisibility(tile, 1);
                 }
-                UpdateTileVisibility(new Dummy(), 1);
+                UpdateTileVisibility(rotate, 1);
                 SarashiHai.Add(args.Meld);
             })
             .AddTo(_disposables);
@@ -470,7 +470,7 @@ namespace Tenpai.ViewModels
                             var _wait = wait.Clone() as Tile;
                             _wait.Rotate = new System.Windows.Media.RotateTransform(90);
                             _wait.CallFrom = callFrom;
-                            switch (wait.CallFrom)
+                            switch (_wait.CallFrom)
                             {
                                 case EOpponent.Kamicha:
                                     melds.Add(new Run(_wait, e.Tiles[0], e.Tiles[1]));
