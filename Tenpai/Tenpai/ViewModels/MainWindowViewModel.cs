@@ -210,6 +210,10 @@ namespace Tenpai.ViewModels
             ChiCommand.Subscribe(args =>
             {
                 sarashiCount += 3;
+                var rotate = args.Target.Clone() as Tile;
+                rotate.CallFrom = args.CallFrom;
+                rotate.Rotate = new System.Windows.Media.RotateTransform(90);
+                UpdateTile(new Dummy(), rotate, 1);
                 foreach (var tile in args.Meld.Tiles.Where(x => x.CallFrom == EOpponent.Unknown))
                 {
                     UpdateTileVisibility(tile, 1);
@@ -402,7 +406,7 @@ namespace Tenpai.ViewModels
             }
         }
 
-        private Meld[] ConvertToCompletedRuns(IEnumerable<IncompletedMeld> incompletedMelds)
+        public Meld[] ConvertToCompletedRuns(IEnumerable<IncompletedMeld> incompletedMelds)
         {
             var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
 
@@ -415,18 +419,19 @@ namespace Tenpai.ViewModels
                     {
                         foreach (var callFrom in callFroms)
                         {
-                            wait.Rotate = new System.Windows.Media.RotateTransform(90);
-                            wait.CallFrom = callFrom;
-                            switch (wait.CallFrom)
+                            var _wait = wait.Clone() as Tile;
+                            _wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            _wait.CallFrom = callFrom;
+                            switch (_wait.CallFrom)
                             {
                                 case EOpponent.Kamicha:
-                                    melds.Add(new Run(wait, o.Tiles[0], o.Tiles[1]));
+                                    melds.Add(new Run(_wait, o.Tiles[0], o.Tiles[1]));
                                     break;
                                 case EOpponent.Toimen:
-                                    melds.Add(new Run(o.Tiles[0], wait, o.Tiles[1]));
+                                    melds.Add(new Run(o.Tiles[0], _wait, o.Tiles[1]));
                                     break;
                                 case EOpponent.Shimocha:
-                                    melds.Add(new Run(o.Tiles[0], o.Tiles[1], wait));
+                                    melds.Add(new Run(o.Tiles[0], o.Tiles[1], _wait));
                                     break;
                             }
                         }
@@ -438,18 +443,19 @@ namespace Tenpai.ViewModels
                     {
                         foreach (var callFrom in callFroms)
                         {
-                            wait.Rotate = new System.Windows.Media.RotateTransform(90);
-                            wait.CallFrom = callFrom;
-                            switch (wait.CallFrom)
+                            var _wait = wait.Clone() as Tile;
+                            _wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            _wait.CallFrom = callFrom;
+                            switch (_wait.CallFrom)
                             {
                                 case EOpponent.Kamicha:
-                                    melds.Add(new Run(wait, c.Tiles[0], c.Tiles[1]));
+                                    melds.Add(new Run(_wait, c.Tiles[0], c.Tiles[1]));
                                     break;
                                 case EOpponent.Toimen:
-                                    melds.Add(new Run(c.Tiles[0], wait, c.Tiles[1]));
+                                    melds.Add(new Run(c.Tiles[0], _wait, c.Tiles[1]));
                                     break;
                                 case EOpponent.Shimocha:
-                                    melds.Add(new Run(c.Tiles[0], c.Tiles[1], wait));
+                                    melds.Add(new Run(c.Tiles[0], c.Tiles[1], _wait));
                                     break;
                             }
                         }
@@ -461,25 +467,26 @@ namespace Tenpai.ViewModels
                     {
                         foreach (var callFrom in callFroms)
                         {
-                            wait.Rotate = new System.Windows.Media.RotateTransform(90);
-                            wait.CallFrom = callFrom;
+                            var _wait = wait.Clone() as Tile;
+                            _wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                            _wait.CallFrom = callFrom;
                             switch (wait.CallFrom)
                             {
                                 case EOpponent.Kamicha:
-                                    melds.Add(new Run(wait, e.Tiles[0], e.Tiles[1]));
+                                    melds.Add(new Run(_wait, e.Tiles[0], e.Tiles[1]));
                                     break;
                                 case EOpponent.Toimen:
-                                    melds.Add(new Run(e.Tiles[0], wait, e.Tiles[1]));
+                                    melds.Add(new Run(e.Tiles[0], _wait, e.Tiles[1]));
                                     break;
                                 case EOpponent.Shimocha:
-                                    melds.Add(new Run(e.Tiles[0], e.Tiles[1], wait));
+                                    melds.Add(new Run(e.Tiles[0], e.Tiles[1], _wait));
                                     break;
                             }
                         }
                     }
                 }
             }
-            return melds.Distinct().ToArray();
+            return melds.ToArray();
         }
 
         private void UpdateTileVisibility(Tile args, int count)
