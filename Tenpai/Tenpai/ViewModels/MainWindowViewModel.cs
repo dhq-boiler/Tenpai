@@ -137,7 +137,7 @@ namespace Tenpai.ViewModels
                         {
                             Header = ankanCandidate,
                             Command = AnkanCommand,
-                            CommandParameter = new Call(Tiles[int.Parse(args)], quad)
+                            CommandParameter = new Call(quad)
                         };
                         kan.Items.Add(ankanCandidateMenuItem);
                     }

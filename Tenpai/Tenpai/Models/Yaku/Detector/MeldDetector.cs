@@ -502,7 +502,7 @@ namespace Tenpai.Yaku.Meld.Detector
                 var third = sorted.ElementAt(i + 2);
                 var fourth = sorted.ElementAt(i + 3);
 
-                if (first.Equals(second) && first.Equals(third) && first.Equals(fourth))
+                if (first.EqualsRedSuitedTileIncluding(second) && first.EqualsRedSuitedTileIncluding(third) && first.EqualsRedSuitedTileIncluding(fourth))
                 {
                     var quad = new Quad(first, second, third, fourth);
                     ret.Add(quad);

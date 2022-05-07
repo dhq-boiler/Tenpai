@@ -32,5 +32,10 @@ namespace Tenpai.Models
             Target = target;
             this.Meld = meld;
         }
+
+        public Call(Meld meld)
+        {
+            this.Meld = meld;
+        }
     }
 }
