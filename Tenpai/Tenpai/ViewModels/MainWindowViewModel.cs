@@ -367,13 +367,14 @@ namespace Tenpai.ViewModels
                           SortIf();
                       })
             .AddTo(_disposables);
-            ShouminkanCommand.Where(x => Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.Equals(x.Target)) == 1 && SarashiHai.Where(y => y.Tiles[0].Equals(x.Target) && y is Triple).Any())
+            ShouminkanCommand.Where(x => Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 1 && SarashiHai.Where(y => y.Tiles[0].EqualsRedSuitedTileIncluding(x.Target) && y is Triple).Any())
                              .Subscribe(args =>
             {
                 sarashiCount++;
                 tileCount.Value++;
+                args.Target.Rotate = new System.Windows.Media.RotateTransform(90);
                 UpdateTileVisibilityToCollapsed(args.Target.Code, 1);
-                var targetCalledTriple = SarashiHai.First(x => x is Triple t && t.Tiles.All(x => x.Equals(args.Target)));
+                var targetCalledTriple = SarashiHai.First(x => x is Triple t && t.Tiles.All(x => x.EqualsRedSuitedTileIncluding(args.Target)));
                 var index = SarashiHai.IndexOf(targetCalledTriple);
                 SarashiHai[index] = args.Meld;
             })
