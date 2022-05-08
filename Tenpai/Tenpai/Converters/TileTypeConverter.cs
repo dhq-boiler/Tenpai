@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Converters
@@ -18,7 +19,7 @@ namespace Tenpai.Converters
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            return Tile.CreateInstance((string)value);
+            return Tile.CreateInstance((string)value, Visibility.Visible, null);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Yaku.Meld
@@ -42,7 +43,7 @@ namespace Tenpai.Yaku.Meld
             Debug.Assert(_Set.Count() == 3);
             Debug.Assert(_Set[0].Code == _Set[1].Code && _Set[0].Code == _Set[2].Code);
             _Waiting.Clear();
-            _Waiting.Add(Tile.CreateInstance(_Set[0].Code));
+            _Waiting.Add(Tile.CreateInstance(_Set[0].Code, Visibility.Visible, null));
         }
 
         public override bool Equals(object obj)

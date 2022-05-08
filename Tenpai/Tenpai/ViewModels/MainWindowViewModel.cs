@@ -40,10 +40,10 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
-        public ReactivePropertySlim<Tile> Tile14 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
-        public ReactivePropertySlim<Tile> Tile15 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
-        public ReactivePropertySlim<Tile> Tile16 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
-        public ReactivePropertySlim<Tile> Tile17 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
+        public ReactivePropertySlim<Tile> Tile14 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
+        public ReactivePropertySlim<Tile> Tile15 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
+        public ReactivePropertySlim<Tile> Tile16 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
+        public ReactivePropertySlim<Tile> Tile17 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
         public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCollection<MenuItem> SarashiHaiTripleContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
@@ -259,7 +259,7 @@ namespace Tenpai.ViewModels
                     if (!ContainsRedTile(targetTiles))
                     {
                         IDialogResult dialogResult = null;
-                        dialogService.ShowDialog(nameof(SelectRedTileOrNot), new DialogParameters() { { "Tile", Tile.CreateInstance(targetTiles.First()) }, { "RedTile", Tile.CreateRedInstance(targetTiles.First().Code) } }, (result) =>
+                        dialogService.ShowDialog(nameof(SelectRedTileOrNot), new DialogParameters() { { "Tile", Tile.CreateInstance(targetTiles.First()) }, { "RedTile", Tile.CreateRedInstance(targetTiles.First().Code, targetTiles.First().Visibility.Value, null) } }, (result) =>
                          {
                              dialogResult = result;
                          });
@@ -274,7 +274,7 @@ namespace Tenpai.ViewModels
                     }
                     else
                     {
-                        target = Tile.CreateInstance(args.Target.Code);
+                        target = Tile.CreateInstance(args.Target.Code, args.Target.Visibility.Value, null);
                     }
                 }
 
@@ -309,7 +309,7 @@ namespace Tenpai.ViewModels
                 rotate.CallFrom = args.CallFrom;
                 rotate.Rotate = new System.Windows.Media.RotateTransform(90);
                 UpdateTile(new Dummy(), rotate, 1);
-                foreach (var tile in args.Meld.Tiles.Where(x => x.CallFrom == EOpponent.Unknown))
+                foreach (var tile in args.Meld.Tiles.Where(x => x.CallFrom == EOpponent.Default))
                 {
                     UpdateTileVisibility(tile, 1);
                 }
@@ -465,6 +465,26 @@ namespace Tenpai.ViewModels
             })
             .AddTo(_disposables);
             Tile13.Subscribe(_ =>
+            {
+                SortIf();
+            })
+            .AddTo(_disposables);
+            Tile14.Subscribe(_ =>
+            {
+                SortIf();
+            })
+            .AddTo(_disposables);
+            Tile15.Subscribe(_ =>
+            {
+                SortIf();
+            })
+            .AddTo(_disposables);
+            Tile16.Subscribe(_ =>
+            {
+                SortIf();
+            })
+            .AddTo(_disposables);
+            Tile17.Subscribe(_ =>
             {
                 SortIf();
             })
@@ -745,14 +765,34 @@ namespace Tenpai.ViewModels
 
         private void ArrangeTiles()
         {
-            var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value }.ToList();
-            tiles = tiles.Where(x => x != null).ToList();
+            var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, Tile17.Value}.ToList();
+            //tiles = tiles.Where(x => x != null).ToList();
             tiles.Sort();
-            for (int i = 0; i < tiles.Count; i++)
-            {
-                var tile = tiles[i];
-                SetTile(i, tile);
-            }
+            //for (int i = 0; i < tiles.Count; i++)
+            //{
+            //    var tile = tiles[i];
+            //    SetTile(i, tile);
+            //}
+            Tile0.Value = tiles[0];
+            Tile1.Value = tiles[1];
+            Tile2.Value = tiles[2];
+            Tile3.Value = tiles[3];
+            Tile4.Value = tiles[4];
+            Tile5.Value = tiles[5];
+            Tile6.Value = tiles[6];
+            Tile7.Value = tiles[7];
+            Tile8.Value = tiles[8];
+            Tile9.Value = tiles[9];
+            Tile10.Value = tiles[10];
+            Tile11.Value = tiles[11];
+            Tile12.Value = tiles[12];
+            Tile13.Value = tiles[13];
+            Tile14.Value = tiles[14];
+            Tile15.Value = tiles[15];
+            Tile16.Value = tiles[16];
+            Tile17.Value = tiles[17];
+            Console.WriteLine("Arranged");
+            Trace.WriteLine("Arranged");
         }
 
         private Tile GetTile(int i)
@@ -800,81 +840,107 @@ namespace Tenpai.ViewModels
             }
         }
 
+        private void ClearTiles()
+        {
+            for (int i = 0; i < Tiles.Count(); i++)
+            {
+                Tile0.Value = null;
+            }
+        }
+
         private void SetTile(int i, Tile tile)
         {
             switch (i)
             {
                 case 0:
-                    Console.WriteLine($"Tile{i}: {Tile0.Value} = {tile.Description}");
-                    Tile0.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile0.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile0.Value.Description} = {tile.Description}");
+                    Tile0.Value = tile.Clone() as Tile;
                     break;
                 case 1:
-                    Console.WriteLine($"Tile{i}: {Tile1.Value} = {tile.Description}");
-                    Tile1.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile1.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile1.Value.Description} = {tile.Description}");
+                    Tile1.Value = tile.Clone() as Tile;
                     break;
                 case 2:
-                    Console.WriteLine($"Tile{i}: {Tile2.Value} = {tile.Description}");
-                    Tile2.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile2.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile2.Value.Description} = {tile.Description}");
+                    Tile2.Value = tile.Clone() as Tile;
                     break;
                 case 3:
-                    Console.WriteLine($"Tile{i}: {Tile3.Value} = {tile.Description}");
-                    Tile3.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile3.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile3.Value.Description} = {tile.Description}");
+                    Tile3.Value = tile.Clone() as Tile;
                     break;
                 case 4:
-                    Console.WriteLine($"Tile{i}: {Tile4.Value} = {tile.Description}");
-                    Tile4.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile4.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile4.Value.Description} = {tile.Description}");
+                    Tile4.Value = tile.Clone() as Tile;
                     break;
                 case 5:
-                    Console.WriteLine($"Tile{i}: {Tile5.Value} = {tile.Description}");
-                    Tile5.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile5.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile5.Value.Description} = {tile.Description}");
+                    Tile5.Value = tile.Clone() as Tile;
                     break;
                 case 6:
-                    Console.WriteLine($"Tile{i}: {Tile6.Value} = {tile.Description}");
-                    Tile6.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile6.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile6.Value.Description} = {tile.Description}");
+                    Tile6.Value = tile.Clone() as Tile;
                     break;
                 case 7:
-                    Console.WriteLine($"Tile{i}: {Tile7.Value} = {tile.Description}");
-                    Tile7.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile7.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile7.Value.Description} = {tile.Description}");
+                    Tile7.Value = tile.Clone() as Tile;
                     break;
                 case 8:
-                    Console.WriteLine($"Tile{i}: {Tile8.Value} = {tile.Description}");
-                    Tile8.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile8.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile8.Value.Description} = {tile.Description}");
+                    Tile8.Value = tile.Clone() as Tile;
                     break;
                 case 9:
-                    Console.WriteLine($"Tile{i}: {Tile9.Value} = {tile.Description}");
-                    Tile9.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile9.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile9.Value.Description} = {tile.Description}");
+                    Tile9.Value = tile.Clone() as Tile;
                     break;
                 case 10:
-                    Console.WriteLine($"Tile{i}: {Tile10.Value} = {tile.Description}");
-                    Tile10.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile10.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile10.Value.Description} = {tile.Description}");
+                    Tile10.Value = tile.Clone() as Tile;
                     break;
                 case 11:
-                    Console.WriteLine($"Tile{i}: {Tile11.Value} = {tile.Description}");
-                    Tile11.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile11.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile11.Value.Description} = {tile.Description}");
+                    Tile11.Value = tile.Clone() as Tile;
                     break;
                 case 12:
-                    Console.WriteLine($"Tile{i}: {Tile12.Value} = {tile.Description}");
-                    Tile12.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile12.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile12.Value.Description} = {tile.Description}");
+                    Tile12.Value = tile.Clone() as Tile;
                     break;
                 case 13:
-                    Console.WriteLine($"Tile{i}: {Tile13.Value} = {tile.Description}");
-                    Tile13.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile13.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile13.Value.Description} = {tile.Description}");
+                    Tile13.Value = tile.Clone() as Tile;
                     break;
                 case 14:
-                    Console.WriteLine($"Tile{i}: {Tile14.Value} = {tile.Description}");
-                    Tile14.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile14.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile14.Value.Description} = {tile.Description}");
+                    Tile14.Value = tile.Clone() as Tile;
                     break;
                 case 15:
-                    Console.WriteLine($"Tile{i}: {Tile15.Value} = {tile.Description}");
-                    Tile15.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile15.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile15.Value.Description} = {tile.Description}");
+                    Tile15.Value = tile.Clone() as Tile;
                     break;
                 case 16:
-                    Console.WriteLine($"Tile{i}: {Tile16.Value} = {tile.Description}");
-                    Tile16.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile16.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile16.Value.Description} = {tile.Description}");
+                    Tile16.Value = tile.Clone() as Tile;
                     break;
                 case 17:
-                    Console.WriteLine($"Tile{i}: {Tile17.Value} = {tile.Description}");
-                    Tile17.Value = tile;
+                    Console.WriteLine($"Tile{i}: {Tile17.Value.Description} = {tile.Description}");
+                    Trace.WriteLine($"Tile{i}: {Tile17.Value.Description} = {tile.Description}");
+                    Tile17.Value = tile.Clone() as Tile;
                     break;
             }
         }

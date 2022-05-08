@@ -9,8 +9,9 @@ namespace Tenpai.Models
     public enum EOpponent
     {
         Unknown,
-        Shimocha,
+        Kamicha,
+        Default,
         Toimen,
-        Kamicha
+        Shimocha,
     }
 }

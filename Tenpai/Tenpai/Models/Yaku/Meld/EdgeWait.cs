@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Yaku.Meld
@@ -43,7 +44,7 @@ namespace Tenpai.Yaku.Meld
             int next_hash = next.Code;
             int diff = terminal_hash - next_hash;
             _Waiting.Clear();
-            _Waiting.Add(Tile.CreateInstance(next_hash - diff));
+            _Waiting.Add(Tile.CreateInstance(next_hash - diff, Visibility.Visible, null));
         }
 
         public override bool Equals(object obj)

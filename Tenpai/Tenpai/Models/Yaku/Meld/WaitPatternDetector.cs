@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Yaku.Meld
@@ -26,14 +27,14 @@ namespace Tenpai.Yaku.Meld
                     {
                         for (int i = comingTile.Code + 1; i < suji.Code; ++i)
                         {
-                            ryanmen.Add(Tile.CreateInstance(i));
+                            ryanmen.Add(Tile.CreateInstance(i, Visibility.Visible, null));
                         }
                     }
                     else
                     {
                         for (int i = suji.Code + 1; i < comingTile.Code; ++i)
                         {
-                            ryanmen.Add(Tile.CreateInstance(i));
+                            ryanmen.Add(Tile.CreateInstance(i, Visibility.Visible, null));
                         }
                     }
                     ret.Add(ryanmen);
@@ -45,8 +46,8 @@ namespace Tenpai.Yaku.Meld
                 else
                 {
                     ClosedWait kanchan = new ClosedWait();
-                    kanchan.Add(Tile.CreateInstance(comingTile.Code - 1));
-                    kanchan.Add(Tile.CreateInstance(comingTile.Code + 1));
+                    kanchan.Add(Tile.CreateInstance(comingTile.Code - 1, Visibility.Visible, null));
+                    kanchan.Add(Tile.CreateInstance(comingTile.Code + 1, Visibility.Visible, null));
                     ret.Add(kanchan);
                 }
 
