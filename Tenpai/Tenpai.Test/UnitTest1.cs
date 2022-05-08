@@ -1,5 +1,6 @@
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using Prism.Services.Dialogs;
 using System;
 using System.Linq;
@@ -1476,6 +1477,125 @@ namespace Tenpai.Test
             Assert.That(vm.Tile11.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile12.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile13.Value, Has.Property("Rotate").Null);
+        }
+
+        [Test]
+        public void ìåìÏêºÇÉ|ÉìÇµÇƒâ¡û»()
+        {
+            var vm = new MainWindowViewModel();
+            var mock = new Mock<IDialogService>();
+            mock.Setup(x => x.ShowDialog(nameof(SelectRedTileOrNot), It.IsAny<IDialogParameters>(), It.IsAny<Action<IDialogResult>>()))
+                .Callback((string name, IDialogParameters parameters, Action<IDialogResult> callback) => callback(new DialogResult(ButtonResult.OK, new DialogParameters() { { "Result", Tile.CreateInstance<Character_5>() } })));
+            vm.dialogService = mock.Object;
+            vm.Tile0.Value = Tile.CreateInstance<East>();
+            vm.Tile1.Value = Tile.CreateInstance<East>();
+            vm.Tile2.Value = Tile.CreateInstance<South>();
+            vm.Tile3.Value = Tile.CreateInstance<South>();
+            vm.Tile4.Value = Tile.CreateInstance<West>();
+            vm.Tile5.Value = Tile.CreateInstance<West>();
+            var ponTile = Tile.CreateInstance<East>();
+            vm.PonCommand.Execute(new Call(ponTile, EOpponent.Kamicha));
+            //Tile6 = East
+
+            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Triple>(t => t.ToString().Equals("ìåìåìå")));
+
+            ponTile = Tile.CreateInstance<South>();
+            vm.PonCommand.Execute(new Call(ponTile, EOpponent.Toimen));
+            //Tile7 = South
+
+            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Triple>(t => t.ToString().Equals("ìÏìÏìÏ")));
+
+            ponTile = Tile.CreateInstance<West>();
+            vm.PonCommand.Execute(new Call(ponTile, EOpponent.Shimocha));
+            //Tile8 = West
+
+            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Triple>(t => t.ToString().Equals("êºêºêº")));
+
+            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Triple>(t => t.ToString().Equals("ìåìåìå")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Triple>(t => t.ToString().Equals("ìÏìÏìÏ")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Triple>(t => t.ToString().Equals("êºêºêº")));
+
+            var kanTile = Tile.CreateInstance<East>();
+            ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
+            vm.Tile9.Value = kanTile;
+            vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(ponTile, kanTile, kanTile.Clone() as Tile, kanTile.Clone() as Tile)));
+
+            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Quad>(q => q.ToString().Equals("ìåìåìåìå")));
+
+            kanTile = Tile.CreateInstance<South>();
+            ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
+            vm.Tile10.Value = kanTile;
+            vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(kanTile.Clone() as Tile, ponTile, kanTile, kanTile.Clone() as Tile)));
+
+            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Quad>(q => q.ToString().Equals("ìÏìÏìÏìÏ")));
+
+            kanTile = Tile.CreateInstance<West>();
+            ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
+            vm.Tile11.Value = kanTile;
+            vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(kanTile.Clone() as Tile, kanTile.Clone() as Tile, ponTile, kanTile)));
+
+            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Quad>(q => q.ToString().Equals("êºêºêºêº")));
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Display").EqualTo("ìå"));
+            Assert.That(vm.Tile1.Value, Has.Property("Display").EqualTo("ìå"));
+            Assert.That(vm.Tile2.Value, Has.Property("Display").EqualTo("ìå"));
+            Assert.That(vm.Tile3.Value, Has.Property("Display").EqualTo("ìå"));
+            Assert.That(vm.Tile4.Value, Has.Property("Display").EqualTo("ìÏ"));
+            Assert.That(vm.Tile5.Value, Has.Property("Display").EqualTo("ìÏ"));
+            Assert.That(vm.Tile6.Value, Has.Property("Display").EqualTo("ìÏ"));
+            Assert.That(vm.Tile7.Value, Has.Property("Display").EqualTo("ìÏ"));
+            Assert.That(vm.Tile8.Value, Has.Property("Display").EqualTo("êº"));
+            Assert.That(vm.Tile9.Value, Has.Property("Display").EqualTo("êº"));
+            Assert.That(vm.Tile10.Value, Has.Property("Display").EqualTo("êº"));
+            Assert.That(vm.Tile11.Value, Has.Property("Display").EqualTo("êº"));
+            Assert.That(vm.Tile12.Value, Has.Property("Display").EqualTo("X"));
+            Assert.That(vm.Tile13.Value, Has.Property("Display").EqualTo("X"));
+            Assert.That(vm.Tile14.Value, Has.Property("Display").EqualTo("X"));
+            Assert.That(vm.Tile15.Value, Has.Property("Display").EqualTo("X"));
+            Assert.That(vm.Tile16.Value, Has.Property("Display").EqualTo("X"));
+            Assert.That(vm.Tile17.Value, Has.Property("Display").EqualTo("X"));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile1.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile2.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile3.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile4.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile5.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile6.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile9.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile10.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile11.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile12.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile13.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile14.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile15.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile16.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile17.Value, Has.Property("Rotate").Null);
         }
     }
 }

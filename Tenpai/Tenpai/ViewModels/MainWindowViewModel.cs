@@ -376,6 +376,7 @@ namespace Tenpai.ViewModels
                 UpdateTileVisibilityToCollapsed(args.Target.Code, 1);
                 var targetCalledTriple = SarashiHai.First(x => x is Triple t && t.Tiles.All(x => x.EqualsRedSuitedTileIncluding(args.Target)));
                 var index = SarashiHai.IndexOf(targetCalledTriple);
+                (args.Meld as Quad).Type = Models.Yaku.Meld.KongType.SmallMeldedKong;
                 SarashiHai[index] = args.Meld;
             })
             .AddTo(_disposables);
