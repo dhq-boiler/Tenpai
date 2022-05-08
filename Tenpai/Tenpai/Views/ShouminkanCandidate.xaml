@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Tenpai.Views.ShouminkanCandidate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Tenpai.Views"
+             xmlns:views="clr-namespace:Tenpai.Views"
+             xmlns:models="clr-namespace:Tenpai.Models"
+             mc:Ignorable="d">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CallFrom}" Value="{x:Static models:EOpponent.Toimen}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CallFrom}" Value="{x:Static models:EOpponent.Shimocha}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <StackPanel Orientation="Vertical">
+                <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+            </StackPanel>
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CallFrom}" Value="{x:Static models:EOpponent.Kamicha}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CallFrom}" Value="{x:Static models:EOpponent.Shimocha}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+            <StackPanel Orientation="Vertical">
+                <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+            </StackPanel>
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CallFrom}" Value="{x:Static models:EOpponent.Kamicha}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CallFrom}" Value="{x:Static models:EOpponent.Toimen}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+            <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+            <StackPanel Orientation="Vertical">
+                <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                <views:ReadOnlyTilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

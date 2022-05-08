@@ -46,12 +46,15 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Tile> Tile17 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed));
         public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
+        public ReactiveCollection<MenuItem> SarashiHaiTripleContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
+        public ReactiveCommand<Tile> SarashiHaiTripleContextMenuOpeningCommand { get; } = new ReactiveCommand<Tile>();
         public ReactiveCommand<Call> PonCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> ChiCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<Meld> SarashiHai { get; } = new ReactiveCollection<Meld>();
         public ReactiveCommand<Call> AnkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> DaiminkanCommand { get; } = new ReactiveCommand<Call>();
+        public ReactiveCommand<Call> ShouminkanCommand { get; } = new ReactiveCommand<Call>();
 
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
 
@@ -180,6 +183,70 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+            SarashiHaiTripleContextMenuOpeningCommand.Subscribe(args =>
+            {
+                SarashiHaiTripleContextMenuItems.Clear();
+                var targetTile = args;
+                var containsOneTile = Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.Equals(targetTile)) == 1;
+                var targetCalledTriples = SarashiHai.Where(x => x.Tiles.Contains(targetTile));
+                if (targetCalledTriples.Any() && containsOneTile)
+                {
+                    var targetCalledTriple = targetCalledTriples.First();
+                    var kan = new MenuItem() { Header = "カン" };
+                    Quad quad = null;
+                    var tiles = targetCalledTriple.Tiles;
+                    switch (targetCalledTriple.CallFrom)
+                    {
+                        case EOpponent.Kamicha:
+                            targetTile = targetTile.Clone() as Tile;
+                            tiles[0].Rotate = new System.Windows.Media.RotateTransform(90);
+                            targetTile.Rotate = new System.Windows.Media.RotateTransform(90);
+                            tiles[1].Rotate = null;
+                            tiles[2].Rotate = null;
+                            quad = new Quad(tiles[0], targetTile, tiles[1], tiles[2]);
+                            break;
+                        case EOpponent.Toimen:
+                            targetTile = targetTile.Clone() as Tile;
+                            tiles[0].Rotate = null;
+                            tiles[1].Rotate = new System.Windows.Media.RotateTransform(90);
+                            targetTile.Rotate = new System.Windows.Media.RotateTransform(90);
+                            tiles[2].Rotate = null;
+                            quad = new Quad(tiles[0], tiles[1], targetTile, tiles[2]);
+                            break;
+                        case EOpponent.Shimocha:
+                            targetTile = targetTile.Clone() as Tile;
+                            tiles[0].Rotate = null;
+                            tiles[1].Rotate = null;
+                            tiles[2].Rotate = new System.Windows.Media.RotateTransform(90);
+                            targetTile.Rotate = new System.Windows.Media.RotateTransform(90);
+                            quad = new Quad(tiles[0], tiles[1], tiles[2], targetTile);
+                            break;
+                    }
+
+                    quad.Type = Models.Yaku.Meld.KongType.SmallMeldedKong;
+                    var shouminkanCandidate = new ShouminkanCandidate()
+                    {
+                        DataContext = quad,
+                    };
+                    var shouminkanCandidateMenuItem = new MenuItem()
+                    {
+                        Header = shouminkanCandidate,
+                        Command = ShouminkanCommand,
+                        CommandParameter = new Call(targetTile, quad)
+                    };
+                    kan.Items.Add(shouminkanCandidateMenuItem);
+
+                    try
+                    {
+                        SarashiHaiTripleContextMenuItems.Add(kan);
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+
+                    }
+                }
+            })
+            .AddTo(_disposables);
             PonCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) >= 2 && Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) <= 3)
                       .Select(x => x)
                       .Subscribe(args =>
@@ -299,6 +366,17 @@ namespace Tenpai.ViewModels
                           }
                           SortIf();
                       })
+            .AddTo(_disposables);
+            ShouminkanCommand.Where(x => Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.Equals(x.Target)) == 1 && SarashiHai.Where(y => y.Tiles[0].Equals(x.Target) && y is Triple).Any())
+                             .Subscribe(args =>
+            {
+                sarashiCount++;
+                tileCount.Value++;
+                UpdateTileVisibilityToCollapsed(args.Target.Code, 1);
+                var targetCalledTriple = SarashiHai.First(x => x is Triple t && t.Tiles.All(x => x.Equals(args.Target)));
+                var index = SarashiHai.IndexOf(targetCalledTriple);
+                SarashiHai[index] = args.Meld;
+            })
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
             {

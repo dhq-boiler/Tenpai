@@ -29,7 +29,18 @@
                                     </StackPanel>
                                 </DataTemplate>
                                 <DataTemplate DataType="{x:Type meld:Triple}">
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal"
+                                                Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                                         ItemsSource="{Binding Tag.SarashiHaiTripleContextMenuItems, RelativeSource={RelativeSource Self}}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Opened">
+                                                        <helper:EventToCommand Command="{Binding Tag.SarashiHaiTripleContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="{Binding AllTiles[0]}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
                                         <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
                                         <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
                                         <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
@@ -64,6 +75,15 @@
                                                                         <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
                                                                         <views:TilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
                                                                     </StackPanel>
+                                                                </DataTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static mmeld:KongType.SmallMeldedKong}}" Value="True">
+                                                        <Setter Property="ContentTemplate">
+                                                            <Setter.Value>
+                                                                <DataTemplate>
+                                                                    <views:ShouminkanCandidate />
                                                                 </DataTemplate>
                                                             </Setter.Value>
                                                         </Setter>
