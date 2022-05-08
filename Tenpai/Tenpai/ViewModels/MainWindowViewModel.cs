@@ -367,7 +367,12 @@ namespace Tenpai.ViewModels
                           SortIf();
                       })
             .AddTo(_disposables);
-            ShouminkanCommand.Where(x => Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 1 && SarashiHai.Where(y => y.Tiles[0].EqualsRedSuitedTileIncluding(x.Target) && y is Triple).Any())
+            ShouminkanCommand.Where(x => {
+                var first = Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 1;
+                var second = SarashiHai.Where(y => y.Tiles[0].EqualsRedSuitedTileIncluding(x.Target) && y is Triple).Any();
+                Console.WriteLine($"ShouminkanCommand_CanExecute first:{first}, second:{second}");
+                return first && second;
+                                   })
                              .Subscribe(args =>
             {
                 sarashiCount++;
@@ -375,6 +380,7 @@ namespace Tenpai.ViewModels
                 args.Target.Rotate = new System.Windows.Media.RotateTransform(90);
                 UpdateTileVisibilityToCollapsed(args.Target.Code, 1);
                 var targetCalledTriple = SarashiHai.First(x => x is Triple t && t.Tiles.All(x => x.EqualsRedSuitedTileIncluding(args.Target)));
+                targetCalledTriple.Tiles.Add(args.Target);
                 var index = SarashiHai.IndexOf(targetCalledTriple);
                 (args.Meld as Quad).Type = Models.Yaku.Meld.KongType.SmallMeldedKong;
                 SarashiHai[index] = args.Meld;
@@ -799,75 +805,75 @@ namespace Tenpai.ViewModels
             switch (i)
             {
                 case 0:
-                    Console.WriteLine($"Tile{i}: {Tile0.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile0.Value} = {tile.Description}");
                     Tile0.Value = tile;
                     break;
                 case 1:
-                    Console.WriteLine($"Tile{i}: {Tile1.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile1.Value} = {tile.Description}");
                     Tile1.Value = tile;
                     break;
                 case 2:
-                    Console.WriteLine($"Tile{i}: {Tile2.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile2.Value} = {tile.Description}");
                     Tile2.Value = tile;
                     break;
                 case 3:
-                    Console.WriteLine($"Tile{i}: {Tile3.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile3.Value} = {tile.Description}");
                     Tile3.Value = tile;
                     break;
                 case 4:
-                    Console.WriteLine($"Tile{i}: {Tile4.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile4.Value} = {tile.Description}");
                     Tile4.Value = tile;
                     break;
                 case 5:
-                    Console.WriteLine($"Tile{i}: {Tile5.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile5.Value} = {tile.Description}");
                     Tile5.Value = tile;
                     break;
                 case 6:
-                    Console.WriteLine($"Tile{i}: {Tile6.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile6.Value} = {tile.Description}");
                     Tile6.Value = tile;
                     break;
                 case 7:
-                    Console.WriteLine($"Tile{i}: {Tile7.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile7.Value} = {tile.Description}");
                     Tile7.Value = tile;
                     break;
                 case 8:
-                    Console.WriteLine($"Tile{i}: {Tile8.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile8.Value} = {tile.Description}");
                     Tile8.Value = tile;
                     break;
                 case 9:
-                    Console.WriteLine($"Tile{i}: {Tile9.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile9.Value} = {tile.Description}");
                     Tile9.Value = tile;
                     break;
                 case 10:
-                    Console.WriteLine($"Tile{i}: {Tile10.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile10.Value} = {tile.Description}");
                     Tile10.Value = tile;
                     break;
                 case 11:
-                    Console.WriteLine($"Tile{i}: {Tile11.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile11.Value} = {tile.Description}");
                     Tile11.Value = tile;
                     break;
                 case 12:
-                    Console.WriteLine($"Tile{i}: {Tile12.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile12.Value} = {tile.Description}");
                     Tile12.Value = tile;
                     break;
                 case 13:
-                    Console.WriteLine($"Tile{i}: {Tile13.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile13.Value} = {tile.Description}");
                     Tile13.Value = tile;
                     break;
                 case 14:
-                    Console.WriteLine($"Tile{i}: {Tile14.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile14.Value} = {tile.Description}");
                     Tile14.Value = tile;
                     break;
                 case 15:
-                    Console.WriteLine($"Tile{i}: {Tile15.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile15.Value} = {tile.Description}");
                     Tile15.Value = tile;
                     break;
                 case 16:
-                    Console.WriteLine($"Tile{i}: {Tile16.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile16.Value} = {tile.Description}");
                     Tile16.Value = tile;
                     break;
                 case 17:
-                    Console.WriteLine($"Tile{i}: {Tile17.Value} = {tile}");
+                    Console.WriteLine($"Tile{i}: {Tile17.Value} = {tile.Description}");
                     Tile17.Value = tile;
                     break;
             }

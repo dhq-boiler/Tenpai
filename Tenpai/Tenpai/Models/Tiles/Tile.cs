@@ -42,6 +42,14 @@ namespace Tenpai.Models.Tiles
 
         public int Code { get { return GetHashCode(); } }
 
+        public string Description
+        {
+            get
+            {
+                return $"{Display}, {Visibility}";
+            }
+        }
+
         public override string ToString()
         {
             return Display;
@@ -285,7 +293,15 @@ namespace Tenpai.Models.Tiles
             else if (Code < other.Code) return -1;
             else
             {
-                return _Guid.CompareTo(other._Guid);
+                if (this.Rotate?.Value != Matrix.Identity && other.Rotate?.Value != Matrix.Identity)
+                    return this.Visibility.Value.CompareTo(other.Visibility.Value) * -1;
+                else if (this.Rotate?.Value != Matrix.Identity)
+                    return 1;
+                else if (other.Rotate?.Value != Matrix.Identity)
+                    return -1;
+                else
+                    return this.Visibility.Value.CompareTo(other.Visibility.Value) * -1;
+                //return _Guid.CompareTo(other._Guid);
             }
         }
 

@@ -1514,10 +1514,19 @@ namespace Tenpai.Test
             Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Triple>(t => t.ToString().Equals("ìåìåìå")));
             Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Triple>(t => t.ToString().Equals("ìÏìÏìÏ")));
             Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Triple>(t => t.ToString().Equals("êºêºêº")));
+            
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
             var kanTile = Tile.CreateInstance<East>();
             ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
             vm.Tile9.Value = kanTile;
+            
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            
             vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(ponTile, kanTile, kanTile.Clone() as Tile, kanTile.Clone() as Tile)));
 
             Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Quad>(q => q.ToString().Equals("ìåìåìåìå")));
@@ -1525,6 +1534,11 @@ namespace Tenpai.Test
             kanTile = Tile.CreateInstance<South>();
             ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
             vm.Tile10.Value = kanTile;
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
             vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(kanTile.Clone() as Tile, ponTile, kanTile, kanTile.Clone() as Tile)));
 
             Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Quad>(q => q.ToString().Equals("ìÏìÏìÏìÏ")));
@@ -1532,6 +1546,11 @@ namespace Tenpai.Test
             kanTile = Tile.CreateInstance<West>();
             ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
             vm.Tile11.Value = kanTile;
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
             vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(kanTile.Clone() as Tile, kanTile.Clone() as Tile, ponTile, kanTile)));
 
             Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Quad>(q => q.ToString().Equals("êºêºêºêº")));
@@ -1577,6 +1596,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
