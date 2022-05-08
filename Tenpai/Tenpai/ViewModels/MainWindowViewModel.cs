@@ -409,7 +409,7 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
         }
 
-        private Meld[] ConvertToCompletedQuads(IEnumerable<IncompletedMeld> incompletedQuads)
+        public Meld[] ConvertToCompletedQuads(IEnumerable<IncompletedMeld> incompletedQuads)
         {
             var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
 
