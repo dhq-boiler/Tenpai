@@ -378,9 +378,23 @@ namespace Tenpai.ViewModels
                 sarashiCount++;
                 tileCount.Value++;
                 args.Target.Rotate = new System.Windows.Media.RotateTransform(90);
-                UpdateTileVisibilityToCollapsed(args.Target.Code, 1);
+                
                 var targetCalledTriple = SarashiHai.First(x => x is Triple t && t.Tiles.All(x => x.EqualsRedSuitedTileIncluding(args.Target)));
+
+                if (targetCalledTriple.CallFrom == EOpponent.Kamicha)
+                    args.Target.Order = 1;
+                else if (targetCalledTriple.CallFrom == EOpponent.Toimen)
+                    args.Target.Order = 2;
+                else if (targetCalledTriple.CallFrom == EOpponent.Shimocha)
+                    args.Target.Order = 3;
+                Tiles.Where(x => x.Code.Equals(args.Target.Code) && x.Order >= args.Target.Order && x != args.Target).ToList().ForEach(x => x.Order++);
+
+                ArrangeTiles();
+
                 targetCalledTriple.Tiles.Add(args.Target);
+
+                UpdateTileVisibilityToCollapsed(args.Target.Code, 1);
+                
                 var index = SarashiHai.IndexOf(targetCalledTriple);
                 (args.Meld as Quad).Type = Models.Yaku.Meld.KongType.SmallMeldedKong;
                 SarashiHai[index] = args.Meld;
