@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Yaku.Meld
@@ -24,7 +25,6 @@ namespace Tenpai.Yaku.Meld
         {
             _Set.Add(have1);
             _Set.Add(have2);
-            ComputeWaitTiles();
         }
 
         public EdgeWait(Tile have1, Tile have2, Tile wait1)
@@ -44,7 +44,7 @@ namespace Tenpai.Yaku.Meld
             int next_hash = next.Code;
             int diff = terminal_hash - next_hash;
             _Waiting.Clear();
-            _Waiting.Add(Tile.CreateInstance(next_hash - diff, Visibility.Visible, null));
+            _Waiting.Add(Tile.CreateInstance(next_hash - diff, Visibility.Visible, new RotateTransform(90)));
         }
 
         public override bool Equals(object obj)

@@ -300,10 +300,16 @@ namespace Tenpai.Models.Tiles
             else if (Code < other.Code) return -1;
             else
             {
-                var callFromInt = this.CallFrom.CompareTo(other.CallFrom);
-                if (callFromInt != 0)
-                    return callFromInt;
-                else if (this.Rotate?.Value == null && other.Rotate?.Value == null)
+                /*
+                if (this.CallFrom != EOpponent.Unknown
+                 && this.CallFrom != EOpponent.Default)
+                    return this.CallFrom.CompareTo(other.CallFrom);
+                else if (other.CallFrom != EOpponent.Unknown
+                      && other.CallFrom != EOpponent.Default)
+                    return this.CallFrom.CompareTo(other.CallFrom);
+                else
+                */
+                if (this.Rotate?.Value == null && other.Rotate?.Value == null)
                     return this.Visibility.Value.CompareTo(other.Visibility.Value);
                 else if (this.Rotate?.Value != null && other.Rotate?.Value == null)
                     return 1;
@@ -323,11 +329,12 @@ namespace Tenpai.Models.Tiles
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Tile)) return false;
-            return Code == (obj as Tile).Code
-                && CallFrom == (obj as Tile).CallFrom
-                && Rotate == (obj as Tile).Rotate
-                && ((this is IRedSuitedTile rthis && obj is IRedSuitedTile r && rthis.IsRedSuited == r.IsRedSuited) || !(this is IRedSuitedTile && obj is IRedSuitedTile));
+            if (!(obj is Tile t)) return false;
+            var a = Code.Equals(t.Code);
+            //var b = CallFrom.Equals(t.CallFrom);
+            var c = ((Rotate == null && t.Rotate == null) || (Rotate != null && t.Rotate != null && Rotate.Angle.Equals(t.Rotate.Angle)));
+            var d = ((this is IRedSuitedTile rthis && obj is IRedSuitedTile r && rthis.IsRedSuited == r.IsRedSuited) || !(this is IRedSuitedTile && obj is IRedSuitedTile));
+            return a && c && d;
         }
 
         public object Clone()

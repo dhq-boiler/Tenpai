@@ -49,7 +49,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ReactivePropertySlimë„ì¸ééå±()
+        public void ReactivePropertySlimë„ì¸ééå±_è„â∆()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<North>(Visibility.Visible, null);
@@ -58,18 +58,30 @@ namespace Tenpai.Test
 
             vm.Tile1.Value = Tile.CreateInstance<North>(Visibility.Visible, new RotateTransform(90));
 
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
-            
+
             vm.Tile1.Value.CallFrom = EOpponent.Kamicha;
 
             vm.Tile2.Value = Tile.CreateInstance<North>(Visibility.Visible, null);
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null);
 
             vm.Tile3.Value = Tile.CreateInstance<West>(Visibility.Visible, null);
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
@@ -78,6 +90,10 @@ namespace Tenpai.Test
 
             vm.Tile4.Value = Tile.CreateInstance<South>(Visibility.Visible, new RotateTransform(90));
 
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile2.Value, Has.Property("Rotate").Not.Null);
@@ -85,6 +101,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null);
 
             vm.Tile5.Value = Tile.CreateInstance<East>(Visibility.Visible, null);
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
@@ -106,6 +126,108 @@ namespace Tenpai.Test
             Assert.That(vm.Tile3.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null);
+        }
+
+        [Test]
+        public void ReactivePropertySlimë„ì¸ééå±_ëŒñ ()
+        {
+            var vm = new MainWindowViewModel();
+            vm.Tile0.Value = Tile.CreateInstance<North>(Visibility.Visible, null);
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+
+            var t1 = vm.Tile1.Value = Tile.CreateInstance<North>(Visibility.Visible, new RotateTransform(90));
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
+
+            t1.CallFrom = EOpponent.Toimen;
+
+            vm.Tile2.Value = Tile.CreateInstance<North>(Visibility.Visible, null);
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null);
+
+            vm.Tile3.Value = Tile.CreateInstance<West>(Visibility.Visible, null);
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null);
+
+            vm.Tile4.Value = Tile.CreateInstance<South>(Visibility.Visible, new RotateTransform(90));
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null);
+
+            vm.Tile5.Value = Tile.CreateInstance<East>(Visibility.Visible, null);
+
+            Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+            Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null);
+
+            Assert.That(vm.Tiles, Has.ItemAt(0).Matches<Tile>(t => t.ToString().Equals("ìå")));
+            Assert.That(vm.Tiles, Has.ItemAt(1).Matches<Tile>(t => t.ToString().Equals("ìÏ")));
+            Assert.That(vm.Tiles, Has.ItemAt(2).Matches<Tile>(t => t.ToString().Equals("êº")));
+            Assert.That(vm.Tiles, Has.ItemAt(3).Matches<Tile>(t => t.ToString().Equals("ñk")));
+            Assert.That(vm.Tiles, Has.ItemAt(4).Matches<Tile>(t => t.ToString().Equals("ñk")));
+            Assert.That(vm.Tiles, Has.ItemAt(5).Matches<Tile>(t => t.ToString().Equals("ñk")));
+
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null);
+        }
+
+        [Test]
+        public void Tile_Equalsééå±()
+        {
+            var a = Tile.CreateInstance<Bamboo_3>(Visibility.Visible, new RotateTransform(90));
+            var b = Tile.CreateInstance<Bamboo_3>(Visibility.Visible, new RotateTransform(90));
+            var c = Tile.CreateInstance<Bamboo_3>(Visibility.Visible, null);
+            Assert.That(a.Equals(b), Is.True);
+            Assert.That(a.Equals(c), Is.False);
+        }
+
+        [Test]
+        public void TileCollection_Containsééå±()
+        {
+            var tc = new TileCollection();
+            tc.Add(Tile.CreateInstance<Bamboo_1>(Visibility.Visible, null));
+            tc.Add(Tile.CreateInstance<Bamboo_2>(Visibility.Visible, null));
+            tc.Add(Tile.CreateInstance<Bamboo_3>(Visibility.Visible, new RotateTransform(90)));
+
+            var target = Tile.CreateInstance<Bamboo_3>(Visibility.Visible, new RotateTransform(90));
+            Assert.That(tc.Contains(target), Is.True);
         }
 
         [Test]
@@ -569,7 +691,7 @@ namespace Tenpai.Test
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>();
             vm.Tile1.Value = Tile.CreateInstance<Character_4>();
-            var called = Tile.CreateInstance<Character_5>();
+            var called = Tile.CreateInstance<Character_5>(Visibility.Visible, new RotateTransform(90));
             var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(vm.Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(called));
             var completedMelds = vm.ConvertToCompletedRuns(incompletedMelds).Where(x => x.Tiles.Contains(called));
             var selectedMeld = completedMelds.FirstOrDefault(x => x.Tiles[0].Equals(called) && x.Tiles[1].Equals(Tile.CreateInstance<Character_3>()) && x.Tiles[2].Equals(Tile.CreateInstance<Character_4>()) && x.Tiles[0].Rotate != null && x.CallFrom == EOpponent.Kamicha);
@@ -709,7 +831,7 @@ namespace Tenpai.Test
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>();
             vm.Tile1.Value = Tile.CreateInstance<Character_4>();
-            var called = Tile.CreateInstance<Character_5>();
+            var called = Tile.CreateInstance<Character_5>(Visibility.Visible, new RotateTransform(90));
             var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(vm.Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(called));
             var completedMelds = vm.ConvertToCompletedRuns(incompletedMelds).Where(x => x.Tiles.Contains(called));
             var selectedMeld = completedMelds.FirstOrDefault(x => x.Tiles[0].Equals(Tile.CreateInstance<Character_3>()) && x.Tiles[1].Equals(Tile.CreateInstance<Character_4>()) && x.Tiles[2].Equals(called) && x.Tiles[2].Rotate != null && x.CallFrom == EOpponent.Shimocha);
@@ -780,7 +902,7 @@ namespace Tenpai.Test
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>(Visibility.Visible, null);
             vm.Tile1.Value = Tile.CreateInstance<Character_4>(Visibility.Visible, null);
-            var called = Tile.CreateRedInstance<Character_5>(Visibility.Visible, null);
+            var called = Tile.CreateRedInstance<Character_5>(Visibility.Visible, new RotateTransform(90));
             var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(vm.Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(called));
             var completedMelds = vm.ConvertToCompletedRuns(incompletedMelds).Where(x => x.Tiles.Contains(called));
             var selectedMeld = completedMelds.FirstOrDefault(x => x.Tiles[0].Equals(called) && x.Tiles[1].Equals(Tile.CreateInstance<Character_3>()) && x.Tiles[2].Equals(Tile.CreateInstance<Character_4>()) && x.Tiles[0].Rotate != null && x.CallFrom == EOpponent.Kamicha);
@@ -920,7 +1042,7 @@ namespace Tenpai.Test
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>(Visibility.Visible, null);
             vm.Tile1.Value = Tile.CreateInstance<Character_4>(Visibility.Visible, null);
-            var called = Tile.CreateRedInstance<Character_5>(Visibility.Visible, null);
+            var called = Tile.CreateRedInstance<Character_5>(Visibility.Visible, new RotateTransform(90));
             var incompletedMelds = IncompletedMeldDetector.FindIncompletedRuns(vm.Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(called));
             var completedMelds = vm.ConvertToCompletedRuns(incompletedMelds).Where(x => x.Tiles.Contains(called));
             var selectedMeld = completedMelds.FirstOrDefault(x => x.Tiles[0].Equals(Tile.CreateInstance<Character_3>()) && x.Tiles[1].Equals(Tile.CreateInstance<Character_4>()) && x.Tiles[2].Equals(called) && x.Tiles[2].Rotate != null && x.CallFrom == EOpponent.Shimocha);
@@ -1350,7 +1472,7 @@ namespace Tenpai.Test
             vm.dialogService = mock.Object;
             vm.Tile0.Value = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
             vm.Tile1.Value = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
-            var ponTile = Tile.CreateInstance<Character_5>();
+            var ponTile = Tile.CreateInstance<Character_5>(Visibility.Visible, new RotateTransform(90));
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Kamicha));
 
             var kanTile = Tile.CreateRedInstance<Character_5>(Visibility.Visible, null);
@@ -1391,9 +1513,9 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
 
-            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
-            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Not.Null);
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile3.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null);
@@ -1482,13 +1604,13 @@ namespace Tenpai.Test
             mock.Setup(x => x.ShowDialog(nameof(SelectRedTileOrNot), It.IsAny<IDialogParameters>(), It.IsAny<Action<IDialogResult>>()))
                 .Callback((string name, IDialogParameters parameters, Action<IDialogResult> callback) => callback(new DialogResult(ButtonResult.OK, new DialogParameters() { { "Result", Tile.CreateInstance<Character_5>() } })));
             vm.dialogService = mock.Object;
-            vm.Tile0.Value = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
-            vm.Tile1.Value = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
-            var ponTile = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
+            var t0 = vm.Tile0.Value = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
+            var t1 = vm.Tile1.Value = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
+            var ponTile = Tile.CreateInstance<Character_5>(Visibility.Visible, new RotateTransform(90));
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Shimocha));
-            var kanTile = Tile.CreateRedInstance<Character_5>(Visibility.Visible, null);
+            var kanTile = Tile.CreateRedInstance<Character_5>(Visibility.Visible, new RotateTransform(90));
             vm.Tile3.Value = kanTile;
-            vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(vm.Tile0.Value, vm.Tile1.Value, ponTile, kanTile)));
+            vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(t0, t1, ponTile, kanTile)));
 
             Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));

@@ -149,6 +149,7 @@ namespace Tenpai.Yaku.Meld.Detector
                     if (one is ITerminals || another is ITerminals)
                     {
                         var wait = new EdgeWait(one, another);
+                        wait.ComputeWaitTiles();
                         ret.Add(wait);
                     }
                     else

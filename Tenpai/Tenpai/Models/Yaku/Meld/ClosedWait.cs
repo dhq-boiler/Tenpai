@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Yaku.Meld
@@ -39,11 +40,11 @@ namespace Tenpai.Yaku.Meld
             Debug.Assert(_Set.Count() == 2);
             var tiles = _Set.ToArray();
             _Waiting.Clear();
-            var tile = Tile.CreateInstance((int)tiles.Average(a => a.Code), Visibility.Visible, null);
+            var tile = Tile.CreateInstance((int)tiles.Average(a => a.Code), Visibility.Visible, new RotateTransform(90));
             _Waiting.Add(tile);
             if (tile is IRedSuitedTile r)
             {
-                tile = Tile.CreateRedInstance(tile.Code, Visibility.Visible, null);
+                tile = Tile.CreateRedInstance(tile.Code, Visibility.Visible, new RotateTransform(90));
                 _Waiting.Add(tile);
             }
         }
