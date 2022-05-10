@@ -187,7 +187,7 @@ namespace Tenpai.ViewModels
             {
                 SarashiHaiTripleContextMenuItems.Clear();
                 var targetTile = args;
-                var containsOneTile = Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.Equals(targetTile)) == 1;
+                var containsOneTile = Tiles.Where(y => y.Visibility.Value == Visibility.Visible).Count(y => y.EqualsRedSuitedTileIncluding(targetTile)) == 1;
                 var targetCalledTriples = SarashiHai.Where(x => x.Tiles.Contains(targetTile));
                 if (targetCalledTriples.Any() && containsOneTile)
                 {
@@ -281,6 +281,7 @@ namespace Tenpai.ViewModels
                 sarashiCount += 3;
 
                 var rotate = target.Clone() as Tile;
+                rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Count();
                 rotate.CallFrom = args.CallFrom;
                 rotate.Rotate = new System.Windows.Media.RotateTransform(90);
 
@@ -306,6 +307,7 @@ namespace Tenpai.ViewModels
             {
                 sarashiCount += 3;
                 var rotate = args.Target.Clone() as Tile;
+                rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Count();
                 rotate.CallFrom = args.CallFrom;
                 rotate.Rotate = new System.Windows.Media.RotateTransform(90);
                 UpdateTile(new Dummy(), rotate, 1);
@@ -340,6 +342,7 @@ namespace Tenpai.ViewModels
                           tileCount.Value++;
 
                           var rotate = target.Clone() as Tile;
+                          rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Count();
                           rotate.CallFrom = args.CallFrom;
                           rotate.Rotate = new System.Windows.Media.RotateTransform(90);
 
@@ -409,7 +412,9 @@ namespace Tenpai.ViewModels
                 });
                 if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
                 {
-                    tp.TileType = dialogResult.Parameters.GetValue<Tile>("TileType");
+                    var newTile = dialogResult.Parameters.GetValue<Tile>("TileType");
+                    newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
+                    tp.TileType = newTile;
                 }
             })
             .AddTo(_disposables);
