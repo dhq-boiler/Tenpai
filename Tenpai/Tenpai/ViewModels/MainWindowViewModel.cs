@@ -55,6 +55,7 @@ namespace Tenpai.ViewModels
         public ReactiveCommand<Call> AnkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> DaiminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> ShouminkanCommand { get; } = new ReactiveCommand<Call>();
+        public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
 
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
 
@@ -281,12 +282,25 @@ namespace Tenpai.ViewModels
                 sarashiCount += 3;
 
                 var rotate = target.Clone() as Tile;
-                rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Count();
+                //if (Tiles.Where(x => x.Code == rotate.Code).Any())
+                //{
+                //    rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Max(x => x.Order) + 1;
+                //}
                 rotate.CallFrom = args.CallFrom;
+                if (rotate.CallFrom == EOpponent.Kamicha)
+                    rotate.Order = 0;
+                else if (rotate.CallFrom == EOpponent.Toimen)
+                    rotate.Order = 1;
+                else if (rotate.CallFrom == EOpponent.Shimocha)
+                    rotate.Order = 2;
                 rotate.Rotate = new System.Windows.Media.RotateTransform(90);
 
                 UpdateTile(new Dummy(), rotate, 1);
                 UpdateTileVisibilityToCollapsed(rotate.Code, 3);
+                var updateOrderList = Tiles.Where(x => x.Code.Equals(rotate.Code) && x.Order >= rotate.Order && x.CallFrom != rotate.CallFrom).ToList();
+                updateOrderList.ForEach(x => x.Order++);
+
+                ArrangeTiles();
                 
                 switch (args.CallFrom)
                 {
@@ -307,7 +321,10 @@ namespace Tenpai.ViewModels
             {
                 sarashiCount += 3;
                 var rotate = args.Target.Clone() as Tile;
-                rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Count();
+                if (Tiles.Where(x => x.Code == rotate.Code).Any())
+                {
+                    rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Max(x => x.Order) + 1;
+                }
                 rotate.CallFrom = args.CallFrom;
                 rotate.Rotate = new System.Windows.Media.RotateTransform(90);
                 UpdateTile(new Dummy(), rotate, 1);
@@ -342,12 +359,23 @@ namespace Tenpai.ViewModels
                           tileCount.Value++;
 
                           var rotate = target.Clone() as Tile;
-                          rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Count();
+                          if (args.CallFrom == EOpponent.Kamicha)
+                              args.Target.Order = 0;
+                          else if (args.CallFrom == EOpponent.Toimen)
+                              args.Target.Order = 1;
+                          else if (args.CallFrom == EOpponent.Shimocha)
+                              args.Target.Order = 3;
                           rotate.CallFrom = args.CallFrom;
                           rotate.Rotate = new System.Windows.Media.RotateTransform(90);
 
                           UpdateTile(new Dummy(), rotate, 1);
                           UpdateTileVisibilityToCollapsed(rotate.Code, 4);
+
+                          var updateOrderList = Tiles.Where(x => x.Code.Equals(rotate.Code) && x.Order >= rotate.Order && x.CallFrom != rotate.CallFrom).ToList();
+                          updateOrderList.ForEach(x => x.Order++);
+
+                          ArrangeTiles();
+
                           Quad quad = null;
                           switch (args.CallFrom)
                           {
@@ -380,6 +408,7 @@ namespace Tenpai.ViewModels
             {
                 sarashiCount++;
                 tileCount.Value++;
+                args.Target.CallFrom = args.CallFrom;
                 args.Target.Rotate = new System.Windows.Media.RotateTransform(90);
                 
                 var targetCalledTriple = SarashiHai.First(x => x is Triple t && t.Tiles.All(x => x.EqualsRedSuitedTileIncluding(args.Target)));
@@ -390,7 +419,8 @@ namespace Tenpai.ViewModels
                     args.Target.Order = 2;
                 else if (targetCalledTriple.CallFrom == EOpponent.Shimocha)
                     args.Target.Order = 3;
-                Tiles.Where(x => x.Code.Equals(args.Target.Code) && x.Order >= args.Target.Order && x != args.Target).ToList().ForEach(x => x.Order++);
+                var updateOrderList = Tiles.Where(x => x.Code.Equals(args.Target.Code) && x.Order >= args.Target.Order && x.CallFrom != args.Target.CallFrom).ToList();
+                updateOrderList.ForEach(x => x.Order++);
 
                 ArrangeTiles();
 
@@ -421,91 +451,109 @@ namespace Tenpai.ViewModels
             Tile0.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile1.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile2.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile3.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile4.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile5.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile6.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile7.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile8.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile9.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile10.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile11.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile12.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile13.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile14.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile15.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile16.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             Tile17.Subscribe(_ =>
             {
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             IsArrangingTiles.Subscribe(flag =>
@@ -532,6 +580,13 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+        }
+
+        private void ConstructReadyHands()
+        {
+            ReadyHands.Clear();
+            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray());
+            ReadyHands.AddRangeOnScheduler(readyHands);
         }
 
         public Meld[] ConvertToCompletedQuads(IEnumerable<IncompletedMeld> incompletedQuads)
@@ -619,18 +674,28 @@ namespace Tenpai.ViewModels
         private void UpdateTile(Tile replaced, Tile target, int count)
         {
             int processedCount = 0;
+            //bool f = false;
+            //var list = new List<Tile>();
             for (int j = 0; j < Tiles.Count(); j++)
             {
                 var tile = GetTile(j);
+                //list.Add(tile);
                 if (tile is null || tile.Visibility.Value == Visibility.Collapsed)
                     continue;
-                if (tile.Equals(replaced) && tile.Visibility.Value != Visibility.Collapsed)
+                if (tile.Equals(replaced) && tile.Visibility.Value != Visibility.Collapsed && processedCount < count)
                 {
                     SetTile(j, target);
                     processedCount++;
                 }
                 if (processedCount == count)
+                {
                     return;
+                    //f = true;
+                }
+                //if (f)
+                //{
+                //    tile.Order = list.Where(x => x.Code == tile.Code).Max(x => x.Order) + 1;
+                //}
             }
         }
 

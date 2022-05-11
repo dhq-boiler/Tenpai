@@ -20,18 +20,6 @@
             <views:TilePlaceholder TileType="m9" SelectCommand="{Binding m9Command}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <views:TilePlaceholder TileType="s1" SelectCommand="{Binding s1Command}" />
-            <views:TilePlaceholder TileType="s2" SelectCommand="{Binding s2Command}" />
-            <views:TilePlaceholder TileType="s3" SelectCommand="{Binding s3Command}" />
-            <views:TilePlaceholder TileType="s4" SelectCommand="{Binding s4Command}" />
-            <views:TilePlaceholder TileType="s5" SelectCommand="{Binding s5Command}" />
-            <views:TilePlaceholder TileType="s5r" SelectCommand="{Binding s5rCommand}" />
-            <views:TilePlaceholder TileType="s6" SelectCommand="{Binding s6Command}" />
-            <views:TilePlaceholder TileType="s7" SelectCommand="{Binding s7Command}" />
-            <views:TilePlaceholder TileType="s8" SelectCommand="{Binding s8Command}" />
-            <views:TilePlaceholder TileType="s9" SelectCommand="{Binding s9Command}" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
             <views:TilePlaceholder TileType="p1" SelectCommand="{Binding p1Command}"/>
             <views:TilePlaceholder TileType="p2" SelectCommand="{Binding p2Command}"/>
             <views:TilePlaceholder TileType="p3" SelectCommand="{Binding p3Command}"/>
@@ -42,6 +30,18 @@
             <views:TilePlaceholder TileType="p7" SelectCommand="{Binding p7Command}"/>
             <views:TilePlaceholder TileType="p8" SelectCommand="{Binding p8Command}"/>
             <views:TilePlaceholder TileType="p9" SelectCommand="{Binding p9Command}"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <views:TilePlaceholder TileType="s1" SelectCommand="{Binding s1Command}" />
+            <views:TilePlaceholder TileType="s2" SelectCommand="{Binding s2Command}" />
+            <views:TilePlaceholder TileType="s3" SelectCommand="{Binding s3Command}" />
+            <views:TilePlaceholder TileType="s4" SelectCommand="{Binding s4Command}" />
+            <views:TilePlaceholder TileType="s5" SelectCommand="{Binding s5Command}" />
+            <views:TilePlaceholder TileType="s5r" SelectCommand="{Binding s5rCommand}" />
+            <views:TilePlaceholder TileType="s6" SelectCommand="{Binding s6Command}" />
+            <views:TilePlaceholder TileType="s7" SelectCommand="{Binding s7Command}" />
+            <views:TilePlaceholder TileType="s8" SelectCommand="{Binding s8Command}" />
+            <views:TilePlaceholder TileType="s9" SelectCommand="{Binding s9Command}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <views:TilePlaceholder TileType="東" SelectCommand="{Binding EastCommand}" />

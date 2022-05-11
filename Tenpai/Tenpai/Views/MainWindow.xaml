@@ -15,7 +15,8 @@
         <converters:EnumConverter x:Key="Enum" />
     </Window.Resources>
     <DockPanel>
-        <DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="30">
             <DockPanel DockPanel.Dock="Right">
                 <StackPanel Orientation="Horizontal">
                     <ItemsControl ItemsSource="{Binding SarashiHai}" VerticalAlignment="Center">
@@ -375,6 +376,201 @@
                     </views:TilePlaceholder.ContextMenu>
                 </views:TilePlaceholder>
             </StackPanel>
+        </DockPanel>
+        <DockPanel>
+            <ItemsControl ItemsSource="{Binding ReadyHands}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <ItemsControl ItemsSource="{Binding Melds}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplateSelector>
+                                    <helper:MeldItemTemplateSelector>
+                                        <DataTemplate DataType="{x:Type meld:Single}">
+                                            <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Double}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Run}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Triple}">
+                                            <StackPanel Orientation="Horizontal"
+                                                Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}">
+                                                <StackPanel.ContextMenu>
+                                                    <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                                         ItemsSource="{Binding Tag.SarashiHaiTripleContextMenuItems, RelativeSource={RelativeSource Self}}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Opened">
+                                                                <helper:EventToCommand Command="{Binding Tag.SarashiHaiTripleContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="{Binding AllTiles[0]}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </ContextMenu>
+                                                </StackPanel.ContextMenu>
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Quad}">
+                                            <ContentControl Content="{Binding}">
+                                                <ContentControl.Style>
+                                                    <Style TargetType="ContentControl">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static mmeld:KongType.ConcealedKong}}" Value="True">
+                                                                <Setter Property="ContentTemplate">
+                                                                    <Setter.Value>
+                                                                        <DataTemplate>
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" BackVisibility="Visible" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[3]}" BackVisibility="Visible" />
+                                                                            </StackPanel>
+                                                                        </DataTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static mmeld:KongType.LargeMeldedKong}}" Value="True">
+                                                                <Setter Property="ContentTemplate">
+                                                                    <Setter.Value>
+                                                                        <DataTemplate>
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
+                                                                            </StackPanel>
+                                                                        </DataTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static mmeld:KongType.SmallMeldedKong}}" Value="True">
+                                                                <Setter Property="ContentTemplate">
+                                                                    <Setter.Value>
+                                                                        <DataTemplate>
+                                                                            <views:ShouminkanCandidate />
+                                                                        </DataTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ContentControl.Style>
+                                            </ContentControl>
+                                        </DataTemplate>
+                                    </helper:MeldItemTemplateSelector>
+                                </ItemsControl.ItemTemplateSelector>
+                            </ItemsControl>
+                            <ItemsControl ItemsSource="{Binding Waiting}">
+                                <ItemsControl.ItemTemplateSelector>
+                                    <helper:MeldItemTemplateSelector>
+                                        <DataTemplate DataType="{x:Type meld:Single}">
+                                            <views:TilePlaceholder TileType="{Binding Tiles[0]}"
+                                                                   Opacity="0.5" />
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Double}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Run}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Triple}">
+                                            <StackPanel Orientation="Horizontal"
+                                                Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}">
+                                                <StackPanel.ContextMenu>
+                                                    <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                                         ItemsSource="{Binding Tag.SarashiHaiTripleContextMenuItems, RelativeSource={RelativeSource Self}}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Opened">
+                                                                <helper:EventToCommand Command="{Binding Tag.SarashiHaiTripleContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="{Binding AllTiles[0]}"/>
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </ContextMenu>
+                                                </StackPanel.ContextMenu>
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:Quad}">
+                                            <ContentControl Content="{Binding}">
+                                                <ContentControl.Style>
+                                                    <Style TargetType="ContentControl">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static mmeld:KongType.ConcealedKong}}" Value="True">
+                                                                <Setter Property="ContentTemplate">
+                                                                    <Setter.Value>
+                                                                        <DataTemplate>
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" BackVisibility="Visible" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[3]}" BackVisibility="Visible" />
+                                                                            </StackPanel>
+                                                                        </DataTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static mmeld:KongType.LargeMeldedKong}}" Value="True">
+                                                                <Setter Property="ContentTemplate">
+                                                                    <Setter.Value>
+                                                                        <DataTemplate>
+                                                                            <StackPanel Orientation="Horizontal">
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                                                                <views:TilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
+                                                                            </StackPanel>
+                                                                        </DataTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static mmeld:KongType.SmallMeldedKong}}" Value="True">
+                                                                <Setter Property="ContentTemplate">
+                                                                    <Setter.Value>
+                                                                        <DataTemplate>
+                                                                            <views:ShouminkanCandidate />
+                                                                        </DataTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ContentControl.Style>
+                                            </ContentControl>
+                                        </DataTemplate>
+                                    </helper:MeldItemTemplateSelector>
+                                </ItemsControl.ItemTemplateSelector>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </DockPanel>
     </DockPanel>
 </Window>

@@ -22,12 +22,16 @@ namespace Tenpai.Yaku.Meld
             : base()
         {
             Tiles.Add(tile);
+            ComputeWaitTiles();
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Single
-                && WaitTiles.SequenceEqual((obj as Single).WaitTiles);
+            var a = obj is Single;
+            if (!a)
+                return false;
+            var b = WaitTiles[0].EqualsRedSuitedTileIncluding((obj as Single).WaitTiles[0]);
+            return a && b;
         }
 
         public override int GetHashCode()

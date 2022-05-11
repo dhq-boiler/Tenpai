@@ -191,7 +191,7 @@ namespace Tenpai.Yaku.Meld.Detector
                 var two   = sorted.ElementAt(i + 1);
                 var three = sorted.ElementAt(i + 2);
 
-                if (one.Equals(two) && one.Equals(three))
+                if (one.EqualsRedSuitedTileIncluding(two) && one.EqualsRedSuitedTileIncluding(three))
                 {
                     var triple = new Triple();
                     triple.Add(one);

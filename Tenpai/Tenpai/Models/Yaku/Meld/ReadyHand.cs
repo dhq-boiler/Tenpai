@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Reactive.Bindings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tenpai.Models.Tiles;
@@ -21,6 +22,22 @@ namespace Tenpai.Yaku.Meld
             Odd = odd;
         }
 
+        /// <summary>
+        /// 合計翻数
+        /// </summary>
+        public int SumHanCount
+        {
+            get
+            {
+                return Yakus.Sum(x => x.HanCount);
+            }
+        }
+
+        /// <summary>
+        /// 役のコレクション
+        /// </summary>
+        public ReactiveCollection<Tenpai.Models.Yaku.Yaku> Yakus { get; set; } = new ReactiveCollection<Tenpai.Models.Yaku.Yaku>();
+
         public Meld[] Waiting
         {
             get { return Melds.Where(a => 
@@ -35,7 +52,7 @@ namespace Tenpai.Yaku.Meld
                 HashSet<Tile> wait = new HashSet<Tile>();
                 foreach (var meld in Waiting.Cast<IncompletedMeld>())
                 {
-                    foreach (var waitTile in meld.WaitTiles)
+                    foreach (var waitTile in meld.ComputeWaitTiles(new TileCollection(this.Odd), this.Melds))
                     {
                         wait.Add(waitTile);
                     }

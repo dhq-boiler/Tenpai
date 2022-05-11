@@ -23,7 +23,6 @@ namespace Tenpai.Yaku.Meld
         {
             _Set.Add(pairone);
             _Set.Add(pairone);
-            ComputeWaitTiles();
         }
 
         public override void ComputeWaitTiles()

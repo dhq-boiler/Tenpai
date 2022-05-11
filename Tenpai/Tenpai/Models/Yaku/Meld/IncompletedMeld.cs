@@ -48,6 +48,32 @@ namespace Tenpai.Yaku.Meld
             }
         }
 
+        public TileCollection ComputeWaitTiles(TileCollection tiles, Meld[] melds)
+        {
+            var waitTiles = new TileCollection();
+            foreach (var meld in melds.OfType<IncompletedMeld>())
+            {
+                foreach (var waitTile in meld.WaitTiles)
+                {
+                    waitTiles.Add(waitTile);
+                }
+            }
+            if (melds.Count(x => x is Double) == 2)
+            {
+                var toitsuList = melds.Where(x => x is Double).ToList();
+                Debug.Assert(toitsuList.Count() == 2);
+                waitTiles.Add(toitsuList.ElementAt(0).Tiles.First());
+                waitTiles.Add(toitsuList.ElementAt(1).Tiles.First());
+            }
+            if (melds.Count(x => x is Single) == 1)
+            {
+                var single = melds.Where(x => x is Single).ToList();
+                Debug.Assert(single.Count() == 1);
+                waitTiles.Add(single.ElementAt(0).Tiles.First());
+            }
+            return waitTiles;
+        }
+
         public TileCollection AllTiles
         {
             get

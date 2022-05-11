@@ -161,7 +161,7 @@ namespace Tenpai.Yaku.Meld.Detector
             //4面子1雀頭
             ReadyHandsBasicForm(hand, exposed, ret, runs, triples, heads, singles);
 
-            return ret.ToArray();
+            return ret.Distinct().ToArray();
         }
 
         private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
@@ -441,7 +441,7 @@ namespace Tenpai.Yaku.Meld.Detector
                 var two = sorted.ElementAt(i + 1);
                 var three = sorted.ElementAt(i + 2);
                 
-                if (one.Equals(two) && one.Equals(three))
+                if (one.EqualsRedSuitedTileIncluding(two) && one.EqualsRedSuitedTileIncluding(three))
                 {
                     var triple = new Triple();
                     triple.Add(one);

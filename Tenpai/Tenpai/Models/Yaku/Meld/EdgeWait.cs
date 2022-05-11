@@ -49,8 +49,11 @@ namespace Tenpai.Yaku.Meld
 
         public override bool Equals(object obj)
         {
-            return obj is EdgeWait
-                && WaitTiles.SequenceEqual((obj as EdgeWait).WaitTiles);
+            var a = obj is EdgeWait;
+            if (!a)
+                return false;
+            var b = WaitTiles[0].EqualsRedSuitedTileIncluding((obj as EdgeWait).WaitTiles[0]);
+            return a && b;
         }
 
         public override int GetHashCode()

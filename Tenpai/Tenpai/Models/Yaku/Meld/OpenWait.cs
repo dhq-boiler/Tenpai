@@ -81,7 +81,7 @@ namespace Tenpai.Yaku.Meld
         public override bool Equals(object obj)
         {
             return obj is OpenWait
-                && WaitTiles.SequenceEqual((obj as OpenWait).WaitTiles);
+                && _Set.SequenceEqual((obj as OpenWait)._Set);
         }
 
         public override int GetHashCode()
