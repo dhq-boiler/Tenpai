@@ -377,7 +377,7 @@
                 </views:TilePlaceholder>
             </StackPanel>
         </DockPanel>
-        <DockPanel>
+        <DockPanel Margin="30">
             <ItemsControl ItemsSource="{Binding ReadyHands}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -395,6 +395,41 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplateSelector>
                                     <helper:MeldItemTemplateSelector>
+                                        <DataTemplate DataType="{x:Type meld:OpenWait}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:ClosedWait}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:EdgeWait}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:ThirteenWait}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[2]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[3]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[4]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[5]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[6]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[7]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[8]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[9]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[10]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[11]}" />
+                                                <views:TilePlaceholder TileType="{Binding Tiles[12]}" />
+                                            </StackPanel>
+                                        </DataTemplate>
                                         <DataTemplate DataType="{x:Type meld:Single}">
                                             <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
                                         </DataTemplate>
@@ -482,6 +517,22 @@
                             <ItemsControl ItemsSource="{Binding Waiting}">
                                 <ItemsControl.ItemTemplateSelector>
                                     <helper:MeldItemTemplateSelector>
+                                        <DataTemplate DataType="{x:Type meld:OpenWait}">
+                                            <views:TilePlaceholder TileType="{Binding WaitTiles[0]}"
+                                                                   Opacity="0.5" />
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:ClosedWait}">
+                                            <views:TilePlaceholder TileType="{Binding WaitTiles[0]}"
+                                                                   Opacity="0.5" />
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:EdgeWait}">
+                                            <views:TilePlaceholder TileType="{Binding WaitTiles[0]}"
+                                                                   Opacity="0.5" />
+                                        </DataTemplate>
+                                        <DataTemplate DataType="{x:Type meld:ThirteenWait}">
+                                            <views:TilePlaceholder TileType="{Binding WaitTiles[0]}"
+                                                                   Opacity="0.5" />
+                                        </DataTemplate>
                                         <DataTemplate DataType="{x:Type meld:Single}">
                                             <views:TilePlaceholder TileType="{Binding Tiles[0]}"
                                                                    Opacity="0.5" />
