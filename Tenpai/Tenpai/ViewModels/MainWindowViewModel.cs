@@ -584,8 +584,9 @@ namespace Tenpai.ViewModels
 
         private void ConstructReadyHands()
         {
+            ArrangeTiles();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray());
+            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray()).OrderBy(x => x.WaitingTiles[0]);
             ReadyHands.AddRangeOnScheduler(readyHands);
         }
 
