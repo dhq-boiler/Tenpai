@@ -4,20 +4,20 @@ using System.Linq;
 using System.Windows;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
     /// 刻子
     /// </summary>
-    public class Triple : IncompletedMeld
+    public class Triple : Meld
     {
         public Triple()
             : base()
         { }
 
-        public Triple(MeldStatus status)
-            : base(status)
-        { }
+        //public Triple(MeldStatus status)
+        //    : base(status)
+        //{ }
 
         public Triple(Tile trio)
             : base()
@@ -26,7 +26,7 @@ namespace Tenpai.Yaku.Meld
             {
                 _Set.Add(trio);
             }
-            ComputeWaitTiles();
+            //ComputeWaitTiles();
         }
 
         public Triple(Tile a, Tile b, Tile c)
@@ -35,16 +35,16 @@ namespace Tenpai.Yaku.Meld
             _Set.Add(a);
             _Set.Add(b);
             _Set.Add(c);
-            ComputeWaitTiles();
+            //ComputeWaitTiles();
         }
 
-        public override void ComputeWaitTiles()
-        {
-            Debug.Assert(_Set.Count() == 3);
-            Debug.Assert(_Set[0].Code == _Set[1].Code && _Set[0].Code == _Set[2].Code);
-            _Waiting.Clear();
-            _Waiting.Add(Tile.CreateInstance(_Set[0].Code, Visibility.Visible, null));
-        }
+        //public override void ComputeWaitTiles()
+        //{
+        //    Debug.Assert(_Set.Count() == 3);
+        //    Debug.Assert(_Set[0].Code == _Set[1].Code && _Set[0].Code == _Set[2].Code);
+        //    _Waiting.Clear();
+        //    _Waiting.Add(Tile.CreateInstance(_Set[0].Code, Visibility.Visible, null));
+        //}
 
         public override bool Equals(object obj)
         {
@@ -66,14 +66,14 @@ namespace Tenpai.Yaku.Meld
             }
             return ret;
         }
-        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
-        {
-            var newObj = new Triple(status);
-            newObj._Set = new TileCollection(_Set);
-            newObj._Existed = new TileCollection(_Existed);
-            newObj._Waiting = new TileCollection(_Waiting);
-            return newObj;
-        }
+        //public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        //{
+        //    var newObj = new Triple(status);
+        //    newObj._Set = new TileCollection(_Set);
+        //    newObj._Existed = new TileCollection(_Existed);
+        //    newObj._Waiting = new TileCollection(_Waiting);
+        //    return newObj;
+        //}
     }
 
     public class Triple<T> : Triple

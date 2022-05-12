@@ -2,7 +2,7 @@
 using System.Linq;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
     /// 順子

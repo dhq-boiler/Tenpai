@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku.Meld;
 
-namespace Tenpai.Yaku.Meld.Detector
+namespace Tenpai.Models.Yaku.Meld.Detector
 {
     public static class MeldDetector
     {
@@ -38,10 +40,7 @@ namespace Tenpai.Yaku.Meld.Detector
             if (heads.Count() >= 1 && meldCount >= 4)
             {
                 var melds = new List<Meld>();
-                foreach (var triple in triples)
-                {
-                    melds.Add((triple as Triple).Clone(IncompletedMeld.MeldStatus.COMPLETED));
-                }
+                melds.AddRange(triples);
                 melds.AddRange(runs);
 
                 TileCollection tiles = new TileCollection(hand);
@@ -161,17 +160,14 @@ namespace Tenpai.Yaku.Meld.Detector
             //4面子1雀頭
             ReadyHandsBasicForm(hand, exposed, ret, runs, triples, heads, singles);
 
-            return ret.Distinct().ToArray();
+            return ret.Distinct(new DelegateComparer<ReadyHand, Tile[]>(x => x.WaitingTiles)).ToArray();
         }
 
         private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
         {
             var melds = new List<Meld>();
             melds.AddRange(runs);
-            foreach (var triple in triples)
-            {
-                melds.Add((triple as Triple).Clone(IncompletedMeld.MeldStatus.COMPLETED));
-            }
+            melds.AddRange(triples);
 
             if (exposed != null)
             {
@@ -184,6 +180,8 @@ namespace Tenpai.Yaku.Meld.Detector
                     melds.Add(one.Clone(IncompletedMeld.MeldStatus.COMPLETED));
                 }
             }
+
+            var waitpool = new TileCollection();
 
             //1雀頭完成済み
             for (int l = 0; l < heads.Count(); ++l)
@@ -229,8 +227,21 @@ namespace Tenpai.Yaku.Meld.Detector
                                     continue;
 
                                 var odd = tiles.Odd(head, firstMeld, secondMeld, thirdMeld, wait);
-                                //1雀頭・3面子完成済み，1搭子
-                                ret.Add(new ReadyHand(odd, (head as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), firstMeld, secondMeld, thirdMeld, wait.Clone(IncompletedMeld.MeldStatus.WAIT)));
+
+                                if (wait.MeldStatusType == IncompletedMeld.MeldStatus.WAIT)
+                                {
+                                    wait.ComputeWaitTiles();
+                                }
+
+                                foreach (var w in wait.WaitTiles)
+                                {
+                                    if (waitpool.ContainsRedSuitedTileIncluding(w))
+                                        continue;
+                                    //1雀頭・3面子完成済み，1搭子
+                                    ret.Add(new ManualWaitReadyHand(w, (head as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), firstMeld, secondMeld, thirdMeld, wait.Clone(IncompletedMeld.MeldStatus.WAIT)));
+
+                                    waitpool.Add(w);
+                                }
                             }
                         }
                     }
@@ -275,8 +286,14 @@ namespace Tenpai.Yaku.Meld.Detector
                                     continue;
 
                                 var odd = tiles.Odd(wait, firstMeld, secondMeld, thirdMeld, fourthMeld);
+
+                                if (waitpool.ContainsRedSuitedTileIncluding(odd[0]))
+                                    continue;
+
                                 //4面子完成済み，1雀頭完成待ち
                                 ret.Add(new ReadyHand(odd, (wait as Single).Clone(IncompletedMeld.MeldStatus.WAIT), firstMeld, secondMeld, thirdMeld, fourthMeld));
+
+                                waitpool.Add(odd[0]);
                             }
                         }
                     }
@@ -362,46 +379,28 @@ namespace Tenpai.Yaku.Meld.Detector
 
         private static void ReadyHandsPureThirteenOrphans(Tile[] hand, List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
         {
-            List<Tile> ThirteenOrphans = ThirteenOrphansTiles();
             if (runs.Count() == 0 && triples.Count() == 0 && heads.Count() == 0 && singles.Count() == 13)
             {
-                List<Meld> x = new List<Meld>();
-                foreach (var tile in ThirteenOrphans)
+                if (!AllThirteenOrphansContains(singles))
+                    return;
+                foreach (var s in singles)
                 {
-                    if (!singles.Contains(new Single(tile)))
-                        return;
-
-                    var add = singles.Where(a => a.Equals(new Single(tile))).Cast<IncompletedMeld>().Single();
-                    x.Add(add.Clone(IncompletedMeld.MeldStatus.WAIT));
+                    var h = new ManualWaitReadyHand(singles);
+                    h.WaitingTiles = s.Tiles;
+                    ret.Add(h);
                 }
-
-                var odd = new TileCollection(hand).Odd(x.ToArray());
-                ret.Add(new ReadyHand(x.ToArray()));
             }
         }
 
-        /// <summary>
-        /// 手牌と晒し牌から暗槓や小明槓ができる面子を検出します．
-        /// </summary>
-        /// <param name="hand">手牌の牌リスト</param>
-        /// <param name="exposed">晒し牌のリスト</param>
-        /// <returns></returns>
-        public static Meld[] FindCallable(Tile[] hand, Meld[] exposed)
+        private static bool AllThirteenOrphansContains(Meld[] singles)
         {
-            var Quads = FindQuads(hand);
-
-            List<Meld> ret = new List<Meld>();
-            ret.AddRange(Quads);
-
-            foreach (var set in exposed.Where(a => a is Triple))
+            List<Tile> ThirteenOrphans = ThirteenOrphansTiles();
+            foreach (var tile in ThirteenOrphans)
             {
-                if (hand.Contains((set as Triple).WaitTiles.Single()))
-                {
-                    ret.Add(set);
-                }
+                if (!singles.Contains(new Single(tile)))
+                    return false;
             }
-
-            return ret.ToArray();
+            return true;
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using Reactive.Bindings;
 using System.Linq;
 using Tenpai.Models.Tiles;
-using Tenpai.Yaku.Meld;
+using Tenpai.Models.Yaku.Meld;
 
 namespace Tenpai.Models
 {

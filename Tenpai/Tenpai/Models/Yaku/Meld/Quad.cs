@@ -3,7 +3,7 @@ using System.Linq;
 using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku.Meld;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
     /// 槓子

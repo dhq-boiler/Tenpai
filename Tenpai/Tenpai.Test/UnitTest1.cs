@@ -1,6 +1,5 @@
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using Prism.Services.Dialogs;
 using System;
 using System.Linq;
@@ -9,10 +8,10 @@ using System.Windows.Media;
 using Tenpai.Extensions;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku.Meld;
+using Tenpai.Models.Yaku.Meld.Detector;
 using Tenpai.ViewModels;
 using Tenpai.Views;
-using Tenpai.Yaku.Meld;
-using Tenpai.Yaku.Meld.Detector;
 
 namespace Tenpai.Test
 {

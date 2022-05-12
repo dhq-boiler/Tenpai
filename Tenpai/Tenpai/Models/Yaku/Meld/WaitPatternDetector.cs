@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     public static class WaitPatternDetector
     {

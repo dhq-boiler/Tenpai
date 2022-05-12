@@ -2,9 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     public class ReadyHand : WaitHand
     {
@@ -45,19 +46,22 @@ namespace Tenpai.Yaku.Meld
                 && (a as IncompletedMeld).MeldStatusType == IncompletedMeld.MeldStatus.WAIT).ToArray(); }
         }
 
-        public Tile[] WaitingTiles
+        public virtual Tile[] WaitingTiles
         {
             get
             {
                 HashSet<Tile> wait = new HashSet<Tile>();
                 foreach (var meld in Waiting.Cast<IncompletedMeld>())
                 {
-                    foreach (var waitTile in meld.ComputeWaitTiles(new TileCollection(this.Odd), this.Melds))
+                    foreach (var waitTile in meld.ComputeWaitTiles(this.Melds))
                     {
                         wait.Add(waitTile);
                     }
                 }
                 return wait.ToArray();
+            }
+            set
+            {
             }
         }
 
@@ -73,6 +77,8 @@ namespace Tenpai.Yaku.Meld
                 if (!other.Melds.Contains(meld))
                     return false;
             }
+            if (!WaitingTiles.SequenceEqualDoNotConsiderRotationAndOrder(other.WaitingTiles))
+                return false;
             return true;
         }
 

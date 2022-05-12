@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Tenpai.Yaku.Meld;
+using Tenpai.Models.Yaku.Meld;
 
 namespace Tenpai.Models.Tiles
 {
@@ -62,7 +62,7 @@ namespace Tenpai.Models.Tiles
         public Tile[] Odd(params Meld[] melds)
         {
             TileCollection tiles = new TileCollection(this);
-            foreach (var meld in melds)
+            foreach (var meld in melds.Where(x => !(x is IncompletedMeld)))
             {
                 foreach (var tile in meld.Tiles)
                 {

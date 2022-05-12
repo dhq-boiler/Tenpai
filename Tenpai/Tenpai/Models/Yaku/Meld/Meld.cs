@@ -1,8 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
     /// 面子
@@ -28,6 +29,17 @@ namespace Tenpai.Yaku.Meld
         }
 
         public TileCollection Tiles { get { return _Set; } }
+
+        public virtual TileCollection AllTiles
+        {
+            get
+            {
+                var list = new List<Tile>();
+                list.AddRange(_Set);
+                list.Sort();
+                return new TileCollection(list);
+            }
+        }
 
         public EOpponent? CallFrom
         {

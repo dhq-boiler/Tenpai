@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld.Detector
+namespace Tenpai.Models.Yaku.Meld.Detector
 {
     public static class IncompletedMeldDetector
     {
@@ -13,13 +13,13 @@ namespace Tenpai.Yaku.Meld.Detector
         /// <param name="hand">手牌の牌リスト</param>
         /// <param name="target">捨て牌</param>
         /// <returns></returns>
-        public static IncompletedMeld[] FindCallable(Tile[] hand, Tile target)
+        public static Meld[] FindCallable(Tile[] hand, Tile target)
         {
             var icRuns = FindIncompletedRuns(hand);
             var icTriples = FindIncompletedTriple(hand);
             var icQuads = FindIncompletedQuad(hand);
 
-            List<IncompletedMeld> ret = new List<IncompletedMeld>();
+            var ret = new List<Meld>();
 
             foreach (var icRun in icRuns)
             {
@@ -35,7 +35,7 @@ namespace Tenpai.Yaku.Meld.Detector
 
             foreach (var icQuad in icQuads)
             {
-                if (icQuad.WaitTiles.Any(a => a.Equals(target)))
+                if (icQuad.Tiles[0].Equals(target))
                     ret.Add(icQuad);
             }
 
@@ -173,9 +173,9 @@ namespace Tenpai.Yaku.Meld.Detector
         /// </summary>
         /// <param name="hand">手牌の牌リスト</param>
         /// <returns></returns>
-        public static IncompletedMeld[] FindIncompletedQuad(Tile[] hand)
+        public static Meld[] FindIncompletedQuad(Tile[] hand)
         {
-            List<IncompletedMeld> ret = new List<IncompletedMeld>();
+            List<Meld> ret = new List<Meld>();
             var sorted = hand.OrderBy(a => a.Code);
             int count = hand.Count();
             for (int i = 0; i < count - 2; ++i)

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tenpai.Models.Tiles;
-using Tenpai.Yaku.Meld;
+﻿using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku.Meld;
 
 namespace Tenpai.Models
 {

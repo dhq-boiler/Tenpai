@@ -12,9 +12,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku.Meld;
+using Tenpai.Models.Yaku.Meld.Detector;
 using Tenpai.Views;
-using Tenpai.Yaku.Meld;
-using Tenpai.Yaku.Meld.Detector;
 using Unity;
 
 namespace Tenpai.ViewModels
@@ -589,35 +589,31 @@ namespace Tenpai.ViewModels
             ReadyHands.AddRangeOnScheduler(readyHands);
         }
 
-        public Meld[] ConvertToCompletedQuads(IEnumerable<IncompletedMeld> incompletedQuads)
+        public Meld[] ConvertToCompletedQuads(IEnumerable<Meld> incompletedQuads)
         {
             var callFroms = new[] { EOpponent.Kamicha, EOpponent.Toimen, EOpponent.Shimocha };
 
             var melds = new List<Meld>();
             foreach (var incompletedQuad in incompletedQuads)
             {
-                if (incompletedQuad is Yaku.Meld.Triple t)
+                if (incompletedQuad is Triple t)
                 {
-                    t.ComputeWaitTiles();
-                    foreach (var wait in t.WaitTiles)
+                    foreach (var callFrom in callFroms)
                     {
-                        foreach (var callFrom in callFroms)
+                        var _wait = t.Tiles[0].Clone() as Tile;
+                        _wait.Rotate = new System.Windows.Media.RotateTransform(90);
+                        _wait.CallFrom = callFrom;
+                        switch (_wait.CallFrom)
                         {
-                            var _wait = wait.Clone() as Tile;
-                            _wait.Rotate = new System.Windows.Media.RotateTransform(90);
-                            _wait.CallFrom = callFrom;
-                            switch (_wait.CallFrom)
-                            {
-                                case EOpponent.Kamicha:
-                                    melds.Add(new Quad(_wait, t.Tiles[0], t.Tiles[1], t.Tiles[2]));
-                                    break;
-                                case EOpponent.Toimen:
-                                    melds.Add(new Quad(t.Tiles[0], _wait, t.Tiles[1], t.Tiles[2]));
-                                    break;
-                                case EOpponent.Shimocha:
-                                    melds.Add(new Quad(t.Tiles[0], t.Tiles[1], t.Tiles[2], _wait));
-                                    break;
-                            }
+                            case EOpponent.Kamicha:
+                                melds.Add(new Quad(_wait, t.Tiles[0], t.Tiles[1], t.Tiles[2]));
+                                break;
+                            case EOpponent.Toimen:
+                                melds.Add(new Quad(t.Tiles[0], _wait, t.Tiles[1], t.Tiles[2]));
+                                break;
+                            case EOpponent.Shimocha:
+                                melds.Add(new Quad(t.Tiles[0], t.Tiles[1], t.Tiles[2], _wait));
+                                break;
                         }
                     }
                 }
@@ -632,7 +628,7 @@ namespace Tenpai.ViewModels
             var melds = new List<Meld>();
             foreach (var incompletedMeld in ponIncompletedMelds)
             {
-                if (incompletedMeld is Yaku.Meld.Double d)
+                if (incompletedMeld is Models.Yaku.Meld.Double d)
                 {
                     d.ComputeWaitTiles();
                     foreach (var wait in d.WaitTiles)

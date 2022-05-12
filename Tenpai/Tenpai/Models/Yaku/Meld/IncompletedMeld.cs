@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     public abstract class IncompletedMeld : Meld
     {
@@ -48,11 +48,15 @@ namespace Tenpai.Yaku.Meld
             }
         }
 
-        public TileCollection ComputeWaitTiles(TileCollection tiles, Meld[] melds)
+        public TileCollection ComputeWaitTiles(Meld[] melds)
         {
             var waitTiles = new TileCollection();
             foreach (var meld in melds.OfType<IncompletedMeld>())
             {
+                if (meld is IncompletedMeld icm && icm.MeldStatusType == MeldStatus.WAIT)
+                {
+                    meld.ComputeWaitTiles();
+                }
                 foreach (var waitTile in meld.WaitTiles)
                 {
                     waitTiles.Add(waitTile);
@@ -62,19 +66,28 @@ namespace Tenpai.Yaku.Meld
             {
                 var toitsuList = melds.Where(x => x is Double).ToList();
                 Debug.Assert(toitsuList.Count() == 2);
-                waitTiles.Add(toitsuList.ElementAt(0).Tiles.First());
-                waitTiles.Add(toitsuList.ElementAt(1).Tiles.First());
+                if ((toitsuList.ElementAt(0) as IncompletedMeld).MeldStatusType == MeldStatus.WAIT)
+                {
+                    waitTiles.Add(toitsuList.ElementAt(0).Tiles.First());
+                }
+                if ((toitsuList.ElementAt(1) as IncompletedMeld).MeldStatusType == MeldStatus.WAIT)
+                {
+                    waitTiles.Add(toitsuList.ElementAt(1).Tiles.First());
+                }
             }
             if (melds.Count(x => x is Single) == 1)
             {
                 var single = melds.Where(x => x is Single).ToList();
                 Debug.Assert(single.Count() == 1);
-                waitTiles.Add(single.ElementAt(0).Tiles.First());
+                if ((single.First() as IncompletedMeld).MeldStatusType == MeldStatus.WAIT)
+                {
+                    waitTiles.Add(single.ElementAt(0).Tiles.First());
+                }
             }
             return waitTiles;
         }
 
-        public TileCollection AllTiles
+        public override TileCollection AllTiles
         {
             get
             {

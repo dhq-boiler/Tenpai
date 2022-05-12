@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
     /// 単騎待ちを表すクラス
@@ -22,7 +22,6 @@ namespace Tenpai.Yaku.Meld
             : base()
         {
             Tiles.Add(tile);
-            ComputeWaitTiles();
         }
 
         public override bool Equals(object obj)
@@ -30,8 +29,11 @@ namespace Tenpai.Yaku.Meld
             var a = obj is Single;
             if (!a)
                 return false;
-            var b = WaitTiles[0].EqualsRedSuitedTileIncluding((obj as Single).WaitTiles[0]);
-            return a && b;
+            var b = WaitTiles.Count() > 0
+                 && (obj as Single).WaitTiles.Count() > 0
+                 && WaitTiles.Count() == (obj as Single).WaitTiles.Count(); 
+            var c = b && WaitTiles[0].EqualsRedSuitedTileIncluding((obj as Single).WaitTiles[0]);
+            return a && (!b || c);
         }
 
         public override int GetHashCode()

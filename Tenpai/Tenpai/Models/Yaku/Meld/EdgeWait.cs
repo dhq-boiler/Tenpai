@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
     /// 辺張待ちを表すクラス

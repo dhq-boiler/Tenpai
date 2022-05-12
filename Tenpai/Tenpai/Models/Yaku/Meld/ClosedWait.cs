@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using Tenpai.Models.Tiles;
 
-namespace Tenpai.Yaku.Meld
+namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
     /// 嵌張待ちを表すクラス
