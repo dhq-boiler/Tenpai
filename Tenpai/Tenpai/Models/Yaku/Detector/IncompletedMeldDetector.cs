@@ -54,7 +54,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             foreach (var tile in tiles)
             {
-                if (tiles.Count(a => a.Equals(tile)) == 1)
+                if (tiles.Count(a => a.EqualsRedSuitedTileIncluding(tile)) == 1)
                     ret.Add(new Single(tile));
             }
             return ret.ToArray();

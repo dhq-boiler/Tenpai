@@ -306,7 +306,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             if (heads.Count() == 6 && singles.Count() == 1 && (exposed == null || exposed.Count() == 0))
             {
                 List<Meld> form = new List<Meld>();
-
+                IncompletedMeld s = null;
                 foreach (var head in heads)
                 {
                     form.Add((head as Double).Clone(IncompletedMeld.MeldStatus.COMPLETED));
@@ -314,11 +314,12 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
                 foreach (var single in singles)
                 {
-                    form.Add((single as Single).Clone(IncompletedMeld.MeldStatus.WAIT));
+                    s = (single as Single).Clone(IncompletedMeld.MeldStatus.WAIT);
+                    form.Add(s);
                 }
 
                 var odd = new TileCollection(hand).Odd(form.ToArray());
-                ret.Add(new ReadyHand(odd, form.ToArray()));
+                ret.Add(new ManualWaitReadyHand(s.Tiles[0], form.ToArray()));
             }
         }
 

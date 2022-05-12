@@ -763,7 +763,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void FindReadyHandsTest5()
+        public void 純正九蓮宝燈9面待ち()
         {
             //Wait Bamboo_1, Bamboo_2, Bamboo_3, Bamboo_4, Bamboo_5, Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9
             TileCollection tiles = new TileCollection(new Tile[]
@@ -899,7 +899,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void FindReadyHandsTest6()
+        public void 国士無双十三面待ち()
         {
             //Wait Character_1, Character_9, Dot_1, Dot_9, Bamboo_1, Bamboo_9, East, South, West, North, White, Green, Red
             TileCollection tiles = new TileCollection(new Tile[]
