@@ -282,10 +282,6 @@ namespace Tenpai.ViewModels
                 sarashiCount += 3;
 
                 var rotate = target.Clone() as Tile;
-                //if (Tiles.Where(x => x.Code == rotate.Code).Any())
-                //{
-                //    rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Max(x => x.Order) + 1;
-                //}
                 rotate.CallFrom = args.CallFrom;
                 if (rotate.CallFrom == EOpponent.Kamicha)
                     rotate.Order = 0;
@@ -671,12 +667,9 @@ namespace Tenpai.ViewModels
         private void UpdateTile(Tile replaced, Tile target, int count)
         {
             int processedCount = 0;
-            //bool f = false;
-            //var list = new List<Tile>();
             for (int j = 0; j < Tiles.Count(); j++)
             {
                 var tile = GetTile(j);
-                //list.Add(tile);
                 if (tile is null || tile.Visibility.Value == Visibility.Collapsed)
                     continue;
                 if (tile.Equals(replaced) && tile.Visibility.Value != Visibility.Collapsed && processedCount < count)
@@ -687,12 +680,7 @@ namespace Tenpai.ViewModels
                 if (processedCount == count)
                 {
                     return;
-                    //f = true;
                 }
-                //if (f)
-                //{
-                //    tile.Order = list.Where(x => x.Code == tile.Code).Max(x => x.Order) + 1;
-                //}
             }
         }
 
@@ -847,13 +835,7 @@ namespace Tenpai.ViewModels
         private void ArrangeTiles()
         {
             var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, Tile17.Value}.ToList();
-            //tiles = tiles.Where(x => x != null).ToList();
             tiles.Sort();
-            //for (int i = 0; i < tiles.Count; i++)
-            //{
-            //    var tile = tiles[i];
-            //    SetTile(i, tile);
-            //}
             Tile0.Value = tiles[0];
             Tile1.Value = tiles[1];
             Tile2.Value = tiles[2];
