@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tenpai.Models.Yaku
 {
-    internal class Reach : Yaku
+    public class KingsTileDraw : Yaku
     {
-        public Reach() : base("立直", MenzenExclusiveOrDownfallOrNo.MenzenExclusive, 1)
+        public KingsTileDraw() : base("嶺上開花", MenzenExclusiveOrDownfallOrNo.NoDownfall, 1)
         {
         }
     }

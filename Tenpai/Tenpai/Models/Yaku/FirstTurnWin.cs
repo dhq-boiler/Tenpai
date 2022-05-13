@@ -8,7 +8,7 @@ namespace Tenpai.Models.Yaku
 {
     public class FirstTurnWin : Yaku
     {
-        public FirstTurnWin() : base("一発", true, 1)
+        public FirstTurnWin() : base("一発", MenzenExclusiveOrDownfallOrNo.MenzenExclusive, 1)
         {
         }
     }

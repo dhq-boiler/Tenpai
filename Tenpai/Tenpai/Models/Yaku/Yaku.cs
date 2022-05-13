@@ -30,30 +30,42 @@
         /// true:門前限定
         /// false:鳴いても翻数がつく
         /// </summary>
-        public bool IsMenzenExclusive { get; set; }
+        public MenzenExclusiveOrDownfallOrNo CallType { get; set; }
+
+        public enum MenzenExclusiveOrDownfallOrNo
+        {
+            MenzenExclusive,
+            Downfall,
+            NoDownfall
+        }
 
         /// <summary>
         /// 翻数
         /// </summary>
         public int HanCount(bool called)
         {
-            if (called && !IsMenzenExclusive)
+            if (called && (CallType == MenzenExclusiveOrDownfallOrNo.Downfall || CallType == MenzenExclusiveOrDownfallOrNo.NoDownfall))
                 return CalledHanCount;
             else
                 return MenzenHanCount;
         }
 
-        public Yaku(string name, bool isMenzenExclusive, int hanCount)
+        public Yaku(string name, MenzenExclusiveOrDownfallOrNo callType, int hanCount)
         {
             Name = name;
             MenzenHanCount = hanCount;
-            if (IsMenzenExclusive)
+            CallType = callType;
+            switch (CallType)
             {
-                CalledHanCount = 0;
-            }
-            else
-            {
-                CalledHanCount = hanCount - 1;
+                case MenzenExclusiveOrDownfallOrNo.MenzenExclusive:
+                    CalledHanCount = 0;
+                    break;
+                case MenzenExclusiveOrDownfallOrNo.Downfall:
+                    CalledHanCount = hanCount - 1;
+                    break;
+                case MenzenExclusiveOrDownfallOrNo.NoDownfall:
+                    CalledHanCount = hanCount;
+                    break;
             }
         }
     }

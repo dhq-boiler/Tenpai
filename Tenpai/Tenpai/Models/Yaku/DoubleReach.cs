@@ -8,7 +8,7 @@ namespace Tenpai.Models.Yaku
 {
     public class DoubleReach : Yaku
     {
-        public DoubleReach() : base("ダブル立直", true, 1)
+        public DoubleReach() : base("ダブル立直", MenzenExclusiveOrDownfallOrNo.MenzenExclusive, 1)
         {
         }
     }
