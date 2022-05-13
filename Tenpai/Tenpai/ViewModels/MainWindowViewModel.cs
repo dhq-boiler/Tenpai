@@ -579,6 +579,7 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             Yakus.Add(new Reach());
             Yakus.Add(new FirstTurnWin());
+            Yakus.Add(new DoubleReach());
         }
 
         private void ConstructReadyHands()
