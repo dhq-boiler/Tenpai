@@ -26,12 +26,9 @@ namespace Tenpai.Models.Yaku.Meld
         /// <summary>
         /// 合計翻数
         /// </summary>
-        public int SumHanCount
+        public int SumHanCount(bool called)
         {
-            get
-            {
-                return Yakus.Sum(x => x.HanCount);
-            }
+            return Yakus.Sum(x => x.HanCount(called));
         }
 
         /// <summary>

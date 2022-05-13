@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku;
 using Tenpai.Models.Yaku.Meld;
 using Tenpai.Models.Yaku.Meld.Detector;
 using Tenpai.Views;
@@ -56,7 +57,7 @@ namespace Tenpai.ViewModels
         public ReactiveCommand<Call> DaiminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> ShouminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
-
+        public ReactiveCollection<Yaku> Yakus { get;} = new ReactiveCollection<Yaku>();
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
 
         private int sarashiCount = 0;
@@ -576,6 +577,7 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+            Yakus.Add(new Reach());
         }
 
         private void ConstructReadyHands()
@@ -583,6 +585,7 @@ namespace Tenpai.ViewModels
             ArrangeTiles();
             ReadyHands.Clear();
             var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray()).OrderBy(x => x.WaitingTiles[0]);
+            readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable)));
             ReadyHands.AddRangeOnScheduler(readyHands);
         }
 
