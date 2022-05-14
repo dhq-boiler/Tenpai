@@ -14,7 +14,8 @@
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
         <converters:EnumConverter x:Key="Enum" />
-        <converters:HanCountConverter x:Key="HanCount" />
+        <converters:HanCountToIntConverter x:Key="HanCountToInt" />
+        <converters:HanCountToStringConverter x:Key="HanCountToString" />
     </Window.Resources>
     <DockPanel>
         <DockPanel DockPanel.Dock="Right">
@@ -30,13 +31,12 @@
                                     <TextBlock>
                                         <Run>
                                             <Run.Text>
-                                                <MultiBinding Converter="{StaticResource HanCount}" Mode="OneWay">
+                                                <MultiBinding Converter="{StaticResource HanCountToString}" Mode="OneWay">
                                                     <Binding />
                                                     <Binding Path="DataContext.SarashiHai" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}" />
                                                 </MultiBinding>
                                             </Run.Text>
                                         </Run>
-                                        <Run Text="翻" />
                                     </TextBlock>
                                 </Label>
                             </StackPanel>
@@ -580,13 +580,12 @@
                                                         <TextBlock>
                                                             <Run>
                                                                 <Run.Text>
-                                                                    <MultiBinding Converter="{StaticResource HanCount}" Mode="OneWay">
+                                                                    <MultiBinding Converter="{StaticResource HanCountToString}" Mode="OneWay">
                                                                         <Binding />
                                                                         <Binding Path="DataContext.SarashiHai" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}" />
                                                                     </MultiBinding>
                                                                 </Run.Text>
                                                             </Run>
-                                                        <Run Text="翻" />
                                                         </TextBlock>
                                                     </Label>
                                                 </StackPanel>

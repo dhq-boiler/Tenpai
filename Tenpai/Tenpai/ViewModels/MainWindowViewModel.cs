@@ -583,6 +583,8 @@ namespace Tenpai.ViewModels
             Yakus.Add(new KingsTileDraw());
             Yakus.Add(new FinalTileWin_Tumo());
             Yakus.Add(new FinalTileWin_Ron());
+            Yakus.Add(new HeavenlyWin());
+            Yakus.Add(new EarthlyWin());
         }
 
         private void ConstructReadyHands()
