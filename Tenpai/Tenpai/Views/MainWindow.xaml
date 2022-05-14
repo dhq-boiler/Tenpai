@@ -25,8 +25,17 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox Content="{Binding Name}"
-                                          IsChecked="{Binding IsEnable}"
-                                          VerticalAlignment="Center" />
+                                          IsChecked="{Binding IsEnable.Value}"
+                                          VerticalAlignment="Center">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Checked">
+                                            <helper:EventToCommand Command="{Binding CheckedCommand}" />
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="Unchecked">
+                                            <helper:EventToCommand Command="{Binding UncheckedCommand}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </CheckBox>
                                 <Label VerticalAlignment="Center">
                                     <TextBlock>
                                         <Run>

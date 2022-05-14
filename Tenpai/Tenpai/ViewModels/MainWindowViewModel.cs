@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -577,9 +578,28 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
-            Yakus.Add(new Reach());
-            Yakus.Add(new FirstTurnWin());
-            Yakus.Add(new DoubleReach());
+            Yakus.Add(new Reach()
+            {
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    Yakus.First(x => x is FirstTurnWin).IsEnable.Value = false;
+                    Yakus.First(x => x is DoubleReach).IsEnable.Value = false;
+                }),
+            });
+            Yakus.Add(new FirstTurnWin()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    Yakus.First(x => x is Reach).IsEnable.Value = true;
+                }),
+            });
+            Yakus.Add(new DoubleReach()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    Yakus.First(x => x is Reach).IsEnable.Value = true;
+                }),
+            });
             Yakus.Add(new KingsTileDraw());
             Yakus.Add(new FinalTileWin_Tumo());
             Yakus.Add(new FinalTileWin_Ron());
@@ -592,7 +612,7 @@ namespace Tenpai.ViewModels
             ArrangeTiles();
             ReadyHands.Clear();
             var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value).OrderBy(x => x.WaitingTiles[0]);
-            readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable)));
+            readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable.Value)));
             ReadyHands.AddRangeOnScheduler(readyHands);
         }
 

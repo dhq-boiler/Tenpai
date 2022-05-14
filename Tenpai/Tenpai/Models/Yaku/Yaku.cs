@@ -1,14 +1,18 @@
-﻿namespace Tenpai.Models.Yaku
+﻿using Prism.Mvvm;
+using Reactive.Bindings;
+using System.Windows.Input;
+
+namespace Tenpai.Models.Yaku
 {
     /// <summary>
     /// 役の抽象クラス
     /// </summary>
-    public abstract class Yaku
+    public abstract class Yaku : BindableBase
     {
         /// <summary>
         /// 役の有効性
         /// </summary>
-        public bool IsEnable { get; set; }
+        public ReactivePropertySlim<bool> IsEnable { get; } = new ReactivePropertySlim<bool>();
 
         /// <summary>
         /// 役の名称
@@ -49,6 +53,10 @@
             else
                 return MenzenHanCount;
         }
+
+        public ICommand CheckedCommand { get; set; }
+
+        public ICommand UncheckedCommand { get; set; }
 
         public Yaku(string name, MenzenExclusiveOrDownfallOrNo callType, int hanCount)
         {
