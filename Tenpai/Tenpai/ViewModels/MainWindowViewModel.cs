@@ -5,6 +5,7 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -580,31 +581,125 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             Yakus.Add(new Reach()
             {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
+                    ConstructReadyHands();
+                }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    Yakus.First(x => x is FirstTurnWin).IsEnable.Value = false;
-                    Yakus.First(x => x is DoubleReach).IsEnable.Value = false;
+                    SwitchIsEnable<FirstTurnWin>(false);
+                    SwitchIsEnable<DoubleReach>(false);
+                    ConstructReadyHands();
                 }),
             });
             Yakus.Add(new FirstTurnWin()
             {
                 CheckedCommand = new DelegateCommand(() =>
                 {
-                    Yakus.First(x => x is Reach).IsEnable.Value = true;
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
+                    SwitchIsEnable<Reach>(true);
+                    ConstructReadyHands();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
                 }),
             });
             Yakus.Add(new DoubleReach()
             {
                 CheckedCommand = new DelegateCommand(() =>
                 {
-                    Yakus.First(x => x is Reach).IsEnable.Value = true;
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
+                    SwitchIsEnable<Reach>(true);
+                    ConstructReadyHands();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
                 }),
             });
-            Yakus.Add(new KingsTileDraw());
-            Yakus.Add(new FinalTileWin_Tumo());
-            Yakus.Add(new FinalTileWin_Ron());
-            Yakus.Add(new HeavenlyWin());
-            Yakus.Add(new EarthlyWin());
+            Yakus.Add(new KingsTileDraw()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
+                }),
+            });
+            Yakus.Add(new FinalTileWin_Tumo()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
+                    SwitchIsEnable<FinalTileWin_Ron>(false);
+                    ConstructReadyHands();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
+                }),
+            });
+            Yakus.Add(new FinalTileWin_Ron()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
+                    SwitchIsEnable<FinalTileWin_Tumo>(false);
+                    ConstructReadyHands();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
+                }),
+            });
+            Yakus.Add(new HeavenlyWin()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    SwitchIsEnable<Reach>(false);
+                    SwitchIsEnable<FirstTurnWin>(false);
+                    SwitchIsEnable<DoubleReach>(false);
+                    SwitchIsEnable<FinalTileWin_Tumo>(false);
+                    SwitchIsEnable<FinalTileWin_Ron>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
+                    ConstructReadyHands();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
+                }),
+            });
+            Yakus.Add(new EarthlyWin()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    SwitchIsEnable<Reach>(false);
+                    SwitchIsEnable<FirstTurnWin>(false);
+                    SwitchIsEnable<DoubleReach>(false);
+                    SwitchIsEnable<FinalTileWin_Tumo>(false);
+                    SwitchIsEnable<FinalTileWin_Ron>(false);
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    ConstructReadyHands();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructReadyHands();
+                }),
+            });
+        }
+
+        private void SwitchIsEnable<T>(bool isEnable)
+        {
+            Yakus.First(x => x is T).IsEnable.Value = isEnable;
         }
 
         private void ConstructReadyHands()
@@ -613,7 +708,8 @@ namespace Tenpai.ViewModels
             ReadyHands.Clear();
             var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value).OrderBy(x => x.WaitingTiles[0]);
             readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable.Value)));
-            ReadyHands.AddRangeOnScheduler(readyHands);
+            //ReadyHands.AddRangeOnScheduler(readyHands);
+            ReadyHands.AddRange(readyHands);
         }
 
         public Meld[] ConvertToCompletedQuads(IEnumerable<Meld> incompletedQuads)
