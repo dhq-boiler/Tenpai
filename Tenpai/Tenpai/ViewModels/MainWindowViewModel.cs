@@ -61,6 +61,7 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
         public ReactiveCollection<Yaku> Yakus { get;} = new ReactiveCollection<Yaku>();
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
+        public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
 
         private int sarashiCount = 0;
 
@@ -434,16 +435,42 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
             {
-                IDialogResult dialogResult = null;
-                dialogService.ShowDialog(nameof(TileLineup), (result) =>
+                if (Tiles.Where(x => !(x is Dummy)).Count() < tileCount.Value - 1)
                 {
-                    dialogResult = result;
-                });
-                if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
+                    IDialogResult dialogResult = null;
+                    dialogService.ShowDialog(nameof(TileLineup), (result) =>
+                    {
+                        dialogResult = result;
+                    });
+                    if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
+                    {
+                        var newTile = dialogResult.Parameters.GetValue<Tile>("TileType");
+                        newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
+                        tp.TileType = newTile;
+                    }
+                }
+                else
                 {
-                    var newTile = dialogResult.Parameters.GetValue<Tile>("TileType");
-                    newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
-                    tp.TileType = newTile;
+                    IDialogResult dialogResult = null;
+                    dialogService.ShowDialog(nameof(TumoOrRon), (result) =>
+                    {
+                        dialogResult = result;
+                    });
+                    if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
+                    {
+                        IDialogResult dialogResult2 = null;
+                        dialogService.ShowDialog(nameof(TileLineup), (result) =>
+                        {
+                            dialogResult2 = result;
+                        });
+                        if (dialogResult2 != null && dialogResult2.Result == ButtonResult.OK)
+                        {
+                            var newTile = dialogResult2.Parameters.GetValue<Tile>("TileType");
+                            newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
+                            tp.TileType = newTile;
+                            AgariType.Value = dialogResult.Parameters.GetValue<AgariType>("AgariType");
+                        }
+                    }
                 }
             })
             .AddTo(_disposables);

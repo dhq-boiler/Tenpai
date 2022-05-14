@@ -25,6 +25,7 @@ namespace Tenpai
         {
             cr.RegisterDialog<Views.TileLineup, ViewModels.TileLineupViewModel>();
             cr.RegisterDialog<Views.SelectRedTileOrNot, ViewModels.SelectRedTileOrNotViewModel>();
+            cr.RegisterDialog<Views.TumoOrRon, ViewModels.TumoOrRonViewModel>();
         }
     }
 }
