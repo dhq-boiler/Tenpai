@@ -44,6 +44,17 @@ namespace Tenpai.Utils
 
         [DllImport("user32.dll")]
         public static extern bool ClientToScreen(IntPtr hwnd, out POINT lpPoint);
+        
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetCursorPos(ref Win32Point pt);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Win32Point
+        {
+            public Int32 X;
+            public Int32 Y;
+        };
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);

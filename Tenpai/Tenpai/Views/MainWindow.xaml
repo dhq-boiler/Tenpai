@@ -17,6 +17,11 @@
         <converters:HanCountToIntConverter x:Key="HanCountToInt" />
         <converters:HanCountToStringConverter x:Key="HanCountToString" />
     </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <helper:EventToCommand Command="{Binding ClosingCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <DockPanel>
         <DockPanel DockPanel.Dock="Right">
             <ScrollViewer>

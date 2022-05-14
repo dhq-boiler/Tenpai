@@ -333,6 +333,42 @@ namespace Tenpai.ViewModels
 
         public void OnDialogClosed()
         {
+            _disposables.Dispose();
+            m1Command.Dispose();
+            m2Command.Dispose();
+            m3Command.Dispose();
+            m4Command.Dispose();
+            m5Command.Dispose();
+            m6Command.Dispose();
+            m7Command.Dispose();
+            m8Command.Dispose();
+            m9Command.Dispose();
+            s1Command.Dispose();
+            s2Command.Dispose();
+            s3Command.Dispose();
+            s4Command.Dispose();
+            s5Command.Dispose();
+            s6Command.Dispose();
+            s7Command.Dispose();
+            s8Command.Dispose();
+            s9Command.Dispose();
+            p1Command.Dispose();
+            p2Command.Dispose();
+            p3Command.Dispose();
+            p4Command.Dispose();
+            p5Command.Dispose();
+            p6Command.Dispose();
+            p7Command.Dispose();
+            p8Command.Dispose();
+            p9Command.Dispose();
+            EastCommand.Dispose();
+            SouthCommand.Dispose();
+            WestCommand.Dispose();
+            NorthCommand.Dispose();
+            WhiteCommand.Dispose();
+            GreenCommand.Dispose();
+            RedCommand.Dispose();
+            DeleteCommand.Dispose();
         }
 
         public void OnDialogOpened(IDialogParameters parameters)

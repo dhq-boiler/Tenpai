@@ -4,10 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Tenpai.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:helper="clr-namespace:Tenpai.Helpers"
              xmlns:prism="http://prismlibrary.com/"
              mc:Ignorable="d">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="LayoutUpdated">
+            <helper:EventToCommand Command="{Binding LayoutUpdatedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <prism:Dialog.WindowStyle>
-        <Style TargetType="Window">
+        <Style TargetType="prism:DialogWindow">
             <Setter Property="WindowStyle" Value="None" />
             <Setter Property="SizeToContent" Value="WidthAndHeight" />
         </Style>

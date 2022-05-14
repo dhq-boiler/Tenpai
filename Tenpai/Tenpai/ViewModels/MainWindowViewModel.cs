@@ -29,6 +29,9 @@ namespace Tenpai.ViewModels
         [Dependency]
         public IDialogService dialogService { get; set; }
 
+        [Dependency]
+        public MainWindow MainWindow { get; set; }
+
         public ReactivePropertySlim<Tile> Tile0 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile1 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile2 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
@@ -62,6 +65,7 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<Yaku> Yakus { get;} = new ReactiveCollection<Yaku>();
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
+        public ReactiveCommand ClosingCommand { get; } = new ReactiveCommand();
 
         private int sarashiCount = 0;
 
@@ -451,8 +455,9 @@ namespace Tenpai.ViewModels
                 }
                 else
                 {
+                    var position = GetMousePosition();
                     IDialogResult dialogResult = null;
-                    dialogService.ShowDialog(nameof(TumoOrRon), (result) =>
+                    dialogService.ShowDialog(nameof(TumoOrRon), new DialogParameters() { { "Left", position.X }, { "Top", position.Y } }, (result) =>
                     {
                         dialogResult = result;
                     });
@@ -606,6 +611,11 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+            ClosingCommand.Subscribe(_ =>
+            {
+                App.Current.Shutdown();
+            })
+            .AddTo(_disposables);
             Yakus.Add(new Reach()
             {
                 CheckedCommand = new DelegateCommand(() =>
@@ -724,6 +734,13 @@ namespace Tenpai.ViewModels
             });
         }
 
+        public static Point GetMousePosition()
+        {
+            Utils.NativeMethods.Win32Point w32Mouse = new Utils.NativeMethods.Win32Point();
+            Utils.NativeMethods.GetCursorPos(ref w32Mouse);
+            return new Point(w32Mouse.X, w32Mouse.Y);
+        }
+
         private void SwitchIsEnable<T>(bool isEnable)
         {
             Yakus.First(x => x is T).IsEnable.Value = isEnable;
@@ -735,7 +752,6 @@ namespace Tenpai.ViewModels
             ReadyHands.Clear();
             var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value).OrderBy(x => x.WaitingTiles[0]);
             readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable.Value)));
-            //ReadyHands.AddRangeOnScheduler(readyHands);
             ReadyHands.AddRange(readyHands);
         }
 
