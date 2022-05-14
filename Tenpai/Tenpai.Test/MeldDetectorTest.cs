@@ -606,7 +606,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_6>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 14);
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_4>(),
@@ -652,7 +652,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_7>(),
                     Tile.CreateInstance<Character_8>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 14);
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
@@ -698,7 +698,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_8>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 14);
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Dot_5>(),
@@ -743,7 +743,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<White>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 14);
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<White>(),
@@ -782,7 +782,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_9>(),
                     Tile.CreateInstance<Bamboo_9>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 14).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
             Assert.AreEqual(9, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
@@ -918,7 +918,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Green>(),
                     Tile.CreateInstance<Red>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 14);
             Assert.AreEqual(13, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
@@ -1145,7 +1145,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Red>(),
                     Tile.CreateInstance<Red>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 14);
             Assert.AreEqual(1, readyHands.Count());
             foreach (var readyHand in readyHands)
             {

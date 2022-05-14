@@ -589,7 +589,7 @@ namespace Tenpai.ViewModels
         {
             ArrangeTiles();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray()).OrderBy(x => x.WaitingTiles[0]);
+            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value).OrderBy(x => x.WaitingTiles[0]);
             readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable)));
             ReadyHands.AddRangeOnScheduler(readyHands);
         }
