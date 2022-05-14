@@ -1,4 +1,5 @@
-﻿using Prism.Services.Dialogs;
+﻿using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -8,7 +9,7 @@ using Tenpai.Models.Tiles;
 
 namespace Tenpai.ViewModels
 {
-    public class TileLineupViewModel : IDialogAware
+    public class TileLineupViewModel : BindableBase, IDialogAware
     {
         private CompositeDisposable _disposables = new CompositeDisposable();
         public string Title => "牌の選択";

@@ -1,4 +1,5 @@
-﻿using Prism.Services.Dialogs;
+﻿using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
@@ -7,7 +8,7 @@ using Tenpai.Models.Tiles;
 
 namespace Tenpai.ViewModels
 {
-    public class SelectRedTileOrNotViewModel : IDialogAware, IDisposable
+    public class SelectRedTileOrNotViewModel : BindableBase, IDialogAware, IDisposable
     {
         private CompositeDisposable _disposable = new CompositeDisposable();
         private bool disposedValue;
