@@ -51,6 +51,9 @@
             <views:TilePlaceholder TileType="白" SelectCommand="{Binding WhiteCommand}" />
             <views:TilePlaceholder TileType="發" SelectCommand="{Binding GreenCommand}" />
             <views:TilePlaceholder TileType="中" SelectCommand="{Binding RedCommand}" />
+            <Button Command="{Binding DeleteCommand}"
+                    Width="144"
+                    Content="削除" />
         </StackPanel>
     </StackPanel>
 </UserControl>

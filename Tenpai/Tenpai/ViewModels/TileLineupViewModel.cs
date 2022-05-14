@@ -52,6 +52,7 @@ namespace Tenpai.ViewModels
         public ReactiveCommand WhiteCommand { get; } = new ReactiveCommand();
         public ReactiveCommand GreenCommand { get; } = new ReactiveCommand();
         public ReactiveCommand RedCommand { get; } = new ReactiveCommand();
+        public ReactiveCommand DeleteCommand { get; } = new ReactiveCommand();
 
         public TileLineupViewModel()
         {
@@ -311,6 +312,13 @@ namespace Tenpai.ViewModels
             {
                 var dialogResult = new DialogResult(ButtonResult.OK);
                 dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Red>(Visibility.Visible, null));
+                RequestClose.Invoke(dialogResult);
+            })
+            .AddTo(_disposables);
+            DeleteCommand.Subscribe(() =>
+            {
+                var dialogResult = new DialogResult(ButtonResult.OK);
+                dialogResult.Parameters.Add("TileType", Tile.CreateInstance<Dummy>(Visibility.Visible, null));
                 RequestClose.Invoke(dialogResult);
             })
             .AddTo(_disposables);
