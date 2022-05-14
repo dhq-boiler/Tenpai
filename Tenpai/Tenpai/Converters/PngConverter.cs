@@ -18,7 +18,7 @@ namespace Tenpai.Converters
                 return DependencyProperty.UnsetValue;
             if (tile is null)
                 tile = Tile.CreateInstance(value as string, Visibility.Visible, null);
-            return new Uri(new Uri(Directory.GetCurrentDirectory() + "/net5.0-windows"), $"Assets/{tile.Display}.png");
+            return new Uri(new Uri(Directory.GetCurrentDirectory() + "/net6.0-windows"), $"Assets/{tile.Display}.png");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
