@@ -9,9 +9,10 @@
         xmlns:views="clr-namespace:Tenpai.Views"
         xmlns:meld="clr-namespace:Tenpai.Models.Yaku.Meld"
         xmlns:tiles="clr-namespace:Tenpai.Models.Tiles"
+        xmlns:viewModels="clr-namespace:Tenpai.ViewModels"
         xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="聴牌 β" Height="720" Width="1280">
     <Window.Resources>
         <converters:EnumConverter x:Key="Enum" />
         <converters:HanCountToIntConverter x:Key="HanCountToInt" />
@@ -425,6 +426,53 @@
                         </ContextMenu>
                     </views:TilePlaceholder.ContextMenu>
                 </views:TilePlaceholder>
+                <ContentControl Content="{Binding}"
+                                VerticalAlignment="Center">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AgariTypeAsInt.Value, Converter={StaticResource Enum}, ConverterParameter={x:Static viewModels:AgariType.Unspecified}}" Value="True">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AgariTypeAsInt.Value, Converter={StaticResource Enum}, ConverterParameter={x:Static viewModels:AgariType.Tsumo}}" Value="True">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <DataTemplate.Resources>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="FontSize" Value="30" />
+                                                        <Setter Property="FontFamily" Value="HGS行書体" />
+                                                    </Style>
+                                                </DataTemplate.Resources>
+                                                <Label Content="ツモ" />
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AgariTypeAsInt.Value, Converter={StaticResource Enum}, ConverterParameter={x:Static viewModels:AgariType.Ron}}" Value="True">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <DataTemplate.Resources>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="FontSize" Value="30" />
+                                                        <Setter Property="FontFamily" Value="HGS行書体" />
+                                                    </Style>
+                                                </DataTemplate.Resources>
+                                                <Label Content="ロン" />
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
             </StackPanel>
         </DockPanel>
         <ScrollViewer>

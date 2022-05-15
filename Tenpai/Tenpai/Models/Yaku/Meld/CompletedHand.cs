@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tenpai.Models.Yaku.Meld
 {
-    public class CompletedHand : WaitHand
+    public class CompletedHand : ReadyHand
     {
         public CompletedHand()
             : base()

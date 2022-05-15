@@ -67,6 +67,7 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<Yaku> Yakus { get;} = new ReactiveCollection<Yaku>();
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(13);
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
+        public ReadOnlyReactivePropertySlim<int> AgariTypeAsInt { get; }
         public ReactiveCommand ClosingCommand { get; } = new ReactiveCommand();
 
         private int sarashiCount = 0;
@@ -139,8 +140,13 @@ namespace Tenpai.ViewModels
                     }
                 }
 
-                var quads = MeldDetector.FindQuads(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
-                var incompletedQuads = IncompletedMeldDetector.FindIncompletedQuad(Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
+                var removeTiles = new List<Tile>();
+                if (AgariType.Value == ViewModels.AgariType.Ron)
+                {
+                    removeTiles.Add(AgariTile.Value);
+                }
+                var quads = MeldDetector.FindQuads(Tiles.Except(removeTiles).Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
+                var incompletedQuads = IncompletedMeldDetector.FindIncompletedQuad(Tiles.Except(removeTiles).Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray()).Where(x => x.AllTiles.Contains(Tiles[int.Parse(args)]));
                 var daiminkanCompletedQuads = ConvertToCompletedQuads(incompletedQuads).Where(x => x.Tiles.Contains(Tiles[int.Parse(args)]));
                 if (quads.Any() || daiminkanCompletedQuads.Any())
                 {
@@ -164,7 +170,7 @@ namespace Tenpai.ViewModels
                         }
                     }
 
-                    if (daiminkanCompletedQuads.Any())
+                    if (!quads.Any() && daiminkanCompletedQuads.Any())
                     {
                         foreach (var daiminkanQuad in daiminkanCompletedQuads)
                         {
@@ -361,7 +367,7 @@ namespace Tenpai.ViewModels
                 ConstructReadyHands();
             })
             .AddTo(_disposables);
-            DaiminkanCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 3)
+            DaiminkanCommand.Where(x => Tiles.Except(new Tile[] { AgariTile.Value }).Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 3)
                       .Select(x => x)
                       .Subscribe(args =>
                       {
@@ -381,6 +387,11 @@ namespace Tenpai.ViewModels
                               args.Target.Order = 3;
                           rotate.CallFrom = args.CallFrom;
                           rotate.Rotate = new System.Windows.Media.RotateTransform(90);
+                          
+                          if (target.EqualsRedSuitedTileIncluding(AgariTile.Value))
+                          {
+                              AgariTile.Value = Tile.CreateInstance<Dummy>(Visibility.Visible, null);
+                          }
 
                           UpdateTile(new Dummy(), rotate, 1);
                           UpdateTileVisibilityToCollapsed(rotate.Code, 4);
@@ -466,7 +477,10 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             SelectAgariTileCommand.Subscribe(tp =>
             {
-                if (Tiles.Except(new Tile[] { AgariTile.Value }).Where(x => !(x is Dummy)).Count() == tileCount.Value)
+                var targetsWithoutDummy = Tiles.Where(x => !(x is Dummy));
+                var targets = targetsWithoutDummy;
+                var count = targets.Count();
+                if (count >= tileCount.Value)
                 {
                     var position = GetMousePosition();
                     IDialogResult dialogResult = null;
@@ -594,6 +608,11 @@ namespace Tenpai.ViewModels
                 ConstructReadyHands();
             })
             .AddTo(_disposables);
+            AgariTile.Subscribe(_ =>
+            {
+                ConstructCompleteHands();
+            })
+            .AddTo(_disposables);
             IsArrangingTiles.Subscribe(flag =>
             {
                 SortIf();
@@ -629,13 +648,13 @@ namespace Tenpai.ViewModels
                 {
                     SwitchIsEnable<HeavenlyWin>(false);
                     SwitchIsEnable<EarthlyWin>(false);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
                     SwitchIsEnable<FirstTurnWin>(false);
                     SwitchIsEnable<DoubleReach>(false);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
             Yakus.Add(new FirstTurnWin()
@@ -645,11 +664,11 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<HeavenlyWin>(false);
                     SwitchIsEnable<EarthlyWin>(false);
                     SwitchIsEnable<Reach>(true);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
             Yakus.Add(new DoubleReach()
@@ -659,22 +678,24 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<HeavenlyWin>(false);
                     SwitchIsEnable<EarthlyWin>(false);
                     SwitchIsEnable<Reach>(true);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
             Yakus.Add(new KingsTileDraw()
             {
                 CheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
             Yakus.Add(new FinalTileWin_Tumo()
@@ -684,11 +705,11 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<HeavenlyWin>(false);
                     SwitchIsEnable<EarthlyWin>(false);
                     SwitchIsEnable<FinalTileWin_Ron>(false);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
             Yakus.Add(new FinalTileWin_Ron()
@@ -698,11 +719,11 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<HeavenlyWin>(false);
                     SwitchIsEnable<EarthlyWin>(false);
                     SwitchIsEnable<FinalTileWin_Tumo>(false);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
             Yakus.Add(new HeavenlyWin()
@@ -712,14 +733,15 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<Reach>(false);
                     SwitchIsEnable<FirstTurnWin>(false);
                     SwitchIsEnable<DoubleReach>(false);
+                    SwitchIsEnable<KingsTileDraw>(false);
                     SwitchIsEnable<FinalTileWin_Tumo>(false);
                     SwitchIsEnable<FinalTileWin_Ron>(false);
                     SwitchIsEnable<EarthlyWin>(false);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
             Yakus.Add(new EarthlyWin()
@@ -729,16 +751,52 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<Reach>(false);
                     SwitchIsEnable<FirstTurnWin>(false);
                     SwitchIsEnable<DoubleReach>(false);
+                    SwitchIsEnable<KingsTileDraw>(false);
                     SwitchIsEnable<FinalTileWin_Tumo>(false);
                     SwitchIsEnable<FinalTileWin_Ron>(false);
                     SwitchIsEnable<HeavenlyWin>(false);
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
-                    ConstructReadyHands();
+                    ConstructHand();
                 }),
             });
+            AgariTypeAsInt = AgariType.Select(x => (int)x)
+                                      .ToReadOnlyReactivePropertySlim();
+            AgariType.Subscribe(x =>
+            {
+                if (x is ViewModels.AgariType.Tsumo)
+                {
+                    SwitchIsEnable<FinalTileWin_Ron>(false);
+                }
+                else if (x is ViewModels.AgariType.Ron)
+                {
+                    SwitchIsEnable<FinalTileWin_Tumo>(false);
+                }
+            })
+            .AddTo(_disposables);
+        }
+
+        private void ConstructHand()
+        {
+            if (tileCount.Value + 1 == Tiles.Where(x => x is not Dummy).Count())
+            {
+                ConstructCompleteHands();
+            }
+            else
+            {
+                ConstructReadyHands();
+            }
+        }
+
+        private void ConstructCompleteHands()
+        {
+            ArrangeTiles();
+            ReadyHands.Clear();
+            var readyHands = MeldDetector.FindCompletedHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray());
+            readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable.Value)));
+            ReadyHands.AddRange(readyHands);
         }
 
         public static Point GetMousePosition()

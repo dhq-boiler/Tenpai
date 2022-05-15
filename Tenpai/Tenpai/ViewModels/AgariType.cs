@@ -8,6 +8,7 @@ namespace Tenpai.ViewModels
 {
     public enum AgariType
     {
+        Unspecified,
         Tsumo,
         Ron,
     }
