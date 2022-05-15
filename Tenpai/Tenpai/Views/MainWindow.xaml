@@ -373,7 +373,7 @@
                                      ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Opened">
-                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="14"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ContextMenu>
@@ -388,7 +388,7 @@
                                      ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Opened">
-                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="15"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ContextMenu>
@@ -403,7 +403,7 @@
                                      ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Opened">
-                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="16"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ContextMenu>
@@ -418,7 +418,7 @@
                                      ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Opened">
-                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="17"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ContextMenu>
