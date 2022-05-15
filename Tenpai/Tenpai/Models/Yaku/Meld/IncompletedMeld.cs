@@ -9,7 +9,6 @@ namespace Tenpai.Models.Yaku.Meld
 {
     public abstract class IncompletedMeld : Meld
     {
-        protected TileCollection _Waiting;
         public MeldStatus MeldStatusType { get; set; }
 
         public enum MeldStatus
@@ -40,14 +39,6 @@ namespace Tenpai.Models.Yaku.Meld
         //    MeldStatusType = MeldStatus.OPEN;
         //    _Waiting = new TileCollection();
         //}
-
-        public TileCollection WaitTiles
-        {
-            get
-            {
-                return _Waiting;
-            }
-        }
 
         public TileCollection ComputeWaitTiles(Meld[] melds)
         {
@@ -199,6 +190,10 @@ namespace Tenpai.Models.Yaku.Meld
             else if (incompletedMeld is Double d)
             {
                 return new Triple(d.Tiles[0], d.Tiles[1], tile);
+            }
+            else if (incompletedMeld is Single s)
+            {
+                return new Double(s.Tiles[0], tile);
             }
             else
             {

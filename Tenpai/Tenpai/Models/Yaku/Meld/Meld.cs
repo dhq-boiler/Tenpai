@@ -16,6 +16,7 @@ namespace Tenpai.Models.Yaku.Meld
     {
         protected TileCollection _Set;
         protected TileCollection _Existed;
+        protected TileCollection _Waiting;
 
         public Meld()
         {
@@ -42,6 +43,14 @@ namespace Tenpai.Models.Yaku.Meld
                 list.AddRange(_Set);
                 list.Sort();
                 return new TileCollection(list);
+            }
+        }
+
+        public TileCollection WaitTiles
+        {
+            get
+            {
+                return _Waiting;
             }
         }
 
@@ -164,6 +173,28 @@ namespace Tenpai.Models.Yaku.Meld
                 return true;
             else
                 return false;
+        }
+
+        public static Meld operator +(Meld meld, Tile tile)
+        {
+            if (meld is OpenWait || meld is EdgeWait || meld is ClosedWait)
+            {
+                var tiles = new Tile[] { meld.Tiles[0], meld.Tiles[1], tile }.ToList();
+                tiles.Sort();
+                return new Run(tiles[0], tiles[1], tiles[2]);
+            }
+            else if (meld is Double d)
+            {
+                return new Triple(d.Tiles[0], d.Tiles[1], tile);
+            }
+            else if (meld is Single s)
+            {
+                return new Double(s.Tiles[0], tile);
+            }
+            else
+            {
+                throw new Exception("Something wrong!");
+            }
         }
     }
 }

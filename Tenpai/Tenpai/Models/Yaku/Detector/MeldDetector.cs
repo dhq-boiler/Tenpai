@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
@@ -30,7 +31,11 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             //AddYaku(ret, hand, exposed, runs, triples, heads, singles, agariType);
 
-            var incompletedHands = FindReadyHands(hand.Except(new Tile[] { agariTile }).ToArray(), exposed, tileCount, agariType, windOfTheRound, onesOwnWind);
+            var handCollection = new TileCollection(hand);
+            handCollection.RemoveTiles(agariTile, 1);
+            var handArr = handCollection.ToArray();
+
+            var incompletedHands = FindReadyHands(handArr, exposed, tileCount - 1, agariType, windOfTheRound, onesOwnWind);
 
             foreach (var incompletedHand in incompletedHands)
             {
@@ -41,9 +46,26 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     {
                         if (meld is IncompletedMeld im)
                         {
-                            if (im is OpenWait || im is EdgeWait || im is ClosedWait)
+                            if (im is Single s)
                             {
-                                completedHand.WaitForm = new IncompletedMeld[] { im };
+                                completedHand.WaitForm = new Meld[] { im };
+                                //var replace = completedHand.WaitForm.First(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
+                                var replace = im;
+                                int index = completedHand.Melds.ToList().IndexOf(replace);
+                                completedHand.Melds[index] = replace + agariTile;
+                            }
+                            else if (im is Double && incompletedHand.Melds.Count(x => x is Double) == 6)
+                            {
+                                //七対子の形、対子にヒット
+                            }
+                            else if (im is OpenWait || im is EdgeWait || im is ClosedWait)
+                            {
+                                Debug.Assert(im.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
+                                //im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as IncompletedMeld;
+                                completedHand.WaitForm = new Meld[] { im /*+ agariTile*/ };
+                                var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
+                                int index = completedHand.Melds.ToList().IndexOf(replace);
+                                completedHand.Melds[index] = replace + agariTile;
                             }
                             else if (im is Double d)
                             {
@@ -51,14 +73,14 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                                 {
                                     im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as Double;
                                     im.ComputeWaitTiles();
-                                    completedHand.WaitForm = new IncompletedMeld[] { im };
+                                    completedHand.WaitForm = new Meld[] { im };
                                 }
                                 else if (completedHand.WaitForm[0] is Double)
                                 {
                                     im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as Double;
                                     im.ComputeWaitTiles();
-                                    completedHand.WaitForm = new IncompletedMeld[] { completedHand.WaitForm[0], im };
-                                    var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
+                                    completedHand.WaitForm = new Meld[] { completedHand.WaitForm[0], im };
+                                    var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
                                     int index = completedHand.Melds.ToList().IndexOf(replace);
                                     completedHand.Melds[index] = replace + agariTile;
                                 }
@@ -69,7 +91,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                             }
                             else
                             {
-                                completedHand.WaitForm = new IncompletedMeld[] { im };
+                                completedHand.WaitForm = new Meld[] { im };
                             }
                         }
                     }
@@ -211,7 +233,8 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind)
         {
             hand = hand.Where(x => !(x is Dummy)).ToArray();
-            if (hand.Count() + (exposed != null ? exposed.Select(x => x.Tiles.Count()).Sum() : 0) != tileCount)
+            var tcount = hand.Count() + (exposed != null ? exposed.Select(x => x.Tiles.Count()).Sum() : 0);
+            if (tcount != tileCount)
                 return Array.Empty<ReadyHand>();
 
             List<ReadyHand> ret = new List<ReadyHand>();
@@ -242,7 +265,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         {
             foreach (var rh in ret)
             {
-                var isMenzen = exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
+                var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                 var isTumo = agariType == ViewModels.AgariType.Tsumo;
                 if (isMenzen && isTumo)
                 {

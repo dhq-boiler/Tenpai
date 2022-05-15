@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Tenpai.Models.Yaku.Meld;
 
 namespace Tenpai.Models.Tiles
@@ -26,6 +27,58 @@ namespace Tenpai.Models.Tiles
                     {
                         this.Add(t);
                     }
+                }
+            }
+        }
+
+        public void RemoveTiles(Tile args, int v)
+        {
+            var count = this.Where(x => x != null && x.CompareTo(args) == 0).Count();
+            int processed = 0;
+            for (int i = 0; i < count; i++)
+            {
+                for (int j = 0; j < this.Count(); j++)
+                {
+                    var targetTile = this[j];
+                    if (targetTile == null)
+                        continue;
+                    if (args.CompareTo(targetTile) == 0)
+                    {
+                        this[j] = null;
+                        processed++;
+                    }
+                    if (processed == v)
+                    {
+                        Arrange();
+                        return;
+                    }
+                }
+                Arrange();
+            }
+        }
+
+        public void Arrange()
+        {
+            RemoveAll(x => x is null);
+            Sort();
+        }
+
+        public void UpdateTile(Tile replaced, Tile target, int count)
+        {
+            int processedCount = 0;
+            for (int j = 0; j < this.Count(); j++)
+            {
+                var tile = this[j];
+                if (tile is null || tile.Visibility.Value == Visibility.Collapsed)
+                    continue;
+                if (tile.Equals(replaced) && tile.Visibility.Value != Visibility.Collapsed && processedCount < count)
+                {
+                    this[j] = target;
+                    processedCount++;
+                }
+                if (processedCount == count)
+                {
+                    return;
                 }
             }
         }

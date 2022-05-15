@@ -15,7 +15,7 @@ using Tenpai.Views;
 
 namespace Tenpai.Test
 {
-    public class Tests
+    public class Tests : TestFixtureBase
     {
         private string Str(string str, int length)
         {
@@ -268,10 +268,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -331,10 +331,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -393,10 +393,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -455,10 +455,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -520,7 +520,7 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -590,7 +590,7 @@ namespace Tenpai.Test
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -657,10 +657,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -727,10 +727,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -797,10 +797,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -867,10 +867,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -938,10 +938,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -1011,7 +1011,7 @@ namespace Tenpai.Test
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -1078,10 +1078,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -1188,7 +1188,7 @@ namespace Tenpai.Test
             vm.Tile3.Value = Tile.CreateRedInstance<Character_5>(Visibility.Visible, null);
             var quads = MeldDetector.FindQuads(vm.Tiles.Where(x => x.Visibility.Value == Visibility.Visible && !(x is Dummy)).ToArray());
             quads = quads.Where(x => x.Tiles.ContainsRedSuitedTileIncluding(vm.Tile0.Value)).ToArray();
-            vm.AnkanCommand.Execute(new Call(quads.First()));
+            vm.AnkanCommand.Execute(new Call(vm.Tile3.Value, quads.First()));
 
             Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
@@ -1290,10 +1290,11 @@ namespace Tenpai.Test
             Assert.That(vm.Tile7.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile8.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile9.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null);
@@ -1690,11 +1691,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             var ponTile = Tile.CreateInstance<East>(Visibility.Visible, new RotateTransform(90), 0);
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Kamicha));
@@ -1716,11 +1716,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             ponTile = Tile.CreateInstance<South>(Visibility.Visible, new RotateTransform(90), 0);
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Kamicha));
@@ -1742,11 +1741,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             ponTile = Tile.CreateInstance<West>(Visibility.Visible, new RotateTransform(90), 0);
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Kamicha));
@@ -1768,11 +1766,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
         }
 
@@ -1800,11 +1797,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             var ponTile = Tile.CreateInstance<East>(Visibility.Visible, new RotateTransform(90), 0);
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Kamicha));
@@ -1826,11 +1822,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
 
             vm.Tile7.Value = Tile.CreateInstance<East>(Visibility.Visible, null, 3);
 
@@ -1851,11 +1846,10 @@ namespace Tenpai.Test
             Assert.That(vm.Tile10.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile11.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile12.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
+            Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
         }
 
         [Test]
@@ -1915,7 +1909,6 @@ namespace Tenpai.Test
             Assert.That(vm.Tile14.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile15.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile16.Value, Has.Property("Rotate").Null);
-            Assert.That(vm.Tile17.Value, Has.Property("Rotate").Null);
 
             var kanTile = Tile.CreateInstance<East>(Visibility.Visible, new RotateTransform(90), 3);
             ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
@@ -1950,7 +1943,6 @@ namespace Tenpai.Test
             Assert.That(vm.Tile14.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile15.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile16.Value, Has.Property("Rotate").Null); //X
-            Assert.That(vm.Tile17.Value, Has.Property("Rotate").Null); //X
 
             kanTile = Tile.CreateInstance<South>(Visibility.Visible, new RotateTransform(90), 3);
             ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
@@ -1981,7 +1973,6 @@ namespace Tenpai.Test
             Assert.That(vm.Tile14.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile15.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile16.Value, Has.Property("Rotate").Null); //X
-            Assert.That(vm.Tile17.Value, Has.Property("Rotate").Null); //X
 
             kanTile = Tile.CreateInstance<West>(Visibility.Visible, new RotateTransform(90), 3);
             ponTile = vm.SarashiHai.First(x => x.Tiles.All(x => x.EqualsRedSuitedTileIncluding(kanTile))).Tiles.First(x => x.Rotate != null);
@@ -2016,7 +2007,6 @@ namespace Tenpai.Test
             Assert.That(vm.Tile14.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile15.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile16.Value, Has.Property("Rotate").Null); //X
-            Assert.That(vm.Tile17.Value, Has.Property("Rotate").Null); //X
 
             Assert.That(vm.Tile0.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
             Assert.That(vm.Tile1.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
@@ -2034,8 +2024,7 @@ namespace Tenpai.Test
             Assert.That(vm.Tile13.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile14.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
             Assert.That(vm.Tile15.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Visible));
-            Assert.That(vm.Tile17.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
+            Assert.That(vm.Tile16.Value, Has.Property("Visibility").Property("Value").EqualTo(Visibility.Collapsed));
         }
     }
 }

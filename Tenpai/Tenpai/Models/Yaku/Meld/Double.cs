@@ -25,6 +25,13 @@ namespace Tenpai.Models.Yaku.Meld
             _Set.Add(pairone);
         }
 
+        public Double(Tile a, Tile b)
+            : this(MeldStatus.COMPLETED)
+        {
+            _Set.Add(a);
+            _Set.Add(b);
+        }
+
         public override void ComputeWaitTiles()
         {
             Debug.Assert(_Set.Count() == 2);
