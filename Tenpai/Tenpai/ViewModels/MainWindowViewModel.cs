@@ -45,14 +45,16 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Tile> Tile10 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile11 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> Tile12 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
-        public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> Tile13 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
         public ReactivePropertySlim<Tile> Tile14 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
         public ReactivePropertySlim<Tile> Tile15 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
         public ReactivePropertySlim<Tile> Tile16 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
-        public ReactivePropertySlim<Tile> Tile17 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Collapsed, null));
+        public ReactivePropertySlim<Tile> AgariTile { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>(Visibility.Visible, null));
         public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCollection<MenuItem> SarashiHaiTripleContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
+        public ReactiveCommand<TilePlaceholder> SelectCommand { get; } = new ReactiveCommand<TilePlaceholder>();
+        public ReactiveCommand<TilePlaceholder> SelectAgariTileCommand { get; } = new ReactiveCommand<TilePlaceholder>();
         public ReactiveCommand<string> ContextMenuOpeningCommand { get; } = new ReactiveCommand<string>();
         public ReactiveCommand<Tile> SarashiHaiTripleContextMenuOpeningCommand { get; } = new ReactiveCommand<Tile>();
         public ReactiveCommand<Call> PonCommand { get; } = new ReactiveCommand<Call>();
@@ -63,13 +65,13 @@ namespace Tenpai.ViewModels
         public ReactiveCommand<Call> ShouminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
         public ReactiveCollection<Yaku> Yakus { get;} = new ReactiveCollection<Yaku>();
-        public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(14);
+        public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(13);
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
         public ReactiveCommand ClosingCommand { get; } = new ReactiveCommand();
 
         private int sarashiCount = 0;
 
-        public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, Tile17.Value }; } }
+        public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, AgariTile.Value }; } }
 
         private bool sortflag = false;
 
@@ -156,7 +158,7 @@ namespace Tenpai.ViewModels
                             {
                                 Header = ankanCandidate,
                                 Command = AnkanCommand,
-                                CommandParameter = new Call(quad)
+                                CommandParameter = new Call(Tiles[int.Parse(args)], quad)
                             };
                             kan.Items.Add(ankanCandidateMenuItem);
                         }
@@ -319,6 +321,7 @@ namespace Tenpai.ViewModels
                         break;
                 }
                 SortIf();
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             ChiCommand.Subscribe(args =>
@@ -338,17 +341,24 @@ namespace Tenpai.ViewModels
                 }
                 UpdateTileVisibility(rotate, 1);
                 SarashiHai.Add(args.Meld);
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             AnkanCommand.Subscribe(args =>
             {
                 sarashiCount += 4;
                 tileCount.Value++;
+                if (args.Target.EqualsRedSuitedTileIncluding(AgariTile.Value))
+                {
+                    UpdateTile(new Dummy(), AgariTile.Value, 1);
+                    AgariTile.Value = Tile.CreateInstance<Dummy>(Visibility.Visible, null);
+                }
                 for (int i = 0; i < 4; i++)
                 {
                     UpdateTileVisibility(args.Meld.Tiles[i], 1);
                 }
                 SarashiHai.Add(args.Meld);
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             DaiminkanCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 3)
@@ -400,6 +410,7 @@ namespace Tenpai.ViewModels
                                   break;
                           }
                           SortIf();
+                          ConstructReadyHands();
                       })
             .AddTo(_disposables);
             ShouminkanCommand.Where(x => {
@@ -435,25 +446,27 @@ namespace Tenpai.ViewModels
                 var index = SarashiHai.IndexOf(targetCalledTriple);
                 (args.Meld as Quad).Type = Models.Yaku.Meld.KongType.SmallMeldedKong;
                 SarashiHai[index] = args.Meld;
+                ConstructReadyHands();
             })
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
             {
-                if (Tiles.Where(x => !(x is Dummy)).Count() < tileCount.Value - 1)
+                IDialogResult dialogResult = null;
+                dialogService.ShowDialog(nameof(TileLineup), (result) =>
                 {
-                    IDialogResult dialogResult = null;
-                    dialogService.ShowDialog(nameof(TileLineup), (result) =>
-                    {
-                        dialogResult = result;
-                    });
-                    if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
-                    {
-                        var newTile = dialogResult.Parameters.GetValue<Tile>("TileType");
-                        newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
-                        tp.TileType = newTile;
-                    }
+                    dialogResult = result;
+                });
+                if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
+                {
+                    var newTile = dialogResult.Parameters.GetValue<Tile>("TileType");
+                    newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
+                    tp.TileType = newTile;
                 }
-                else
+            })
+            .AddTo(_disposables);
+            SelectAgariTileCommand.Subscribe(tp =>
+            {
+                if (Tiles.Except(new Tile[] { AgariTile.Value }).Where(x => !(x is Dummy)).Count() == tileCount.Value)
                 {
                     var position = GetMousePosition();
                     IDialogResult dialogResult = null;
@@ -581,12 +594,6 @@ namespace Tenpai.ViewModels
                 ConstructReadyHands();
             })
             .AddTo(_disposables);
-            Tile17.Subscribe(_ =>
-            {
-                SortIf();
-                ConstructReadyHands();
-            })
-            .AddTo(_disposables);
             IsArrangingTiles.Subscribe(flag =>
             {
                 SortIf();
@@ -596,6 +603,9 @@ namespace Tenpai.ViewModels
             {
                 switch (count)
                 {
+                    case 14:
+                        Tile13.Value.Visibility.Value = Visibility.Visible;
+                        break;
                     case 15:
                         Tile14.Value.Visibility.Value = Visibility.Visible;
                         break;
@@ -604,9 +614,6 @@ namespace Tenpai.ViewModels
                         break;
                     case 17:
                         Tile16.Value.Visibility.Value = Visibility.Visible;
-                        break;
-                    case 18:
-                        Tile17.Value.Visibility.Value = Visibility.Visible;
                         break;
                 }
             })
@@ -1003,7 +1010,7 @@ namespace Tenpai.ViewModels
 
         private void ArrangeTiles()
         {
-            var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, Tile17.Value}.ToList();
+            var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value }.ToList();
             tiles.Sort();
             Tile0.Value = tiles[0];
             Tile1.Value = tiles[1];
@@ -1022,7 +1029,6 @@ namespace Tenpai.ViewModels
             Tile14.Value = tiles[14];
             Tile15.Value = tiles[15];
             Tile16.Value = tiles[16];
-            Tile17.Value = tiles[17];
             Console.WriteLine("Arranged");
             Trace.WriteLine("Arranged");
         }
@@ -1065,8 +1071,6 @@ namespace Tenpai.ViewModels
                     return Tile15.Value;
                 case 16:
                     return Tile16.Value;
-                case 17:
-                    return Tile17.Value;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1169,15 +1173,8 @@ namespace Tenpai.ViewModels
                     Trace.WriteLine($"Tile{i}: {Tile16.Value.Description} = {tile.Description}");
                     Tile16.Value = tile.Clone() as Tile;
                     break;
-                case 17:
-                    Console.WriteLine($"Tile{i}: {Tile17.Value.Description} = {tile.Description}");
-                    Trace.WriteLine($"Tile{i}: {Tile17.Value.Description} = {tile.Description}");
-                    Tile17.Value = tile.Clone() as Tile;
-                    break;
             }
         }
-
-        public ReactiveCommand<TilePlaceholder> SelectCommand { get; } = new ReactiveCommand<TilePlaceholder>();
 
         private static unsafe void Paste(OpenCvSharp.Mat target, OpenCvSharp.Mat pasting, Rect rect)
         {

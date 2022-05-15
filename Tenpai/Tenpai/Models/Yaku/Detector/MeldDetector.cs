@@ -142,7 +142,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount)
         {
             hand = hand.Where(x => !(x is Dummy)).ToArray();
-            if (hand.Count() + (exposed != null ? exposed.Select(x => x.Tiles.Count()).Sum() : 0) != tileCount - 1)
+            if (hand.Count() + (exposed != null ? exposed.Select(x => x.Tiles.Count()).Sum() : 0) != tileCount)
                 return Array.Empty<ReadyHand>();
 
             List<ReadyHand> ret = new List<ReadyHand>();
