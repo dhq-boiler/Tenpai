@@ -252,7 +252,12 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
                 var runsAreThree = rh.Melds.Where(x => x is Run).Count() == 3;
                 var allRuns = rh.Melds.Except(rh.Melds.Where(x => x is Double)).All(x => x is Run || x is OpenWait);
-                //var headIsNotYakuhai = (rh.Melds.Count(x => x is Double) == 1) ? rh.Melds.First(x => x is Double).HasYaku()
+                var headIsNotYakuhai = (rh.Melds.Count(x => x is Double) == 1) ? !rh.Melds.First(x => x is Double).HasYaku(windOfTheRound, onesOwnWind) : false;
+                if (isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
+                {
+                    //平和
+                    rh.Yakus.Add(new AllRuns());
+                }
             }
         }
 

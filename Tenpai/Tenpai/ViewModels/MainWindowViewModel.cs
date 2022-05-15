@@ -644,6 +644,30 @@ namespace Tenpai.ViewModels
                 App.Current.Shutdown();
             })
             .AddTo(_disposables);
+            AgariTypeAsInt = AgariType.Select(x => (int)x)
+                                      .ToReadOnlyReactivePropertySlim();
+            AgariType.Subscribe(x =>
+            {
+                if (x is ViewModels.AgariType.Tsumo)
+                {
+                    SwitchIsEnable<FinalTileWin_Ron>(false);
+                }
+                else if (x is ViewModels.AgariType.Ron)
+                {
+                    SwitchIsEnable<FinalTileWin_Tumo>(false);
+                }
+            })
+            .AddTo(_disposables);
+            WindOfTheRound.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            OnesOwnWind.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
             Yakus.Add(new Reach()
             {
                 CheckedCommand = new DelegateCommand(() =>
@@ -764,20 +788,6 @@ namespace Tenpai.ViewModels
                     ConstructHand();
                 }),
             });
-            AgariTypeAsInt = AgariType.Select(x => (int)x)
-                                      .ToReadOnlyReactivePropertySlim();
-            AgariType.Subscribe(x =>
-            {
-                if (x is ViewModels.AgariType.Tsumo)
-                {
-                    SwitchIsEnable<FinalTileWin_Ron>(false);
-                }
-                else if (x is ViewModels.AgariType.Ron)
-                {
-                    SwitchIsEnable<FinalTileWin_Tumo>(false);
-                }
-            })
-            .AddTo(_disposables);
         }
 
         private void ConstructHand()

@@ -29,6 +29,8 @@
                 <x:Type TypeName="viewModels:OnesOwnWind" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <converters:WindOfTheRoundConverter x:Key="WindOfTheRoundConverter" />
+        <converters:OnesOwnWindConverter x:Key="OnesOwnWindConverter" />
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -91,9 +93,9 @@
                         </Style>
                     </StackPanel.Resources>
                     <ComboBox ItemsSource="{Binding Source={StaticResource WindOfTheRoundComboBox}}"
-                              SelectedItem="{Binding WindOfTheRound.Value, Mode=OneWay}" />
+                              SelectedItem="{Binding WindOfTheRound.Value, Mode=OneWayToSource, Converter={StaticResource WindOfTheRoundConverter}}" />
                     <ComboBox ItemsSource="{Binding Source={StaticResource OnesOwnWindComboBox}}"
-                              SelectedItem="{Binding OnesOwnWind.Value, Mode=OneWay}" />
+                              SelectedItem="{Binding OnesOwnWind.Value, Mode=OneWayToSource, Converter={StaticResource OnesOwnWindConverter}}" />
                 </StackPanel>
             </DockPanel>
             <DockPanel DockPanel.Dock="Right">

@@ -5,6 +5,7 @@ using System.Linq;
 using Tenpai.Extensions;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
+using Tenpai.ViewModels;
 
 namespace Tenpai.Models.Yaku.Meld
 {
@@ -129,6 +130,40 @@ namespace Tenpai.Models.Yaku.Meld
                 }
             }
             throw new Exception("Something wrong!");
+        }
+
+        public bool HasYaku(WindOfTheRound windOfTheRound, OnesOwnWind onesOwnWind)
+        {
+            Debug.Assert(this is Double || this is Triple || this is Quad);
+            return HasYakuByWindOfTheRound(windOfTheRound) || HasYakuByOnesOwnWind(onesOwnWind);
+        }
+
+        public bool HasYakuByOnesOwnWind(OnesOwnWind onesOwnWind)
+        {
+            if (onesOwnWind == OnesOwnWind.East && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<East>()))
+                return true;
+            else if (onesOwnWind == OnesOwnWind.South && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<South>()))
+                return true;
+            else if (onesOwnWind == OnesOwnWind.West && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<West>()))
+                return true;
+            else if (onesOwnWind == OnesOwnWind.North && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<North>()))
+                return true;
+            else
+                return false;
+        }
+
+        public bool HasYakuByWindOfTheRound(WindOfTheRound windOfTheRound)
+        {
+            if (windOfTheRound == WindOfTheRound.East && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<East>()))
+                return true;
+            else if (windOfTheRound == WindOfTheRound.South && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<South>()))
+                return true;
+            else if (windOfTheRound == WindOfTheRound.West && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<West>()))
+                return true;
+            else if (windOfTheRound == WindOfTheRound.North && Tiles.First().EqualsRedSuitedTileIncluding(Tile.CreateInstance<North>()))
+                return true;
+            else
+                return false;
         }
     }
 }
