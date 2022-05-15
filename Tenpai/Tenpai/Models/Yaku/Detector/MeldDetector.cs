@@ -9,7 +9,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 {
     public static class MeldDetector
     {
-        public static CompletedHand[] FindCompletedHands(Tile[] hand, Meld[] exposed)
+        public static CompletedHand[] FindCompletedHands(Tile[] hand, Meld[] exposed, ViewModels.AgariType agariType)
         {
             List<CompletedHand> ret = new List<CompletedHand>();
             TileCollection allTiles = new TileCollection(hand, exposed);
@@ -27,6 +27,8 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             //4面子1雀頭
             CompletedHandsBasicForm(hand, exposed, ret, runs, triples, heads);
+
+            AddYaku(ret, hand, exposed, runs, triples, heads, singles, agariType);
 
             return ret.ToArray();
         }
@@ -139,7 +141,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         /// <param name="hand">手牌の牌リスト</param>
         /// <param name="exposed">晒し牌のリスト</param>
         /// <returns></returns>
-        public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount)
+        public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType)
         {
             hand = hand.Where(x => !(x is Dummy)).ToArray();
             if (hand.Count() + (exposed != null ? exposed.Select(x => x.Tiles.Count()).Sum() : 0) != tileCount)
@@ -164,7 +166,23 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             //4面子1雀頭
             ReadyHandsBasicForm(hand, exposed, ret, runs, triples, heads, singles);
 
+            AddYaku(ret, hand, exposed, runs, triples, heads, singles, agariType);
+
             return ret.Distinct(new DelegateComparer<ReadyHand, Tile[]>(x => x.WaitingTiles)).ToArray();
+        }
+
+        private static void AddYaku<T>(List<T> ret, Tile[] hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType) where T : ReadyHand
+        {
+            foreach (var rh in ret)
+            {
+                var isMenzen = exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
+                var isTumo = agariType == ViewModels.AgariType.Tsumo;
+                if (isMenzen && isTumo)
+                {
+                    //門前清自摸和
+                    rh.Yakus.Add(new ConcealedSelfDraw());
+                }
+            }
         }
 
         private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)

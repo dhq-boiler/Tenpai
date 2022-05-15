@@ -794,7 +794,7 @@ namespace Tenpai.ViewModels
         {
             ArrangeTiles();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindCompletedHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray());
+            var readyHands = MeldDetector.FindCompletedHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), AgariType.Value);
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             ReadyHands.AddRange(readyHands);
         }
@@ -803,7 +803,7 @@ namespace Tenpai.ViewModels
         {
             ArrangeTiles();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value).OrderBy(x => x.WaitingTiles[0]);
+            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value).OrderBy(x => x.WaitingTiles[0]);
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             ReadyHands.AddRange(readyHands);
         }
