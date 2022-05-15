@@ -799,6 +799,15 @@ namespace Tenpai.ViewModels
             ReadyHands.AddRange(readyHands);
         }
 
+        private void ConstructReadyHands()
+        {
+            ArrangeTiles();
+            ReadyHands.Clear();
+            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value).OrderBy(x => x.WaitingTiles[0]);
+            readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable.Value)));
+            ReadyHands.AddRange(readyHands);
+        }
+
         public static Point GetMousePosition()
         {
             Utils.NativeMethods.Win32Point w32Mouse = new Utils.NativeMethods.Win32Point();
@@ -809,15 +818,6 @@ namespace Tenpai.ViewModels
         private void SwitchIsEnable<T>(bool isEnable)
         {
             Yakus.First(x => x is T).IsEnable.Value = isEnable;
-        }
-
-        private void ConstructReadyHands()
-        {
-            ArrangeTiles();
-            ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value).OrderBy(x => x.WaitingTiles[0]);
-            readyHands.ToList().ForEach(x => x.Yakus.AddRangeOnScheduler(this.Yakus.Where(y => y.IsEnable.Value)));
-            ReadyHands.AddRange(readyHands);
         }
 
         public Meld[] ConvertToCompletedQuads(IEnumerable<Meld> incompletedQuads)
