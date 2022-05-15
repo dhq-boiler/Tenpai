@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Models.Yaku.Meld
@@ -9,7 +10,7 @@ namespace Tenpai.Models.Yaku.Meld
     public abstract class IncompletedMeld : Meld
     {
         protected TileCollection _Waiting;
-        public readonly MeldStatus MeldStatusType;
+        public MeldStatus MeldStatusType { get; set; }
 
         public enum MeldStatus
         {
@@ -186,5 +187,23 @@ namespace Tenpai.Models.Yaku.Meld
         }
 
         public abstract IncompletedMeld Clone(MeldStatus status);
+
+        public static Meld operator +(IncompletedMeld incompletedMeld, Tile tile)
+        {
+            if (incompletedMeld is OpenWait || incompletedMeld is EdgeWait || incompletedMeld is ClosedWait)
+            {
+                var tiles = new Tile[] { incompletedMeld.Tiles[0], incompletedMeld.Tiles[1], tile }.ToList();
+                tiles.Sort();
+                return new Run(tiles[0], tiles[1], tiles[2]);
+            }
+            else if (incompletedMeld is Double d)
+            {
+                return new Triple(d.Tiles[0], d.Tiles[1], tile);
+            }
+            else
+            {
+                throw new Exception("Something wrong!");
+            }
+        }
     }
 }

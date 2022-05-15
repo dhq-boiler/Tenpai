@@ -50,7 +50,7 @@ namespace Tenpai.Models.Yaku.Meld
                 HashSet<Tile> wait = new HashSet<Tile>();
                 foreach (var meld in Waiting.Cast<IncompletedMeld>())
                 {
-                    foreach (var waitTile in meld.ComputeWaitTiles(this.Melds))
+                    foreach (var waitTile in meld.ComputeWaitTiles(this.Melds.ToArray()))
                     {
                         wait.Add(waitTile);
                     }

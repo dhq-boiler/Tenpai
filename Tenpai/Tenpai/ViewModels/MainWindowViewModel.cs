@@ -69,6 +69,8 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
         public ReadOnlyReactivePropertySlim<int> AgariTypeAsInt { get; }
         public ReactiveCommand ClosingCommand { get; } = new ReactiveCommand();
+        public ReactivePropertySlim<WindOfTheRound> WindOfTheRound { get; } = new ReactivePropertySlim<WindOfTheRound>(ViewModels.WindOfTheRound.East);
+        public ReactivePropertySlim<OnesOwnWind> OnesOwnWind { get; } = new ReactivePropertySlim<OnesOwnWind>(ViewModels.OnesOwnWind.East);
 
         private int sarashiCount = 0;
 
@@ -794,7 +796,7 @@ namespace Tenpai.ViewModels
         {
             ArrangeTiles();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindCompletedHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), AgariType.Value);
+            var readyHands = MeldDetector.FindCompletedHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value);
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             ReadyHands.AddRange(readyHands);
         }
@@ -803,7 +805,7 @@ namespace Tenpai.ViewModels
         {
             ArrangeTiles();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value).OrderBy(x => x.WaitingTiles[0]);
+            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value).OrderBy(x => x.WaitingTiles[0]);
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             ReadyHands.AddRange(readyHands);
         }

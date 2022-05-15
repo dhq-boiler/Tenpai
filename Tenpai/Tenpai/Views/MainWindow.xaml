@@ -10,13 +10,25 @@
         xmlns:meld="clr-namespace:Tenpai.Models.Yaku.Meld"
         xmlns:tiles="clr-namespace:Tenpai.Models.Tiles"
         xmlns:viewModels="clr-namespace:Tenpai.ViewModels"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+        xmlns:utils="clr-namespace:Tenpai.Utils"
         mc:Ignorable="d"
         Title="聴牌 β" Height="720" Width="1280">
     <Window.Resources>
         <converters:EnumConverter x:Key="Enum" />
         <converters:HanCountToIntConverter x:Key="HanCountToInt" />
         <converters:HanCountToStringConverter x:Key="HanCountToString" />
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type utils:EnumerationManager}" x:Key="WindOfTheRoundComboBox">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="viewModels:WindOfTheRound" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type utils:EnumerationManager}" x:Key="OnesOwnWindComboBox">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="viewModels:OnesOwnWind" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -67,6 +79,23 @@
         </DockPanel>
         <DockPanel DockPanel.Dock="Top"
                    Margin="30">
+            <DockPanel DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="Width" Value="75" />
+                            <Setter Property="Height" Value="40" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="FontSize" Value="20" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource WindOfTheRoundComboBox}}"
+                              SelectedItem="{Binding WindOfTheRound.Value, Mode=OneWay}" />
+                    <ComboBox ItemsSource="{Binding Source={StaticResource OnesOwnWindComboBox}}"
+                              SelectedItem="{Binding OnesOwnWind.Value, Mode=OneWay}" />
+                </StackPanel>
+            </DockPanel>
             <DockPanel DockPanel.Dock="Right">
                 <StackPanel Orientation="Horizontal">
                     <ItemsControl ItemsSource="{Binding SarashiHai}" VerticalAlignment="Center">

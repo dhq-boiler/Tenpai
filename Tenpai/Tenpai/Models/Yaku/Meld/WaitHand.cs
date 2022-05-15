@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Reactive.Bindings;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,23 +10,17 @@ namespace Tenpai.Models.Yaku.Meld
 {
     public abstract class WaitHand
     {
-        private List<Meld> _Melds;
-
         public WaitHand()
         {
-            _Melds = new List<Meld>();
         }
 
         public WaitHand(params Meld[] melds)
             : this()
         {
-            _Melds = new List<Meld>(melds.OrderBy(a => a.Tiles.Average(b => b.Code)));
+            Melds.AddRange(melds.OrderBy(a => a.Tiles.Average(b => b.Code)));
         }
 
-        public Meld[] Melds
-        {
-            get { return _Melds.ToArray(); }
-        }
+        public ReactiveCollection<Meld> Melds { get; } = new ReactiveCollection<Meld>();
 
         public override int GetHashCode()
         {

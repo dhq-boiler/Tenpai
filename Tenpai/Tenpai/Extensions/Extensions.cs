@@ -18,6 +18,15 @@ namespace Tenpai.Extensions
             }
             return false;
         }
+        public static bool ContainsRedSuitedTileIncluding(this Tile[] collection, Tile target)
+        {
+            foreach (var tile in collection)
+            {
+                if (tile.Code == target.Code)
+                    return true;
+            }
+            return false;
+        }
 
         public static bool SequenceEqualDoNotConsiderRotationAndOrder(this Tile[] tiles, Tile[] other)
         {

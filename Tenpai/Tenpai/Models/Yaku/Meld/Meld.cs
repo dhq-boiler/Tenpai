@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Tenpai.Extensions;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
 
@@ -93,6 +96,39 @@ namespace Tenpai.Models.Yaku.Meld
         public override string ToString()
         {
             return ToStringCompleted();
+        }
+
+        public static IncompletedMeld operator- (Meld meld, Tile tile)
+        {
+            var tiles = meld.Tiles;
+            tiles.Remove(tile);
+            var a = tiles.ElementAt(0);
+            var b = tiles.ElementAt(1);
+            if (Math.Abs(a.Code - b.Code) == 2)
+            {
+                var wait = new ClosedWait(a, b);
+                wait.ComputeWaitTiles();
+                Debug.Assert(wait.WaitTiles.First().EqualsRedSuitedTileIncluding(tile));
+                return wait;
+            }
+            else if (Math.Abs(a.Code - b.Code) == 1)
+            {
+                if (a is ITerminals || b is ITerminals)
+                {
+                    var wait = new EdgeWait(a, b);
+                    wait.ComputeWaitTiles();
+                    Debug.Assert(wait.WaitTiles.First().EqualsRedSuitedTileIncluding(tile));
+                    return wait;
+                }
+                else
+                {
+                    var wait = new OpenWait(a, b);
+                    wait.ComputeWaitTiles();
+                    Debug.Assert(wait.WaitTiles.ContainsRedSuitedTileIncluding(tile));
+                    return wait;
+                }
+            }
+            throw new Exception("Something wrong!");
         }
     }
 }
