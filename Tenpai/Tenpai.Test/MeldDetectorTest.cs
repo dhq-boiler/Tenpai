@@ -107,17 +107,25 @@ namespace Tenpai.Test
             var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_8>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
             foreach (var completedHand in completedHands)
             {
+                Console.WriteLine(completedHand);
                 if (completedHand.Equals(new CompletedHand(new Triple<Character_2>(),
                                                            new Triple<Character_3>(),
                                                            new Triple<Character_4>(),
                                                            new Triple<Dot_5>(),
                                                            new Double<Character_8>())))
                 { }
+                else if (completedHand.Equals(new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
+                                                                new Run<Character_2, Character_3, Character_4>(),
+                                                                new Run<Character_2, Character_3, Character_4>(),
+                                                                new Triple<Dot_5>(),
+                                                                new Double<Character_8>())))
+                { }
                 else
                 {
                     Assert.Fail();
                 }
             }
+            Assert.That(completedHands, Has.Length.EqualTo(2));
         }
 
         [Test]
@@ -196,7 +204,6 @@ namespace Tenpai.Test
                 TileCollection addedTiles = new TileCollection(tiles);
                 addedTiles.Add(add);
                 var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, add, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
-                Assert.AreEqual(1, completedHands.Count());
                 foreach (var completedHand in completedHands)
                 {
                     if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
@@ -785,7 +792,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_9>(),
                 });
             var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
-            Assert.AreEqual(9, readyHands.Count());
+            Assert.AreEqual(15, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_1>(),
@@ -1372,6 +1379,29 @@ namespace Tenpai.Test
             var quads = MeldDetector.FindQuads(tiles.ToArray());
             Assert.AreEqual(1, quads.Count());
             Assert.AreEqual(Tile.CreateInstance<Bamboo_4>(), quads[0].Tiles[0]);
+        }
+
+        [Test]
+        public void 一盃口を含む形()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+            });
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_5>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
         }
     }
 }

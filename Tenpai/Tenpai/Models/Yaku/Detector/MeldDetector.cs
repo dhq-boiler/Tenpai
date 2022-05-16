@@ -5,6 +5,7 @@ using System.Linq;
 using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku.Meld;
+using Tenpai.Utils;
 
 namespace Tenpai.Models.Yaku.Meld.Detector
 {
@@ -139,9 +140,9 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var heads = FindDoubles(hand);
             var singles = FindSingles(hand);
 
-            AddYaku(ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddYaku(ref ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
 
-            return ret.ToArray();
+            return ret.Distinct().ToArray();
         }
 
         private static bool IsThirteenOrphans(CompletedHand completedHand, out int singleCount, out int doubleCount)
@@ -315,23 +316,23 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var singles = FindSingles(hand);
 
             //七対子
-            ReadyHandsSevenPairs(hand, exposed, ret, heads, singles);
+            ReadyHandsSevenPairs(hand, exposed, ref ret, heads, singles);
 
             //純正国士無双（国士無双13面待ち）
-            ReadyHandsPureThirteenOrphans(hand, ret, runs, triples, heads, singles);
+            ReadyHandsPureThirteenOrphans(hand, ref ret, runs, triples, heads, singles);
 
             //国士無双単騎待ち
-            ReadyHandsThirteenOrphansSingleWait(hand, ret, runs, triples, heads, singles);
+            ReadyHandsThirteenOrphansSingleWait(hand, ref ret, runs, triples, heads, singles);
             
             //4面子1雀頭
-            ReadyHandsBasicForm(hand, exposed, ret, runs, triples, heads, singles);
+            ReadyHandsBasicForm(hand, exposed, ref ret, runs, triples, heads, singles);
 
-            AddYaku(ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddYaku(ref ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
 
-            return ret.Distinct(new DelegateComparer<ReadyHand, Tile[]>(x => x.WaitingTiles)).ToArray();
+            return ret.Distinct().ToArray();
         }
 
-        private static void AddYaku<T>(List<T> ret, Tile[] hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind) where T : ReadyHand
+        private static void AddYaku<T>(ref List<T> ret, Tile[] hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind) where T : ReadyHand
         {
             foreach (var rh in ret)
             {
@@ -354,11 +355,11 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
-        private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
+        private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, ref List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
         {
             var melds = new List<Meld>();
-            melds.AddRange(runs);
             melds.AddRange(triples);
+            melds.AddRange(runs);
 
             if (exposed != null)
             {
@@ -372,11 +373,10 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
             }
 
-            var waitpool = new TileCollection();
-
             //1雀頭完成済み
             for (int l = 0; l < heads.Count(); ++l)
             {
+                List<Meld> havingMelds = new List<Meld>();
                 TileCollection tiles = new TileCollection(hand);
                 if (exposed != null)
                 {
@@ -385,55 +385,38 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         tiles.AddRange(one.Tiles);
                     }
                 }
+
                 var head = heads[l];
 
-                for (int m = 0; m < melds.Count(); ++m)
+                var selectedMelds = Combination.Enumerate(melds, 3, withRepetition: true);
+
+                foreach (var selectedMeld in selectedMelds)
                 {
-                    var firstMeld = melds[m];
-                    if (!tiles.IsAllContained(head, firstMeld))
+                    if (!tiles.IsAllContained(head, selectedMeld[0], selectedMeld[1], selectedMeld[2]))
                         continue;
 
-                    for (int n = m + 1; n < melds.Count(); ++n)
+                    var icRuns = IncompletedMeldDetector.FindIncompletedRuns(hand);
+                    var icTriples = IncompletedMeldDetector.FindIncompletedTriple(hand);
+                    var icMelds = new List<IncompletedMeld>();
+                    icMelds.AddRange(icRuns);
+                    icMelds.AddRange(icTriples);
+                    for (int p = 0; p < icMelds.Count(); ++p)
                     {
-                        var secondMeld = melds[n];
-                        if (!tiles.IsAllContained(head, firstMeld, secondMeld))
+                        var wait = icMelds[p];
+                        if (!tiles.IsAllContained(head, selectedMeld[0], selectedMeld[1], selectedMeld[2], wait))
                             continue;
 
-                        for (int o = n + 1; o < melds.Count(); ++o)
+                        var odd = tiles.Odd(head, selectedMeld[0], selectedMeld[1], selectedMeld[2], wait);
+
+                        if (wait.MeldStatusType == IncompletedMeld.MeldStatus.WAIT)
                         {
-                            var thirdMeld = melds[o];
-                            if (!tiles.IsAllContained(head, firstMeld, secondMeld, thirdMeld))
-                                continue;
+                            wait.ComputeWaitTiles();
+                        }
 
-                            //1雀頭・3面子完成済み
-                            var icRuns = IncompletedMeldDetector.FindIncompletedRuns(hand);
-                            var icTriples = IncompletedMeldDetector.FindIncompletedTriple(hand);
-                            var icMelds = new List<IncompletedMeld>();
-                            icMelds.AddRange(icRuns);
-                            icMelds.AddRange(icTriples);
-                            for (int p = 0; p < icMelds.Count(); ++p)
-                            {
-                                var wait = icMelds[p];
-                                if (!tiles.IsAllContained(head, firstMeld, secondMeld, thirdMeld, wait))
-                                    continue;
-
-                                var odd = tiles.Odd(head, firstMeld, secondMeld, thirdMeld, wait);
-
-                                if (wait.MeldStatusType == IncompletedMeld.MeldStatus.WAIT)
-                                {
-                                    wait.ComputeWaitTiles();
-                                }
-
-                                foreach (var w in wait.WaitTiles)
-                                {
-                                    if (waitpool.ContainsRedSuitedTileIncluding(w))
-                                        continue;
-                                    //1雀頭・3面子完成済み，1搭子
-                                    ret.Add(new ManualWaitReadyHand(w, (head as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), firstMeld, secondMeld, thirdMeld, wait.Clone(IncompletedMeld.MeldStatus.WAIT)));
-
-                                    waitpool.Add(w);
-                                }
-                            }
+                        foreach (var w in wait.WaitTiles)
+                        {
+                            //1雀頭・3面子完成済み，1搭子
+                            ret.Add(new ManualWaitReadyHand(w, (head as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2], wait.Clone(IncompletedMeld.MeldStatus.WAIT)));
                         }
                     }
                 }
@@ -452,47 +435,24 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
                 var wait = singles[l];
 
-                for (int m = 0; m < melds.Count(); ++m)
+                var selectedMelds = Combination.Enumerate(melds, 4, withRepetition: true);
+
+                foreach (var selectedMeld in selectedMelds)
                 {
-                    var firstMeld = melds[m];
-                    if (!tiles.IsAllContained(wait, firstMeld))
+                    if (!tiles.IsAllContained(wait, selectedMeld[0], selectedMeld[1], selectedMeld[2], selectedMeld[3]))
                         continue;
 
-                    for (int n = m + 1; n < melds.Count(); ++n)
-                    {
-                        var secondMeld = melds[n];
-                        if (!tiles.IsAllContained(wait, firstMeld, secondMeld))
-                            continue;
+                    var odd = tiles.Odd(wait, selectedMeld[0], selectedMeld[1], selectedMeld[2], selectedMeld[3]);
 
-                        for (int o = n + 1; o < melds.Count(); ++o)
-                        {
-                            var thirdMeld = melds[o];
-                            if (!tiles.IsAllContained(wait, firstMeld, secondMeld, thirdMeld))
-                                continue;
-
-                            for (int p = o + 1; p < melds.Count(); ++p)
-                            {
-                                var fourthMeld = melds[p];
-                                if (!tiles.IsAllContained(wait, firstMeld, secondMeld, thirdMeld, fourthMeld))
-                                    continue;
-
-                                var odd = tiles.Odd(wait, firstMeld, secondMeld, thirdMeld, fourthMeld);
-
-                                if (waitpool.ContainsRedSuitedTileIncluding(odd[0]))
-                                    continue;
-
-                                //4面子完成済み，1雀頭完成待ち
-                                ret.Add(new ReadyHand(odd, (wait as Single).Clone(IncompletedMeld.MeldStatus.WAIT), firstMeld, secondMeld, thirdMeld, fourthMeld));
-
-                                waitpool.Add(odd[0]);
-                            }
-                        }
-                    }
+                    //4面子完成済み，1雀頭完成待ち
+                    ret.Add(new ReadyHand(odd, (wait as Single).Clone(IncompletedMeld.MeldStatus.WAIT), selectedMeld[0], selectedMeld[1], selectedMeld[2], selectedMeld[3]));
                 }
             }
+
+            ret = ret.Distinct().ToList();
         }
 
-        private static void ReadyHandsSevenPairs(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] heads, Meld[] singles)
+        private static void ReadyHandsSevenPairs(Tile[] hand, Meld[] exposed, ref List<ReadyHand> ret, Meld[] heads, Meld[] singles)
         {
             if (heads.Count() == 6 && singles.Count() == 1 && (exposed == null || exposed.Count() == 0))
             {
@@ -514,7 +474,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
-        private static void ReadyHandsThirteenOrphansSingleWait(Tile[] hand, List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
+        private static void ReadyHandsThirteenOrphansSingleWait(Tile[] hand, ref List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
         {
             List<Tile> ThirteenOrphans = ThirteenOrphansTiles();
             List<Meld> x = new List<Meld>();
@@ -569,7 +529,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             });
         }
 
-        private static void ReadyHandsPureThirteenOrphans(Tile[] hand, List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
+        private static void ReadyHandsPureThirteenOrphans(Tile[] hand, ref List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
         {
             if (runs.Count() == 0 && triples.Count() == 0 && heads.Count() == 0 && singles.Count() == 13)
             {
