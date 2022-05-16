@@ -15,22 +15,6 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             List<CompletedHand> ret = new List<CompletedHand>();
             TileCollection allTiles = new TileCollection(hand, exposed);
 
-            var runs = FindRuns(hand);
-            var triples = FindTriples(hand);
-            var heads = FindDoubles(hand);
-            var singles = FindSingles(hand);
-
-            ////七対子
-            //CompletedHandsSevenPairs(exposed, ret, heads, singles);
-
-            ////国士無双
-            //CompletedHandsThirteenOrphans(ret, runs, triples, heads, singles);
-
-            ////4面子1雀頭
-            //CompletedHandsBasicForm(hand, exposed, ret, runs, triples, heads, agariTile);
-
-            //AddYaku(ret, hand, exposed, runs, triples, heads, singles, agariType);
-
             var handCollection = new TileCollection(hand);
             handCollection.RemoveTiles(agariTile, 1);
             var handArr = handCollection.ToArray();
@@ -42,66 +26,152 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 if (incompletedHand.WaitingTiles.ContainsRedSuitedTileIncluding(agariTile))
                 {
                     var completedHand = new CompletedHand(incompletedHand.Melds.ToArray());
-                    foreach (var meld in incompletedHand.Melds)
+
+                    //国士無双型
+                    if (IsThirteenOrphans(completedHand, out var singleCount, out var doubleCount))
                     {
-                        if (meld is IncompletedMeld im)
+                        //国士無双単騎待ち
+                        if (singleCount == 11 && doubleCount == 1)
                         {
-                            if (im is Single s)
+                            Console.WriteLine($"国士無双単騎待ち {completedHand}");
+                            foreach (var meld in incompletedHand.Melds)
                             {
-                                completedHand.WaitForm = new Meld[] { im };
-                                //var replace = completedHand.WaitForm.First(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
-                                var replace = im;
-                                int index = completedHand.Melds.ToList().IndexOf(replace);
-                                completedHand.Melds[index] = replace + agariTile;
-                            }
-                            else if (im is Double && incompletedHand.Melds.Count(x => x is Double) == 6)
-                            {
-                                //七対子の形、対子にヒット
-                            }
-                            else if (im is OpenWait || im is EdgeWait || im is ClosedWait)
-                            {
-                                Debug.Assert(im.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
-                                //im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as IncompletedMeld;
-                                completedHand.WaitForm = new Meld[] { im /*+ agariTile*/ };
-                                var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
-                                int index = completedHand.Melds.ToList().IndexOf(replace);
-                                completedHand.Melds[index] = replace + agariTile;
-                            }
-                            else if (im is Double d)
-                            {
-                                if (completedHand.WaitForm is null)
+                                if (meld is IncompletedMeld im)
                                 {
-                                    im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as Double;
-                                    im.ComputeWaitTiles();
-                                    completedHand.WaitForm = new Meld[] { im };
+                                    if (im is ThirteenWait tw)
+                                    {
+                                        completedHand.WaitForm = new Meld[] { tw };
+                                        var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
+                                        int index = completedHand.Melds.ToList().IndexOf(replace);
+                                        completedHand.Melds[index] = replace + agariTile;
+                                    }
                                 }
-                                else if (completedHand.WaitForm[0] is Double)
+                            }
+                            ret.Add(completedHand);
+                        }
+                        //国士無双十三面待ち
+                        else if (singleCount == 13 && doubleCount == 0)
+                        {
+                            Console.WriteLine($"国士無双十三面待ち {completedHand}");
+                            var waitForms = new List<Meld>();
+                            foreach (var meld in incompletedHand.Melds)
+                            {
+                                waitForms.Add((meld as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT));
+                            }
+
+                            foreach (var meld in incompletedHand.Melds)
+                            {
+                                if (meld.WaitTiles.ContainsRedSuitedTileIncluding(agariTile))
                                 {
-                                    im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as Double;
-                                    im.ComputeWaitTiles();
-                                    completedHand.WaitForm = new Meld[] { completedHand.WaitForm[0], im };
+                                    completedHand = new CompletedHand(incompletedHand.Melds.ToArray());
+                                    completedHand.WaitForm = waitForms.ToArray();
+                                    var replace = meld;
+                                    int index = completedHand.Melds.ToList().IndexOf(replace);
+                                    completedHand.Melds[index] = replace + agariTile;
+                                    completedHand.Melds.Where(x => !x.Equals(replace + agariTile)).ToList().ForEach(x => (x as IncompletedMeld).MeldStatusType = IncompletedMeld.MeldStatus.COMPLETED);
+                                    ret.Add(completedHand);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var meld in incompletedHand.Melds)
+                        {
+                            if (meld is IncompletedMeld im)
+                            {
+                                if (im is Single s)
+                                {
+                                    completedHand.WaitForm = new Meld[] { im };
+                                    //var replace = completedHand.WaitForm.First(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
+                                    var replace = im;
+                                    int index = completedHand.Melds.ToList().IndexOf(replace);
+                                    completedHand.Melds[index] = replace + agariTile;
+                                }
+                                else if (im is Double && incompletedHand.Melds.Count(x => x is Double) == 6)
+                                {
+                                    //七対子の形、対子にヒット
+                                }
+                                else if (im is OpenWait || im is EdgeWait || im is ClosedWait)
+                                {
+                                    Debug.Assert(im.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
+                                    //im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as IncompletedMeld;
+                                    completedHand.WaitForm = new Meld[] { im /*+ agariTile*/ };
                                     var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
                                     int index = completedHand.Melds.ToList().IndexOf(replace);
                                     completedHand.Melds[index] = replace + agariTile;
                                 }
+                                else if (im is Double d)
+                                {
+                                    if (completedHand.WaitForm is null)
+                                    {
+                                        im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as Double;
+                                        im.ComputeWaitTiles();
+                                        completedHand.WaitForm = new Meld[] { im };
+                                    }
+                                    else if (completedHand.WaitForm[0] is Double)
+                                    {
+                                        im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as Double;
+                                        im.ComputeWaitTiles();
+                                        completedHand.WaitForm = new Meld[] { completedHand.WaitForm[0], im };
+                                        var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
+                                        int index = completedHand.Melds.ToList().IndexOf(replace);
+                                        completedHand.Melds[index] = replace + agariTile;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                }
                                 else
                                 {
-                                    continue;
-                                }    
-                            }
-                            else
-                            {
-                                completedHand.WaitForm = new Meld[] { im };
+                                    completedHand.WaitForm = new Meld[] { im };
+                                }
                             }
                         }
+                        ret.Add(completedHand);
                     }
-                    ret.Add(completedHand);
                 }
             }
+
+            var runs = FindRuns(hand);
+            var triples = FindTriples(hand);
+            var heads = FindDoubles(hand);
+            var singles = FindSingles(hand);
 
             AddYaku(ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
 
             return ret.ToArray();
+        }
+
+        private static bool IsThirteenOrphans(CompletedHand completedHand, out int singleCount, out int doubleCount)
+        {
+            singleCount = 0;
+            doubleCount = 0;
+            foreach (var meld in completedHand.Melds)
+            {
+                if (meld is Single s)
+                {
+                    if (!s.Tiles.Any(x => x is ITerminals || x is Honors))
+                    {
+                        Console.WriteLine($"一九字牌でない牌を検出しました");
+                        return false;
+                    }
+                    singleCount++;
+                }
+                else if (meld is Double d)
+                {
+                    if (!d.Tiles.Any(x => x is ITerminals || x is Honors))
+                    {
+                        Console.WriteLine($"一九字牌でない牌を検出しました");
+                        return false;
+                    }
+                    doubleCount++;
+                }
+            }
+            var isThirteenWait = singleCount == 13 && doubleCount == 0;
+            var isSingleWait = singleCount == 11 && doubleCount == 1;
+            return isThirteenWait || isSingleWait;
         }
 
         private static void CompletedHandsBasicForm(Tile[] hand, Meld[] exposed, List<CompletedHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Tile agariTile)

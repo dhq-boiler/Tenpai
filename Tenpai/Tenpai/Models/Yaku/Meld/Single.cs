@@ -24,6 +24,12 @@ namespace Tenpai.Models.Yaku.Meld
             Tiles.Add(tile);
         }
 
+        public Single(MeldStatus status, Tile tile)
+            : base(status)
+        {
+            Tiles.Add(tile);
+        }
+
         public override bool Equals(object obj)
         {
             var a = obj is Single;

@@ -33,7 +33,7 @@ namespace Tenpai.Models.Tiles
 
         public void RemoveTiles(Tile args, int v)
         {
-            var count = this.Where(x => x != null && x.CompareTo(args) == 0).Count();
+            var count = this.Where(x => x != null && x.EqualsRedSuitedTileIncluding(args)).Count();
             int processed = 0;
             for (int i = 0; i < count; i++)
             {
@@ -42,7 +42,7 @@ namespace Tenpai.Models.Tiles
                     var targetTile = this[j];
                     if (targetTile == null)
                         continue;
-                    if (args.CompareTo(targetTile) == 0)
+                    if (args.EqualsRedSuitedTileIncluding(targetTile))
                     {
                         this[j] = null;
                         processed++;
@@ -125,6 +125,16 @@ namespace Tenpai.Models.Tiles
                 }
             }
             return tiles.ToArray();
+        }
+
+        public override string ToString()
+        {
+            var str = string.Empty;
+            foreach (var tile in this)
+            {
+                str += tile.ToString();
+            }
+            return str;
         }
     }
 }
