@@ -374,6 +374,13 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     //二盃口
                     rh.Yakus.Add(new TwoDoubleRuns());
                 }
+
+                var allSimples = rh.Melds.All(x => x.Tiles.All(y => !(y is ITerminals) && !(y is Honors)));
+                if (allSimples)
+                {
+                    //断么九
+                    rh.Yakus.Add(new AllSimples());
+                }
             }
         }
 
