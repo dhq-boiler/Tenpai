@@ -472,7 +472,45 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
             }
 
-            ret = ret.Distinct().ToList();
+            //2対子完成
+            var listHeads = new List<Meld>();
+            listHeads.AddRange(heads);
+            var twoHeads = Combination.Enumerate(listHeads, 2, withRepetition: true).ToList();
+
+            var selectedMelds2 = Combination.Enumerate(melds, 3, withRepetition: true).ToList();
+            TileCollection tiles2 = new TileCollection(hand);
+
+            for (int j = 0; j < twoHeads.Count; j++)
+            {
+                var twoHead = twoHeads[j];
+
+                for (int i = 0; i < selectedMelds2.Count; ++i)
+                {
+                    var selectedMeld = selectedMelds2[i];
+                    if (!tiles2.IsAllContained(twoHead[0], twoHead[1], selectedMeld[0], selectedMeld[1]))
+                        continue;
+
+                    var icRuns = IncompletedMeldDetector.FindIncompletedRuns(hand);
+                    var icTriples = IncompletedMeldDetector.FindIncompletedTriple(hand);
+                    var icMelds = new List<IncompletedMeld>();
+                    icMelds.AddRange(icRuns);
+                    icMelds.AddRange(icTriples);
+                    icMelds = icMelds.Distinct(new IncompletedMeldComparer()).ToList();
+                    for (int p = 0; p < icMelds.Count(); ++p)
+                    {
+                        if (!tiles2.IsAllContained(twoHead[0], twoHead[1], selectedMeld[0], selectedMeld[1], selectedMeld[2]))
+                            continue;
+
+                        //1雀頭・3面子完成済み，1搭子
+                        ret.Add(new ManualWaitReadyHand(twoHead[1].Tiles[0], (twoHead[1] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (twoHead[0] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2]));
+
+                        //1雀頭・3面子完成済み，1搭子
+                        ret.Add(new ManualWaitReadyHand(twoHead[0].Tiles[0], (twoHead[0] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (twoHead[1] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2]));
+                    }
+                }
+            }
+
+            ret = ret.Distinct(new DelegateComparer<ReadyHand, Tile[]>(x => x.WaitingTiles)).ToList();
         }
 
         private static void ReadyHandsSevenPairs(Tile[] hand, Meld[] exposed, ref List<ReadyHand> ret, Meld[] heads, Meld[] singles)
