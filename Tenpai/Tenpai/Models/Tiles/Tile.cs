@@ -240,6 +240,15 @@ namespace Tenpai.Models.Tiles
             return t;
         }
 
+        public static Tile CreateRedInstance<T>() where T : Tile, IRedSuitedTile, new()
+        {
+            var tile = new T();
+            tile.IsRedSuited = true;
+            tile.Lock();
+            tile.CallFrom = EOpponent.Default;
+            return tile;
+        }
+
         public static Tile CreateRedInstance<T>(Visibility visibility, RotateTransform rotate, int order = 0) where T : Tile, IRedSuitedTile, new()
         {
             var tile = new T();

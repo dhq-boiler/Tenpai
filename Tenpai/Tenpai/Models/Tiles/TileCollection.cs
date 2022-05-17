@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Tenpai.Extensions;
 using Tenpai.Models.Yaku.Meld;
 
 namespace Tenpai.Models.Tiles
@@ -100,13 +101,15 @@ namespace Tenpai.Models.Tiles
         public bool IsAllContained(params Meld[] melds)
         {
             TileCollection tiles = new TileCollection(this);
-            foreach (var meld in melds)
+            for (int i = 0; i < melds.Count(); i++)
             {
-                foreach (var tile in meld.Tiles)
+                var meld = melds[i];
+                for (int j = 0;  j < meld.Tiles.Count(); j++)
                 {
-                    if (!tiles.Contains(tile))
+                    var tile = meld.Tiles[j];
+                    if (!tiles.ContainsRedSuitedTileIncluding(tile))
                         return false;
-                    tiles.Remove(tile);
+                    tiles.RemoveTiles(tile, 1);
                 }
             }
             return true;

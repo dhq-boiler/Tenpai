@@ -409,10 +409,11 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
                 var head = heads[l];
 
-                var selectedMelds = Combination.Enumerate(melds, 3, withRepetition: true);
+                var selectedMelds = Combination.Enumerate(melds, 3, withRepetition: true).ToList();
 
-                foreach (var selectedMeld in selectedMelds)
+                for (int i = 0; i < selectedMelds.Count; ++i)
                 {
+                    var selectedMeld = selectedMelds[i];
                     if (!tiles.IsAllContained(head, selectedMeld[0], selectedMeld[1], selectedMeld[2]))
                         continue;
 
@@ -421,6 +422,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     var icMelds = new List<IncompletedMeld>();
                     icMelds.AddRange(icRuns);
                     icMelds.AddRange(icTriples);
+                    icMelds = icMelds.Distinct(new IncompletedMeldComparer()).ToList();
                     for (int p = 0; p < icMelds.Count(); ++p)
                     {
                         var wait = icMelds[p];
@@ -636,7 +638,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         {
             List<Meld> ret = new List<Meld>();
             var removeDummy = hand.Where(a => !(a is Dummy));
-            var sorted = removeDummy.OrderBy(a => a.Code).Distinct();
+            var sorted = removeDummy.OrderBy(a => a.Code).Distinct(new TileComparer());
             int count = sorted.Count();
             for (int i = 0; i < count - 2; ++i)
             {

@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku.Meld;
 using Tenpai.Models.Yaku.Meld.Detector;
@@ -10,6 +12,21 @@ namespace Tenpai.Test
     [TestFixture]
     public class MeldDetectorTest : TestFixtureBase
     {
+        [Test]
+        public void Distinct試験()
+        {
+            var melds = new List<IncompletedMeld>();
+            melds.Add(new OpenWait<Character_1, Character_2, Character_3, Character_4>());
+            melds.Add(new OpenWait<Character_2, Character_3, Character_4, Character_5>());
+            melds.Add(new OpenWait<Character_1, Character_2, Character_3, Character_4>());
+            melds.Add(new OpenWait<Character_1, Character_2, Character_3, Character_4>());
+            //melds = melds.Distinct(new DelegateComparer<IncompletedMeld, TileCollection>(x => x.WaitTiles)).ToList();
+            melds = melds.Distinct().ToList();
+            Assert.That(melds, Has.Count.EqualTo(2));
+            Assert.That(melds[0], Is.EqualTo(new OpenWait<Character_1, Character_2, Character_3, Character_4>()));
+            Assert.That(melds[1], Is.EqualTo(new OpenWait<Character_2, Character_3, Character_4, Character_5>()));
+        }
+
         [Test]
         public void FindCompletedHandsTest1()
         {
@@ -792,7 +809,6 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_9>(),
                 });
             var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
-            Assert.AreEqual(15, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_1>(),
@@ -801,107 +817,138 @@ namespace Tenpai.Test
                                                              new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                              new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                              new Double<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_9>(),
                                                                   new Double<Bamboo_1>(),
                                                                   new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                                   new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
                                                                   new Double<Bamboo_1>(),
                                                                   new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                                   new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                                   new OpenWait<Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_9>(),
                                                                   new Double<Bamboo_1>(),
                                                                   new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                                   new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                                   new OpenWait<Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_3>(),
                                                                   new Double<Bamboo_1>(),
                                                                   new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                                   new OpenWait<Bamboo_3, Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
                                                                   new Double<Bamboo_1>(),
                                                                   new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                                   new OpenWait<Bamboo_3, Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_3>(),
                                                                   new Double<Bamboo_1>(),
                                                                   new EdgeWait<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                                   new Run<Bamboo_3, Bamboo_4, Bamboo_5>(),
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_7>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                                   new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                                   new EdgeWait<Bamboo_8, Bamboo_9, Bamboo_7>(),
                                                                   new Double<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_4>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                                   new OpenWait<Bamboo_4, Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_7>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                                   new OpenWait<Bamboo_4, Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_1>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new OpenWait<Bamboo_1, Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                                   new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_4>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new OpenWait<Bamboo_1, Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                                   new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_2>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new Single<Bamboo_2>(),
                                                                   new Run<Bamboo_3, Bamboo_4, Bamboo_5>(),
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_5>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                                   new Single<Bamboo_5>(),
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_8>(),
                                                                   new Triple<Bamboo_1>(),
                                                                   new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                                   new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                                   new Single<Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
-                { }
+                {
+                    Console.WriteLine(readyHand);
+                }
                 else
                 {
+                    Console.WriteLine($"FAILED:{readyHand}");
                     Assert.Fail();
                 }
             }
@@ -1413,6 +1460,57 @@ namespace Tenpai.Test
                 else
                 {
                     Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
+
+        [Test]
+        public void 一盃口を含む形_ReadyHand()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+            });
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(readyHands, Has.Length.EqualTo(3));
+            foreach (var readyHand in readyHands)
+            {
+                if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_2>(),
+                                                             new Run<Character_2, Character_3, Character_4>(),
+                                                             new Run<Character_2, Character_3, Character_4>(),
+                                                             new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                                             new Run<Dot_7, Dot_8, Dot_9>(),
+                                                             new Double<Bamboo_6>())))
+                { }
+                else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_5>(),
+                                                                  new Run<Character_2, Character_3, Character_4>(),
+                                                                  new Run<Character_2, Character_3, Character_4>(),
+                                                                  new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                                                  new Run<Dot_7, Dot_8, Dot_9>(),
+                                                                  new Double<Bamboo_6>())))
+                { }
+                else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateRedInstance<Character_5>(),
+                                                                  new Run<Character_2, Character_3, Character_4>(),
+                                                                  new Run<Character_2, Character_3, Character_4>(),
+                                                                  new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                                                  new Run<Dot_7, Dot_8, Dot_9>(),
+                                                                  new Double<Bamboo_6>())))
+                { }
+                else
+                {
+                    Assert.Fail(readyHand.ToString());
                 }
             }
         }

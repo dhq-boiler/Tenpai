@@ -501,8 +501,8 @@ namespace Tenpai.ViewModels
                         {
                             var newTile = dialogResult2.Parameters.GetValue<Tile>("TileType");
                             newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
-                            tp.TileType = newTile;
                             AgariType.Value = dialogResult.Parameters.GetValue<AgariType>("AgariType");
+                            tp.TileType = newTile;
                         }
                     }
                 }
