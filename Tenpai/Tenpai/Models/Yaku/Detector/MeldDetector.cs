@@ -367,7 +367,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 if (doubleRunsCount == 1)
                 {
                     //一盃口
-
+                    rh.Yakus.Add(new DoubleRun());
                 }
                 else if (doubleRunsCount == 2)
                 {
