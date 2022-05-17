@@ -20,7 +20,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             handCollection.RemoveTiles(agariTile, 1);
             var handArr = handCollection.ToArray();
 
-            var incompletedHands = FindReadyHands(handArr, exposed, tileCount - 1, agariType, windOfTheRound, onesOwnWind);
+            var incompletedHands = FindReadyHands(handArr, exposed, tileCount, agariType, windOfTheRound, onesOwnWind);
 
             foreach (var incompletedHand in incompletedHands)
             {
@@ -351,6 +351,27 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 {
                     //平和
                     rh.Yakus.Add(new AllRuns());
+                }
+
+                int doubleRunsCount = 0;
+                var except = new List<Meld>();
+                foreach (var meld in rh.Melds.Except(except))
+                {
+                    if (rh.Melds.Where(x => x.Equals(meld)).Count() == 2)
+                    {
+                        except.Add(meld);
+                        doubleRunsCount++;
+                    }
+                }
+                
+                if (doubleRunsCount == 1)
+                {
+                    //一盃口
+
+                }
+                else if (doubleRunsCount == 2)
+                {
+                    //二盃口
                 }
             }
         }

@@ -30,7 +30,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_5>(),
                     Tile.CreateInstance<Bamboo_6>(),
                 });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 13, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
             Assert.AreEqual(1, completedHands.Count());
             foreach (var completedHand in completedHands)
             {
@@ -104,7 +104,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_8>(),
                     Tile.CreateInstance<Character_8>(),
                 });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_8>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 13, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_8>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
             foreach (var completedHand in completedHands)
             {
                 Console.WriteLine(completedHand);
@@ -345,7 +345,7 @@ namespace Tenpai.Test
                 TileCollection addedTiles = new TileCollection(tiles);
                 addedTiles.Add(add);
                 Console.WriteLine(addedTiles);
-                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_1>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 13, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_1>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
                 Assert.AreEqual(1, completedHands.Count());
                 foreach (var completedHand in completedHands)
                 {
@@ -569,7 +569,7 @@ namespace Tenpai.Test
             {
                 var ts = new TileCollection(tiles);
                 ts.Add(add);
-                var completedHands = MeldDetector.FindCompletedHands(ts, exposed, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+                var completedHands = MeldDetector.FindCompletedHands(ts, exposed, 13, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
                 Assert.AreEqual(1, completedHands.Count());
                 foreach (var completedHand in completedHands)
                 {
@@ -1400,8 +1400,21 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_6>(),
                 Tile.CreateInstance<Bamboo_6>(),
             });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_5>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 13, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_5>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
             Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
+                                                           new Run<Character_2, Character_3, Character_4>(),
+                                                           new Run<Character_3, Character_4, Character_5>(),
+                                                           new Run<Dot_7, Dot_8, Dot_9>(),
+                                                           new Double<Bamboo_6>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
         }
     }
 }
