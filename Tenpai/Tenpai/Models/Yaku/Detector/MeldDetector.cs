@@ -376,12 +376,12 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     }
                 }
                 
-                if (doubleRunsCount == 1)
+                if (isMenzen && doubleRunsCount == 1)
                 {
                     //一盃口
                     rh.Yakus.Add(new DoubleRun());
                 }
-                else if (doubleRunsCount == 2)
+                else if (isMenzen && doubleRunsCount == 2)
                 {
                     //二盃口
                     rh.Yakus.Add(new TwoDoubleRuns());
