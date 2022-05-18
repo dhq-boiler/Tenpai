@@ -1016,7 +1016,7 @@ namespace Tenpai.ViewModels
         private void UpdateTileVisibility(Tile args, int count)
         {
             int processedCount = 0;
-            for (int j = 0; j < Tiles.Count(); j++)
+            for (int j = 0; j < tileCount.Value; j++)
             {
                 var tile = GetTile(j);
                 if (tile is null)
@@ -1034,7 +1034,7 @@ namespace Tenpai.ViewModels
         private void UpdateTileVisibilityToCollapsed(int code, int count)
         {
             int processedCount = 0;
-            for (int j = 0; j < Tiles.Count(); j++)
+            for (int j = 0; j < tileCount.Value; j++)
             {
                 var tile = GetTile(j);
                 if (tile is null)
