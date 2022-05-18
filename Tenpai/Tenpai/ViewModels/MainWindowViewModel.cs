@@ -796,7 +796,7 @@ namespace Tenpai.ViewModels
             {
                 ConstructCompleteHands();
             }
-            else
+            else if (tileCount.Value == Tiles.Where(x => x is not Dummy).Count())
             {
                 ConstructReadyHands();
             }

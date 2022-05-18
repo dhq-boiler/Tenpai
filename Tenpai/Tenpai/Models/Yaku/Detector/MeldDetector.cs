@@ -24,7 +24,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
             var handArr = handCollection.ToArray();
 
-            var incompletedHands = FindReadyHands(handArr, exposed, tileCount, agariType, windOfTheRound, onesOwnWind).Distinct();
+            var incompletedHands = FindReadyHands(handArr, exposed, tileCount - 1, agariType, windOfTheRound, onesOwnWind).Distinct();
 
             foreach (var incompletedHand in incompletedHands)
             {
@@ -310,7 +310,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             hand = hand.Where(x => !(x is Dummy)).ToArray();
             var tcount = hand.Count();
             if (tcount != tileCount)
-                return Array.Empty<ReadyHand>();
+                throw new Exception($"tcount({tcount}) != tileCount({tileCount})");
 
             List<ReadyHand> ret = new List<ReadyHand>();
 
