@@ -335,7 +335,7 @@ namespace Tenpai.ViewModels
             ChiCommand.Subscribe(args =>
             {
                 sarashiCount += 3;
-                var rotate = args.Target.Clone() as Tile;
+                var rotate = args.Meld.Tiles.First(x => x.Rotate is not null) as Tile;
                 if (Tiles.Where(x => x.Code == rotate.Code).Any())
                 {
                     rotate.Order = Tiles.Where(x => x.Code == rotate.Code).Max(x => x.Order) + 1;
