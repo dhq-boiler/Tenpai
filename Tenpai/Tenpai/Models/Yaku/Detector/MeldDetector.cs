@@ -394,8 +394,15 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new AllSimples());
                 }
 
+                var pureOutside = rh.Melds.All(x => x.Tiles.Has(y => y is ITerminals));
+                if (pureOutside)
+                {
+                    //純全帯么九
+                    rh.Yakus.Add(new PureOutsideHand());
+                }
+
                 var mixedOutside = rh.Melds.All(x => x.Tiles.All(y => y is Honors) || x.Tiles.Has(y => y is ITerminals));
-                if (mixedOutside)
+                if (!pureOutside && mixedOutside)
                 {
                     //混全帯么九
                     rh.Yakus.Add(new MixedOutsideHand());
