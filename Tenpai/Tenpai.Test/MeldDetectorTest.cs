@@ -1484,7 +1484,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_6>(),
             });
             var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
-            Assert.That(readyHands, Has.Length.EqualTo(3));
+            Assert.That(readyHands, Has.Length.EqualTo(5));
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_2>(),
@@ -1493,6 +1493,13 @@ namespace Tenpai.Test
                                                              new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
                                                              new Run<Dot_7, Dot_8, Dot_9>(),
                                                              new Double<Bamboo_6>())))
+                { }
+                else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_2>(),
+                                                                  new Double<Character_2>(),
+                                                                  new Triple<Character_3>(),
+                                                                  new Triple<Character_4>(),
+                                                                  new Run<Dot_7, Dot_8, Dot_9>(),
+                                                                  new Double<Bamboo_6>())))
                 { }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_5>(),
                                                                   new Run<Character_2, Character_3, Character_4>(),
@@ -1505,6 +1512,13 @@ namespace Tenpai.Test
                                                                   new Run<Character_2, Character_3, Character_4>(),
                                                                   new Run<Character_2, Character_3, Character_4>(),
                                                                   new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                                                  new Run<Dot_7, Dot_8, Dot_9>(),
+                                                                  new Double<Bamboo_6>())))
+                { }
+                else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
+                                                                  new Double<Character_2>(),
+                                                                  new Triple<Character_3>(),
+                                                                  new Triple<Character_4>(),
                                                                   new Run<Dot_7, Dot_8, Dot_9>(),
                                                                   new Double<Bamboo_6>())))
                 { }

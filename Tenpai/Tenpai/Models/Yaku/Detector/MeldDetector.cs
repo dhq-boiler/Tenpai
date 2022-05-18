@@ -304,7 +304,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind)
         {
             hand = hand.Where(x => !(x is Dummy)).ToArray();
-            var tcount = hand.Count() + (exposed != null ? exposed.Select(x => x.Tiles.Count()).Sum() : 0);
+            var tcount = hand.Count() + (exposed != null ? exposed.SelectMany(x => x.Tiles).Count() : 0);
             if (tcount != tileCount)
                 return Array.Empty<ReadyHand>();
 
