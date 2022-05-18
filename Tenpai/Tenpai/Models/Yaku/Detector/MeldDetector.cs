@@ -105,7 +105,6 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     if (im is Single s)
                     {
                         completedHand.WaitForm = new Meld[] { im };
-                        //var replace = completedHand.WaitForm.First(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
                         var replace = im;
                         int index = completedHand.Melds.ToList().IndexOf(replace);
                         completedHand.Melds[index] = replace + agariTile;
@@ -117,7 +116,6 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     else if (im is OpenWait || im is EdgeWait || im is ClosedWait)
                     {
                         Debug.Assert(im.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
-                        //im = im.Clone(IncompletedMeld.MeldStatus.WAIT) as IncompletedMeld;
                         completedHand.WaitForm = new Meld[] { im /*+ agariTile*/ };
                         var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
                         int index = completedHand.Melds.ToList().IndexOf(replace);
