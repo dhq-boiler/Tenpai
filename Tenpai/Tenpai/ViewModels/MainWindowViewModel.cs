@@ -329,7 +329,7 @@ namespace Tenpai.ViewModels
                         break;
                 }
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             ChiCommand.Subscribe(args =>
@@ -349,7 +349,7 @@ namespace Tenpai.ViewModels
                 }
                 UpdateTileVisibility(rotate, 1);
                 SarashiHai.Add(args.Meld);
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             AnkanCommand.Subscribe(args =>
@@ -366,7 +366,7 @@ namespace Tenpai.ViewModels
                     UpdateTileVisibility(args.Meld.Tiles[i], 1);
                 }
                 SarashiHai.Add(args.Meld);
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             DaiminkanCommand.Where(x => Tiles.Count(y => y.EqualsRedSuitedTileIncluding(x.Target)) == 3)
@@ -423,7 +423,7 @@ namespace Tenpai.ViewModels
                                   break;
                           }
                           SortIf();
-                          ConstructReadyHands();
+                          ConstructHand();
                       })
             .AddTo(_disposables);
             ShouminkanCommand.Where(x => {
@@ -459,7 +459,7 @@ namespace Tenpai.ViewModels
                 var index = SarashiHai.IndexOf(targetCalledTriple);
                 (args.Meld as Quad).Type = Models.Yaku.Meld.KongType.SmallMeldedKong;
                 SarashiHai[index] = args.Meld;
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             SelectCommand.Subscribe(tp =>
@@ -511,108 +511,108 @@ namespace Tenpai.ViewModels
             Tile0.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile1.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile2.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile3.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile4.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile5.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile6.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile7.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile8.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile9.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile10.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile11.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile12.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile13.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile14.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile15.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             Tile16.Subscribe(_ =>
             {
                 SortIf();
-                ConstructReadyHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             AgariTile.Subscribe(_ =>
             {
-                ConstructCompleteHands();
+                ConstructHand();
             })
             .AddTo(_disposables);
             IsArrangingTiles.Subscribe(flag =>
