@@ -18,9 +18,13 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             var handCollection = new TileCollection(hand);
             handCollection.RemoveTiles(agariTile, 1);
+            if (exposed != null)
+            {
+                exposed.ToList().ForEach(x => handCollection.AddRange(x.Tiles));
+            }
             var handArr = handCollection.ToArray();
 
-            var incompletedHands = FindReadyHands(handArr, exposed, tileCount, agariType, windOfTheRound, onesOwnWind);
+            var incompletedHands = FindReadyHands(handArr, exposed, tileCount, agariType, windOfTheRound, onesOwnWind).Distinct();
 
             foreach (var incompletedHand in incompletedHands)
             {
@@ -304,7 +308,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind)
         {
             hand = hand.Where(x => !(x is Dummy)).ToArray();
-            var tcount = hand.Count() + (exposed != null ? exposed.SelectMany(x => x.Tiles).Count() : 0);
+            var tcount = hand.Count();
             if (tcount != tileCount)
                 return Array.Empty<ReadyHand>();
 
@@ -390,34 +394,41 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             melds.AddRange(triples);
             melds.AddRange(runs);
 
-            if (exposed != null)
-            {
-                foreach (var one in exposed.Where(a => !(a is IncompletedMeld)).Cast<Meld>())
-                {
-                    melds.Add(one);
-                }
-                foreach (var one in exposed.Where(a => a is IncompletedMeld).Cast<IncompletedMeld>())
-                {
-                    melds.Add(one.Clone(IncompletedMeld.MeldStatus.COMPLETED));
-                }
-            }
+            //if (exposed != null)
+            //{
+            //    foreach (var one in exposed.Where(a => !(a is IncompletedMeld)).Cast<Meld>())
+            //    {
+            //        melds.Add(one);
+            //    }
+            //    foreach (var one in exposed.Where(a => a is IncompletedMeld).Cast<IncompletedMeld>())
+            //    {
+            //        melds.Add(one.Clone(IncompletedMeld.MeldStatus.COMPLETED));
+            //    }
+            //}
 
             //1雀頭完成済み
-            for (int l = 0; l < heads.Count(); ++l)
+            for (int l = 0; l < heads.Count() && (exposed == null || exposed.Count() <= 3); ++l)
             {
                 List<Meld> havingMelds = new List<Meld>();
                 TileCollection tiles = new TileCollection(hand);
-                if (exposed != null)
-                {
-                    foreach (var one in exposed)
-                    {
-                        tiles.AddRange(one.Tiles);
-                    }
-                }
+                //if (exposed != null)
+                //{
+                //    foreach (var one in exposed)
+                //    {
+                //        tiles.AddRange(one.Tiles);
+                //    }
+                //}
 
                 var head = heads[l];
 
-                var selectedMelds = Combination.Enumerate(melds, 3, withRepetition: true).ToList();
+                var selectedMelds = Combination.Enumerate(melds, 3 - (exposed != null ? exposed.Count() : 0), withRepetition: true).ToList();
+                for (int i = 0; i < selectedMelds.Count() && exposed != null; ++i)
+                {
+                    var m = new List<Meld>();
+                    m.AddRange(selectedMelds[i]);
+                    m.AddRange(exposed);
+                    selectedMelds[i] = m.ToArray();
+                }
 
                 for (int i = 0; i < selectedMelds.Count; ++i)
                 {
@@ -457,16 +468,23 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             for (int l = 0; l < singles.Count(); ++l)
             {
                 TileCollection tiles = new TileCollection(hand);
-                if (exposed != null)
-                {
-                    foreach (var one in exposed)
-                    {
-                        tiles.AddRange(one.Tiles);
-                    }
-                }
+                //if (exposed != null)
+                //{
+                //    foreach (var one in exposed)
+                //    {
+                //        tiles.AddRange(one.Tiles);
+                //    }
+                //}
                 var wait = singles[l];
 
-                var selectedMelds = Combination.Enumerate(melds, 4, withRepetition: true);
+                var selectedMelds = Combination.Enumerate(melds, 4 - (exposed != null ? exposed.Count() : 0), withRepetition: true).ToList();
+                for (int i = 0; i < selectedMelds.Count() && exposed != null; ++i)
+                {
+                    var m = new List<Meld>();
+                    m.AddRange(selectedMelds[i]);
+                    m.AddRange(exposed);
+                    selectedMelds[i] = m.ToArray();
+                }
 
                 foreach (var selectedMeld in selectedMelds)
                 {
@@ -486,6 +504,13 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var twoHeads = Combination.Enumerate(listHeads, 2, withRepetition: true).ToList();
 
             var selectedMelds2 = Combination.Enumerate(melds, 3, withRepetition: true).ToList();
+            for (int i = 0; i < selectedMelds2.Count() && exposed != null; ++i)
+            {
+                var m = new List<Meld>();
+                m.AddRange(selectedMelds2[i]);
+                m.AddRange(exposed);
+                selectedMelds2[i] = m.ToArray();
+            }
             TileCollection tiles2 = new TileCollection(hand);
 
             for (int j = 0; j < twoHeads.Count; j++)
@@ -509,11 +534,17 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         if (!tiles2.IsAllContained(twoHead[0], twoHead[1], selectedMeld[0], selectedMeld[1], selectedMeld[2]))
                             continue;
 
-                        //1雀頭・3面子完成済み，1搭子
-                        ret.Add(new ManualWaitReadyHand(twoHead[1].Tiles[0], (twoHead[1] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (twoHead[0] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2]));
+                        if (tiles2.Where(x => x.EqualsRedSuitedTileIncluding(twoHead[1].Tiles[0])).Count() < 4)
+                        {
+                            //1雀頭・3面子完成済み，1搭子
+                            ret.Add(new ManualWaitReadyHand(twoHead[1].Tiles[0], (twoHead[1] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (twoHead[0] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2]));
+                        }
 
-                        //1雀頭・3面子完成済み，1搭子
-                        ret.Add(new ManualWaitReadyHand(twoHead[0].Tiles[0], (twoHead[0] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (twoHead[1] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2]));
+                        if (tiles2.Where(x => x.EqualsRedSuitedTileIncluding(twoHead[0].Tiles[0])).Count() < 4)
+                        {
+                            //1雀頭・3面子完成済み，1搭子
+                            ret.Add(new ManualWaitReadyHand(twoHead[0].Tiles[0], (twoHead[0] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (twoHead[1] as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2]));
+                        }
                     }
                 }
             }
