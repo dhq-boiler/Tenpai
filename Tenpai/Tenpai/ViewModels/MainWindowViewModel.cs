@@ -806,7 +806,7 @@ namespace Tenpai.ViewModels
         {
             SortIf();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindCompletedHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value);
+            var readyHands = MeldDetector.FindCompletedHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             ReadyHands.AddRange(readyHands);
         }
@@ -815,7 +815,7 @@ namespace Tenpai.ViewModels
         {
             SortIf();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value).OrderBy(x => x.WaitingTiles[0]);
+            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             ReadyHands.AddRange(readyHands);
         }
