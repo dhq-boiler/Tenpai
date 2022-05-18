@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Tenpai.Extensions;
@@ -30,6 +31,28 @@ namespace Tenpai.Models.Tiles
                     }
                 }
             }
+        }
+
+        public TileCollection(Tile[] wait, params Meld[] melds)
+        {
+            if (melds != null)
+            {
+                foreach (var meld in melds)
+                {
+                    this.AddRange(meld.Tiles);
+                }
+            }
+            this.AddRange(wait);
+        }
+
+        public bool IsMoreThan4TilesOfTheSameType()
+        {
+            foreach (var tile in this)
+            {
+                if (this.Count(x => x.EqualsRedSuitedTileIncluding(tile)) > 4)
+                    return true;
+            }
+            return false;
         }
 
         public void RemoveTiles(Tile args, int v)
@@ -82,6 +105,11 @@ namespace Tenpai.Models.Tiles
                     return;
                 }
             }
+        }
+
+        public bool Has(Func<Tile, bool> condition)
+        {
+            return this.Any(t => condition.Invoke(t));
         }
 
         public bool IsContained(TileCollection by)
