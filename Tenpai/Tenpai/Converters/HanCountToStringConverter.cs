@@ -18,7 +18,7 @@ namespace Tenpai.Converters
             var yaku = values[0] as Yaku;
             var sarashiHai = values[1] as ReactiveCollection<Meld>;
 
-            var hanCount = yaku.HanCount(sarashiHai.Count() > 0);
+            var hanCount = yaku.HanCount(sarashiHai.Where(x => (x is Quad q && q.Type != KongType.ConcealedKong) || (x is not Quad)).Count() > 0);
             if (hanCount >= 13)
                 return string.Empty;
             else

@@ -17,7 +17,7 @@ namespace Tenpai.Converters
                 return DependencyProperty.UnsetValue;
             var yaku = values[0] as Yaku;
             var sarashiHai = values[1] as ReactiveCollection<Meld>;
-            return yaku.HanCount(sarashiHai.Count() > 0);
+            return yaku.HanCount(sarashiHai.Where(x => (x is Quad q && q.Type != KongType.ConcealedKong) || (x is not Quad)).Count() > 0);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
