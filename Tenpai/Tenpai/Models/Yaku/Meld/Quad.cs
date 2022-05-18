@@ -44,12 +44,41 @@ namespace Tenpai.Models.Yaku.Meld
 
         public override bool Equals(object obj)
         {
-            return obj is Quad && Tiles.SequenceEqual((obj as Quad).Tiles);
+            return obj is Quad q && Tiles.SequenceEqual((obj as Quad).Tiles) && Type.Equals(q.Type);
         }
 
         public override int GetHashCode()
         {
             return Tiles[0].GetHashCode();
+        }
+    }
+
+    public class Quad<T> : Quad
+        where T : Tile, new()
+    {
+        public Quad(KongType kongType)
+            : base(Tile.CreateInstance<T>(),
+                   Tile.CreateInstance<T>(),
+                   Tile.CreateInstance<T>(),
+                   Tile.CreateInstance<T>())
+        {
+            this.Type = kongType;
+        }
+    }
+
+    public class Quad<T1, T2, T3, T4> : Quad
+        where T1 : Tile, new()
+        where T2 : Tile, new()
+        where T3 : Tile, new()
+        where T4 : Tile, new()
+    {
+        public Quad(KongType kongType)
+            : base(Tile.CreateInstance<T1>(),
+                   Tile.CreateInstance<T2>(),
+                   Tile.CreateInstance<T3>(),
+                   Tile.CreateInstance<T4>())
+        {
+            this.Type = kongType;
         }
     }
 }
