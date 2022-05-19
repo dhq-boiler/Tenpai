@@ -113,7 +113,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     else if (im is OpenWait || im is EdgeWait || im is ClosedWait)
                     {
                         Debug.Assert(im.WaitTiles.ContainsRedSuitedTileIncluding(agariTile));
-                        completedHand.WaitForm = new Meld[] { im /*+ agariTile*/ };
+                        completedHand.WaitForm = new Meld[] { im };
                         var replace = completedHand.WaitForm.FirstOrDefault(x => x.WaitTiles.ContainsRedSuitedTileIncluding(agariTile)) as IncompletedMeld;
                         int index = completedHand.Melds.ToList().IndexOf(replace);
                         completedHand.Melds[index] = replace + agariTile;
@@ -323,6 +323,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var triples = FindTriples(hand);
             var heads = FindDoubles(hand);
             var singles = FindSingles(hand);
+            var quads = exposed != null ? exposed.Where(x => x is Quad).ToArray() : Array.Empty<Meld>();
 
             //七対子
             ReadyHandsSevenPairs(hand, exposed, ref ret, heads, singles);
@@ -334,7 +335,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             ReadyHandsThirteenOrphansSingleWait(hand, ref ret, runs, triples, heads, singles);
             
             //4面子1雀頭
-            ReadyHandsBasicForm(hand, exposed, ref ret, runs, triples, heads, singles);
+            ReadyHandsBasicForm(hand, exposed, ref ret, runs, triples, heads, singles, quads);
 
             AddYaku(ref ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
 
@@ -480,11 +481,26 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             return isNotRun && isNotDouble && ((isTriple && (callFromIsNull || callFromIsUnknown)) || ((isQuad && concealed) || !isQuad));
         }
 
-        private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, ref List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
+        private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, ref List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, Meld[] quads)
         {
             var melds = new List<Meld>();
-            melds.AddRange(triples);
-            melds.AddRange(runs);
+            melds.AddRange(quads);
+            foreach (var triple in triples)
+            {
+                if (!quads.Any(x => x.Tiles.Any(y => triple.Tiles[0].EqualsRedSuitedTileIncluding(y))))
+                {
+                    melds.Add(triple);
+                }
+            }
+            foreach (var run in runs)
+            {
+                if (!quads.Any(x => x.Tiles.Any(y => run.Tiles[0].EqualsRedSuitedTileIncluding(y))
+                                 || x.Tiles.Any(y => run.Tiles[1].EqualsRedSuitedTileIncluding(y))
+                                 || x.Tiles.Any(y => run.Tiles[2].EqualsRedSuitedTileIncluding(y))))
+                {
+                    melds.Add(run);
+                }
+            }
 
             OneHeadCreated(hand, exposed, ret, heads, melds);
             OneHeadCreating(hand, exposed, ret, singles, melds);
@@ -501,11 +517,10 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var twoHeads = Combination.Enumerate(listHeads, 2, withRepetition: true).ToList();
 
             var selectedMelds2 = Combination.Enumerate(melds, 3, withRepetition: true).ToList();
-            for (int i = 0; i < selectedMelds2.Count() && exposed != null; ++i)
+            for (int i = 0; i < selectedMelds2.Count(); ++i)
             {
                 var m = new List<Meld>();
                 m.AddRange(selectedMelds2[i]);
-                m.AddRange(exposed);
                 selectedMelds2[i] = m.ToArray();
             }
             TileCollection tiles2 = new TileCollection(hand);
@@ -573,12 +588,11 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 TileCollection tiles = new TileCollection(hand);
                 var wait = singles[l];
 
-                var selectedMelds = Combination.Enumerate(melds, 4 - (exposed != null ? exposed.Count() : 0), withRepetition: true).ToList();
-                for (int i = 0; i < selectedMelds.Count() && exposed != null; ++i)
+                var selectedMelds = Combination.Enumerate(melds, 4, withRepetition: true).ToList();
+                for (int i = 0; i < selectedMelds.Count(); ++i)
                 {
                     var m = new List<Meld>();
                     m.AddRange(selectedMelds[i]);
-                    m.AddRange(exposed);
                     selectedMelds[i] = m.ToArray();
                 }
 
@@ -614,12 +628,11 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
                 var head = heads[l];
 
-                var selectedMelds = Combination.Enumerate(melds, 3 - (exposed != null ? exposed.Count() : 0), withRepetition: true).ToList();
-                for (int i = 0; i < selectedMelds.Count() && exposed != null; ++i)
+                var selectedMelds = Combination.Enumerate(melds, 3, withRepetition: true).ToList();
+                for (int i = 0; i < selectedMelds.Count(); ++i)
                 {
                     var m = new List<Meld>();
                     m.AddRange(selectedMelds[i]);
-                    m.AddRange(exposed);
                     selectedMelds[i] = m.ToArray();
                 }
 

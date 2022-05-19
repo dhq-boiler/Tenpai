@@ -16,6 +16,11 @@ namespace Tenpai.Utils
                     yield return new T[] { item };
                 yield break;
             }
+            else if (k == 0)
+            {
+                yield break;
+            }
+                
             foreach (var item in items)
             {
                 var leftside = new T[] { item };
