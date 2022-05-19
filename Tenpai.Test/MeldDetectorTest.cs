@@ -2288,5 +2288,89 @@ namespace Tenpai.Test
                 }
             }
         }
+
+        [Test]
+        public void 対々和_ポン()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+            });
+            var melds = new Meld[]
+            {
+                new Triple<Bamboo_3>(),
+                new Triple<White>(),
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Red>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Triple<Character_9>(),
+                                                           new Triple<Bamboo_2>(),
+                                                           new Triple<Bamboo_3>(),
+                                                           new Triple<White>(),
+                                                           new Double<Red>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
+
+        [Test]
+        public void 対々和_混老頭_ポン()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+            });
+            var melds = new Meld[]
+            {
+                new Triple<Character_9>(),
+                new Triple<White>(),
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Red>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Triple<Character_9>(),
+                                                           new Triple<Bamboo_1>(),
+                                                           new Triple<East>(),
+                                                           new Triple<White>(),
+                                                           new Double<Red>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
     }
 }
