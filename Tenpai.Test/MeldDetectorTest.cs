@@ -564,6 +564,9 @@ namespace Tenpai.Test
                 {
                     Tile.CreateInstance<Bamboo_5>(),
                     Tile.CreateInstance<Bamboo_6>(),
+                    Tile.CreateInstance<Bamboo_6>(),
+                    Tile.CreateInstance<Bamboo_7>(),
+                    Tile.CreateInstance<Bamboo_8>(),
                     Tile.CreateInstance<Character_3>(),
                     Tile.CreateInstance<Character_4>(),
                     Tile.CreateInstance<Character_5>(),
@@ -1596,6 +1599,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Red>(),
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
             });
             var melds = new Meld[]
             {
@@ -1634,6 +1641,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Red>(),
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
             });
             var melds = new Meld[]
             {
@@ -1710,6 +1721,9 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_3>(),
                 Tile.CreateInstance<Dot_9>(),
                 Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
 
             });
             var melds = new Meld[]
@@ -1749,6 +1763,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_3>(),
                 Tile.CreateInstance<Dot_9>(),
                 Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
 
             });
             var melds = new Meld[]
@@ -1788,6 +1806,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_3>(),
                 Tile.CreateInstance<Dot_9>(),
                 Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
 
             });
             var melds = new Meld[]
@@ -1827,6 +1849,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_3>(),
                 Tile.CreateInstance<Dot_9>(),
                 Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
 
             });
             var melds = new Meld[]
@@ -1905,6 +1931,9 @@ namespace Tenpai.Test
                 Tile.CreateInstance<North>(),
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
             });
             var melds = new Meld[]
             {
@@ -1944,6 +1973,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<North>(),
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
             });
             var melds = new Meld[]
             {
@@ -1983,6 +2016,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<North>(),
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
             });
             var melds = new Meld[]
             {
@@ -2022,6 +2059,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<North>(),
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
             });
             var melds = new Meld[]
             {
@@ -2097,6 +2138,9 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Character_1>(),
                 Tile.CreateInstance<Character_9>(),
                 Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
             });
             var melds = new Meld[]
             {
@@ -2135,6 +2179,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Character_1>(),
                 Tile.CreateInstance<Character_9>(),
                 Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
             });
             var melds = new Meld[]
             {
@@ -2173,6 +2221,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Character_1>(),
                 Tile.CreateInstance<Character_9>(),
                 Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
             });
             var melds = new Meld[]
             {
@@ -2211,6 +2263,10 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Character_1>(),
                 Tile.CreateInstance<Character_9>(),
                 Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
             });
             var melds = new Meld[]
             {

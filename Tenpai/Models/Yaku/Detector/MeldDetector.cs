@@ -18,10 +18,6 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             var handCollection = new TileCollection(hand);
             handCollection.RemoveTiles(agariTile, 1);
-            if (exposed != null)
-            {
-                exposed.ToList().ForEach(x => handCollection.AddRange(x.Tiles));
-            }
             var handArr = handCollection.ToArray();
 
             var incompletedHands = FindReadyHands(handArr, exposed, tileCount - 1, agariType, windOfTheRound, onesOwnWind).Distinct();
