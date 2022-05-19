@@ -6,6 +6,7 @@ using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku.Meld;
 using Tenpai.Utils;
+using Tenpai.ViewModels;
 
 namespace Tenpai.Models.Yaku.Meld.Detector
 {
@@ -445,7 +446,38 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     //対々和
                     rh.Yakus.Add(new AllTriples());
                 }
+
+                var threeConcealedTriples = rh.Melds.Where(x => (x is Triple t && (t.CallFrom == null || t.CallFrom == EOpponent.Unknown) && (rh is not CompletedHand || rh is CompletedHand ch && ch.WaitForm.Any(y => y.WaitTiles.Any(z => z.EqualsRedSuitedTileIncluding(t.Tiles[0]))))) || (x is Quad q && q.Type == KongType.ConcealedKong)).Count() == 3;
+                bool threeConcealedTriplesTsumo = IsThreeConcealedTriplesTsumo(agariType, rh);
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && (threeConcealedTriples || threeConcealedTriplesTsumo))
+                {
+                    //三暗刻
+                    rh.Yakus.Add(new ThreeConcealedTriples());
+                }
             }
+        }
+
+        private static bool IsThreeConcealedTriplesTsumo<T>(AgariType agariType, T rh) where T : ReadyHand
+        {
+            var coll = rh.Melds.Where(x => IsConcealedTriples(rh, x));
+            var count = coll.Count();
+            var a = count == 3;
+            var b = agariType.Equals(AgariType.Tsumo);
+            return a && b;
+        }
+
+        private static bool IsConcealedTriples<T>(T rh, Meld x) where T : ReadyHand
+        {
+            var isNotRun = x is not Run;
+            var isNotDouble = x is not Double;
+            var isTriple = x is Triple;
+            var isQuad = x is Quad;
+            var t = x as Triple;
+            var callFromIsNull = isTriple && t.CallFrom == null;
+            var callFromIsUnknown = isTriple && t.CallFrom == EOpponent.Unknown;
+            var q = x as Quad;
+            var concealed = isQuad && q.Type == KongType.ConcealedKong;
+            return isNotRun && isNotDouble && ((isTriple && (callFromIsNull || callFromIsUnknown)) || ((isQuad && concealed) || !isQuad));
         }
 
         private static void ReadyHandsBasicForm(Tile[] hand, Meld[] exposed, ref List<ReadyHand> ret, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles)
