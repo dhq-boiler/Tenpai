@@ -462,6 +462,13 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     //三暗刻
                     rh.Yakus.Add(new ThreeConcealedTriples());
                 }
+
+                var threeQuads = rh.Melds.Count(x => x is Quad) == 3;
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && threeQuads)
+                {
+                    //三槓子
+                    rh.Yakus.Add(new ThreeQuads());
+                }
             }
         }
 
