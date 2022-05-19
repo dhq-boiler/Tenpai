@@ -348,9 +348,37 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         {
             foreach (var rh in ret)
             {
+                var exclusiveDoubles = FindDoubles(hand, runs, triples, exposed);
+                var fourConcealedTriples = rh.Melds.Where(x => x is Triple || (x is Quad q && q.Type == KongType.ConcealedKong)).Count() == 4
+                                        && (exposed == null || exposed.Where(x => x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0)
+                                        && rh is CompletedHand && (rh as CompletedHand).WaitForm.All(x => x is Double) && (rh as CompletedHand).WaitForm.Count() == 2
+                                        && agariType == ViewModels.AgariType.Tsumo;
+                if (fourConcealedTriples)
+                {
+                    //四暗刻
+                    rh.Yakus.Add(new FourConcealedTriples());
+                }
+
+                var exclusiveSingles = FindSingles(hand, runs, triples, exposed);
+                var fourConcealedTriplesSingleWait = rh.Melds.Where(x => x is Triple || (x is Quad q && q.Type == KongType.ConcealedKong)).Count() == 4
+                                                  && (exposed == null || exposed.Where(x => x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0)
+                                                  && rh is CompletedHand && (rh as CompletedHand).WaitForm.Count() == 1;
+                if (fourConcealedTriplesSingleWait)
+                {
+                    //四暗刻 単騎待ち
+                    rh.Yakus.Add(new FourConcealedTriplesSingleWait());
+                }
+
+                var allTerminals = rh.Melds.All(x => x.Tiles.All(y => y is ITerminals));
+                if (allTerminals)
+                {
+                    //清老頭
+                    rh.Yakus.Add(new AllTerminals());
+                }
+
                 var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                 var isTumo = agariType == ViewModels.AgariType.Tsumo;
-                if (isMenzen && isTumo)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && isTumo)
                 {
                     //門前清自摸和
                     rh.Yakus.Add(new ConcealedSelfDraw());
@@ -359,7 +387,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 var runsAreThree = rh.Melds.Where(x => x is Run).Count() == 3;
                 var allRuns = rh.Melds.Except(rh.Melds.Where(x => x is Double)).All(x => x is Run || x is OpenWait);
                 var headIsNotYakuhai = (rh.Melds.Count(x => x is Double) == 1) ? !rh.Melds.First(x => x is Double).HasYaku(windOfTheRound, onesOwnWind) : false;
-                if (isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
                 {
                     //平和
                     rh.Yakus.Add(new AllRuns());
@@ -376,47 +404,40 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     }
                 }
                 
-                if (isMenzen && doubleRunsCount == 1)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && doubleRunsCount == 1)
                 {
                     //一盃口
                     rh.Yakus.Add(new DoubleRun());
                 }
-                else if (isMenzen && doubleRunsCount == 2)
+                else if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && doubleRunsCount == 2)
                 {
                     //二盃口
                     rh.Yakus.Add(new TwoDoubleRuns());
                 }
 
                 var allSimples = rh.Melds.All(x => x.Tiles.All(y => !(y is ITerminals) && !(y is Honors)));
-                if (allSimples)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && allSimples)
                 {
                     //断么九
                     rh.Yakus.Add(new AllSimples());
                 }
 
-                var allTerminals = rh.Melds.All(x => x.Tiles.All(y => y is ITerminals));
-                if (allTerminals)
-                {
-                    //清老頭
-                    rh.Yakus.Add(new AllTerminals());
-                }
-
                 var pureOutside = rh.Melds.All(x => x.Tiles.Has(y => y is ITerminals));
-                if (!allTerminals && pureOutside)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && pureOutside)
                 {
                     //純全帯么九
                     rh.Yakus.Add(new PureOutsideHand());
                 }
 
                 var allTerminalsAndHonors = rh.Melds.All(x => x.Tiles.All(y => y is Honors) || x.Tiles.All(y => y is ITerminals));
-                if (!allTerminals && allTerminalsAndHonors)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && allTerminalsAndHonors)
                 {
                     //混老頭
                     rh.Yakus.Add(new AllTerminalsAndHonors());
                 }
 
                 var mixedOutside = rh.Melds.All(x => x.Tiles.All(y => y is Honors) || x.Tiles.Has(y => y is ITerminals));
-                if (!allTerminals && !pureOutside && !allTerminalsAndHonors && mixedOutside)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !pureOutside && !allTerminalsAndHonors && mixedOutside)
                 {
                     //混全帯么九
                     rh.Yakus.Add(new MixedOutsideHand());
@@ -727,6 +748,28 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             return IncompletedMeldDetector.FindIncompletedDoubles(hand);
         }
 
+        public static Meld[] FindSingles(Tile[] hand, params Meld[][] meldsArray)
+        {
+            var h = hand.ToList();
+            if (meldsArray != null)
+            {
+                foreach (var melds in meldsArray)
+                {
+                    if (melds != null)
+                    {
+                        foreach (var meld in melds)
+                        {
+                            foreach (var t in meld.Tiles)
+                            {
+                                h.Remove(t);
+                            }
+                        }
+                    }
+                }
+            }
+            return IncompletedMeldDetector.FindIncompletedDoubles(h.ToArray());
+        }
+
         /// <summary>
         /// 手牌から対子を検出します．
         /// </summary>
@@ -735,6 +778,28 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         public static Meld[] FindDoubles(Tile[] hand)
         {
             return IncompletedMeldDetector.FindIncompletedTriple(hand);
+        }
+
+        public static Meld[] FindDoubles(Tile[] hand, params Meld[][] meldsArray)
+        {
+            var h = hand.ToList();
+            if (meldsArray != null)
+            {
+                foreach (var melds in meldsArray)
+                {
+                    if (melds != null)
+                    {
+                        foreach (var meld in melds)
+                        {
+                            foreach (var t in meld.Tiles)
+                            {
+                                h.Remove(t);
+                            }
+                        }
+                    }
+                }
+            }
+            return IncompletedMeldDetector.FindIncompletedTriple(h.ToArray());
         }
 
         /// <summary>
