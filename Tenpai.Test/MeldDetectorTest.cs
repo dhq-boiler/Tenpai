@@ -2043,5 +2043,194 @@ namespace Tenpai.Test
                 }
             }
         }
+
+        [Test]
+        public void 清老頭_門前()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+            });
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Triple<Dot_1>(),
+                                                           new Triple<Dot_9>(),
+                                                           new Triple<Bamboo_1>(),
+                                                           new Triple<Character_1>(),
+                                                           new Double<Character_9>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
+
+        [Test]
+        public void 清老頭_ポン()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+            });
+            var melds = new Meld[]
+            {
+                new Triple<Bamboo_1>(),
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Triple<Dot_1>(),
+                                                           new Triple<Dot_9>(),
+                                                           new Triple<Bamboo_1>(),
+                                                           new Triple<Character_1>(),
+                                                           new Double<Character_9>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
+
+        [Test]
+        public void 清老頭_暗槓()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+            });
+            var melds = new Meld[]
+            {
+                new Quad<Bamboo_1>(KongType.ConcealedKong),
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Triple<Dot_1>(),
+                                                           new Triple<Dot_9>(),
+                                                           new Quad<Bamboo_1>(KongType.ConcealedKong),
+                                                           new Triple<Character_1>(),
+                                                           new Double<Character_9>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
+
+        [Test]
+        public void 清老頭_大明槓()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+            });
+            var melds = new Meld[]
+            {
+                new Quad<Bamboo_1>(KongType.LargeMeldedKong),
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Triple<Dot_1>(),
+                                                           new Triple<Dot_9>(),
+                                                           new Quad<Bamboo_1>(KongType.LargeMeldedKong),
+                                                           new Triple<Character_1>(),
+                                                           new Double<Character_9>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
+
+        [Test]
+        public void 清老頭_加槓()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+            });
+            var melds = new Meld[]
+            {
+                new Quad<Bamboo_1>(KongType.SmallMeldedKong),
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Triple<Dot_1>(),
+                                                           new Triple<Dot_9>(),
+                                                           new Quad<Bamboo_1>(KongType.SmallMeldedKong),
+                                                           new Triple<Character_1>(),
+                                                           new Double<Character_9>())))
+                { }
+                else
+                {
+                    Assert.Fail(completedHand.ToString());
+                }
+            }
+        }
     }
 }
