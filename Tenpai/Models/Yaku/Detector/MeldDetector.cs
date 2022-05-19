@@ -438,6 +438,13 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     //混全帯么九
                     rh.Yakus.Add(new MixedOutsideHand());
                 }
+
+                var allTriple = rh.Melds.All(x => x is not Run);
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && allTriple)
+                {
+                    //対々和
+                    rh.Yakus.Add(new AllTriples());
+                }
             }
         }
 
