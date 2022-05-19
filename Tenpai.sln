@@ -5,7 +5,12 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenpai", "Tenpai\Tenpai.csproj", "{9A182FB4-97AE-4830-B282-07F9184F9855}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenpai.Test", "Tenpai.Test\Tenpai.Test.csproj", "{EB133A9F-C828-4B97-B382-DED9045A7226}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenpai.Test", "Tenpai.Test\Tenpai.Test.csproj", "{EB133A9F-C828-4B97-B382-DED9045A7226}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{DBEA6843-A1EC-47B6-A154-01BFD4681359}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
