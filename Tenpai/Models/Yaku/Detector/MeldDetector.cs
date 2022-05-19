@@ -374,9 +374,16 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new AllTerminals());
                 }
 
+                var fourQuads = rh.Melds.Count(x => x is Quad) == 4;
+                if (fourQuads)
+                {
+                    //四槓子
+                    rh.Yakus.Add(new FourQuads());
+                }
+
                 var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                 var isTumo = agariType == ViewModels.AgariType.Tsumo;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && isTumo)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && isTumo)
                 {
                     //門前清自摸和
                     rh.Yakus.Add(new ConcealedSelfDraw());
@@ -385,7 +392,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 var runsAreThree = rh.Melds.Where(x => x is Run).Count() == 3;
                 var allRuns = rh.Melds.Except(rh.Melds.Where(x => x is Double)).All(x => x is Run || x is OpenWait);
                 var headIsNotYakuhai = (rh.Melds.Count(x => x is Double) == 1) ? !rh.Melds.First(x => x is Double).HasYaku(windOfTheRound, onesOwnWind) : false;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
                 {
                     //平和
                     rh.Yakus.Add(new AllRuns());
@@ -402,47 +409,47 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     }
                 }
                 
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && doubleRunsCount == 1)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && doubleRunsCount == 1)
                 {
                     //一盃口
                     rh.Yakus.Add(new DoubleRun());
                 }
-                else if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && isMenzen && doubleRunsCount == 2)
+                else if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && doubleRunsCount == 2)
                 {
                     //二盃口
                     rh.Yakus.Add(new TwoDoubleRuns());
                 }
 
                 var allSimples = rh.Melds.All(x => x.Tiles.All(y => !(y is ITerminals) && !(y is Honors)));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && allSimples)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && allSimples)
                 {
                     //断么九
                     rh.Yakus.Add(new AllSimples());
                 }
 
                 var pureOutside = rh.Melds.All(x => x.Tiles.Has(y => y is ITerminals));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && pureOutside)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && pureOutside)
                 {
                     //純全帯么九
                     rh.Yakus.Add(new PureOutsideHand());
                 }
 
                 var allTerminalsAndHonors = rh.Melds.All(x => x.Tiles.All(y => y is Honors) || x.Tiles.All(y => y is ITerminals));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && allTerminalsAndHonors)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && allTerminalsAndHonors)
                 {
                     //混老頭
                     rh.Yakus.Add(new AllTerminalsAndHonors());
                 }
 
                 var mixedOutside = rh.Melds.All(x => x.Tiles.All(y => y is Honors) || x.Tiles.Has(y => y is ITerminals));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !pureOutside && !allTerminalsAndHonors && mixedOutside)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !pureOutside && !allTerminalsAndHonors && mixedOutside)
                 {
                     //混全帯么九
                     rh.Yakus.Add(new MixedOutsideHand());
                 }
 
                 var allTriple = rh.Melds.All(x => x is not Run);
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && allTriple)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && allTriple)
                 {
                     //対々和
                     rh.Yakus.Add(new AllTriples());
@@ -450,7 +457,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
                 var threeConcealedTriples = rh.Melds.Where(x => (x is Triple t && (t.CallFrom == null || t.CallFrom == EOpponent.Unknown) && (rh is not CompletedHand || rh is CompletedHand ch && ch.WaitForm.Any(y => y.WaitTiles.Any(z => z.EqualsRedSuitedTileIncluding(t.Tiles[0]))))) || (x is Quad q && q.Type == KongType.ConcealedKong)).Count() == 3;
                 bool threeConcealedTriplesTsumo = IsThreeConcealedTriplesTsumo(agariType, rh);
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && (threeConcealedTriples || threeConcealedTriplesTsumo))
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && (threeConcealedTriples || threeConcealedTriplesTsumo))
                 {
                     //三暗刻
                     rh.Yakus.Add(new ThreeConcealedTriples());
