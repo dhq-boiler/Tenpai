@@ -81,7 +81,12 @@ namespace Tenpai.Models.Yaku.Meld
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            int hash = base.GetHashCode();
+            foreach (var meld in Melds)
+            {
+                hash ^= meld.GetHashCode();
+            }
+            return hash;
         }
 
         public override string ToString()

@@ -143,11 +143,11 @@ namespace Tenpai.Models.Yaku.Meld
             while (set.Count() + wait.Count() > 0)
             {
                 Tile x = null, y = null;
-                try
+
+                if (set.Count() > 0 && wait.Count() > 0)
                 {
                     x = set.Peek();
                     y = wait.Peek();
-
                     if (x.Code < y.Code)
                     {
                         x = set.Dequeue();
@@ -159,9 +159,9 @@ namespace Tenpai.Models.Yaku.Meld
                         str += "(" + y.ToString() + ")";
                     }
                 }
-                catch (InvalidOperationException)
+                else
                 {
-                    if (x != null)
+                    if (set.Count() > 0)
                     {
                         x = set.Dequeue();
                         str += x.ToString();

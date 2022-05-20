@@ -352,6 +352,16 @@ namespace Tenpai.Models.Tiles
             return a && b && c && d;
         }
 
+        public override int GetHashCode()
+        {
+            int hash = Code.GetHashCode();
+            if (this is IRedSuitedTile r)
+            {
+                hash ^= r.IsRedSuited.GetHashCode();
+            }
+            return hash;
+        }
+
         public object Clone()
         {
             if (this is IRedSuitedTile r && r.IsRedSuited)
