@@ -381,9 +381,16 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new FourQuads());
                 }
 
+                var bigDragons = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y is Dragons)) == 3;
+                if (bigDragons)
+                {
+                    //大三元
+                    rh.Yakus.Add(new BigDragons());
+                }
+
                 var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                 var isTumo = agariType == ViewModels.AgariType.Tsumo;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && isTumo)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && isMenzen && isTumo)
                 {
                     //門前清自摸和
                     rh.Yakus.Add(new ConcealedSelfDraw());
@@ -392,7 +399,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 var runsAreThree = rh.Melds.Where(x => x is Run).Count() == 3;
                 var allRuns = rh.Melds.Except(rh.Melds.Where(x => x is Double)).All(x => x is Run || x is OpenWait);
                 var headIsNotYakuhai = (rh.Melds.Count(x => x is Double) == 1) ? !rh.Melds.First(x => x is Double).HasYaku(windOfTheRound, onesOwnWind) : false;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
                 {
                     //平和
                     rh.Yakus.Add(new AllRuns());
@@ -409,47 +416,47 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     }
                 }
                 
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && doubleRunsCount == 1)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && isMenzen && doubleRunsCount == 1)
                 {
                     //一盃口
                     rh.Yakus.Add(new DoubleRun());
                 }
-                else if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && isMenzen && doubleRunsCount == 2)
+                else if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && isMenzen && doubleRunsCount == 2)
                 {
                     //二盃口
                     rh.Yakus.Add(new TwoDoubleRuns());
                 }
 
                 var allSimples = rh.Melds.All(x => x.Tiles.All(y => !(y is ITerminals) && !(y is Honors)));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && allSimples)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && allSimples)
                 {
                     //断么九
                     rh.Yakus.Add(new AllSimples());
                 }
 
                 var pureOutside = rh.Melds.All(x => x.Tiles.Has(y => y is ITerminals));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && pureOutside)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && pureOutside)
                 {
                     //純全帯么九
                     rh.Yakus.Add(new PureOutsideHand());
                 }
 
                 var allTerminalsAndHonors = rh.Melds.All(x => x.Tiles.All(y => y is Honors) || x.Tiles.All(y => y is ITerminals));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && allTerminalsAndHonors)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && allTerminalsAndHonors)
                 {
                     //混老頭
                     rh.Yakus.Add(new AllTerminalsAndHonors());
                 }
 
                 var mixedOutside = rh.Melds.All(x => x.Tiles.All(y => y is Honors) || x.Tiles.Has(y => y is ITerminals));
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !pureOutside && !allTerminalsAndHonors && mixedOutside)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !pureOutside && !allTerminalsAndHonors && mixedOutside)
                 {
                     //混全帯么九
                     rh.Yakus.Add(new MixedOutsideHand());
                 }
 
                 var allTriple = rh.Melds.All(x => x is not Run);
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && allTriple)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && allTriple)
                 {
                     //対々和
                     rh.Yakus.Add(new AllTriples());
@@ -457,35 +464,35 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
                 var threeConcealedTriples = rh.Melds.Where(x => (x is Triple t && (t.CallFrom == null || t.CallFrom == EOpponent.Unknown) && (rh is not CompletedHand || rh is CompletedHand ch && ch.WaitForm.Any(y => y.WaitTiles.Any(z => z.EqualsRedSuitedTileIncluding(t.Tiles[0]))))) || (x is Quad q && q.Type == KongType.ConcealedKong)).Count() == 3;
                 bool threeConcealedTriplesTsumo = IsThreeConcealedTriplesTsumo(agariType, rh);
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && (threeConcealedTriples || threeConcealedTriplesTsumo))
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && (threeConcealedTriples || threeConcealedTriplesTsumo))
                 {
                     //三暗刻
                     rh.Yakus.Add(new ThreeConcealedTriples());
                 }
 
                 var threeQuads = rh.Melds.Count(x => x is Quad) == 3;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && threeQuads)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && threeQuads)
                 {
                     //三槓子
                     rh.Yakus.Add(new ThreeQuads());
                 }
 
                 var valueTilesWhite = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<White>()))) == 1;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesWhite)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesWhite)
                 {
                     //役牌白
                     rh.Yakus.Add(new ValueTiles<White>(ValueType.ThreeElementTille));
                 }
 
                 var valueTilesGreen = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<Green>()))) == 1;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesGreen)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesGreen)
                 {
                     //役牌發
                     rh.Yakus.Add(new ValueTiles<Green>(ValueType.ThreeElementTille));
                 }
 
                 var valueTilesRed = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<Red>()))) == 1;
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesRed)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesRed)
                 {
                     //役牌中
                     rh.Yakus.Add(new ValueTiles<Red>(ValueType.ThreeElementTille));
@@ -495,7 +502,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 {
                     case WindOfTheRound.East:
                         var valueTilesEast = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<East>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesEast)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesEast)
                         {
                             //役牌 場風牌 東
                             rh.Yakus.Add(new ValueTiles<East>(ValueType.FiledStyleTiles));
@@ -503,7 +510,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         break;
                     case WindOfTheRound.South:
                         var valueTilesSouth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<South>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesSouth)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesSouth)
                         {
                             //役牌 場風牌 南
                             rh.Yakus.Add(new ValueTiles<South>(ValueType.FiledStyleTiles));
@@ -511,7 +518,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         break;
                     case WindOfTheRound.West:
                         var valueTilesWest = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<West>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesWest)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesWest)
                         {
                             //役牌 場風牌 西
                             rh.Yakus.Add(new ValueTiles<West>(ValueType.FiledStyleTiles));
@@ -519,7 +526,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         break;
                     case WindOfTheRound.North:
                         var valueTilesNorth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<North>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesNorth)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesNorth)
                         {
                             //役牌 場風牌 北
                             rh.Yakus.Add(new ValueTiles<North>(ValueType.FiledStyleTiles));
@@ -531,7 +538,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 {
                     case OnesOwnWind.East:
                         var valueTilesEast = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<East>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesEast)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesEast)
                         {
                             //役牌 自風牌 東
                             rh.Yakus.Add(new ValueTiles<East>(ValueType.SelfStyledTile));
@@ -539,7 +546,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         break;
                     case OnesOwnWind.South:
                         var valueTilesSouth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<South>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesSouth)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesSouth)
                         {
                             //役牌 自風牌 南
                             rh.Yakus.Add(new ValueTiles<South>(ValueType.SelfStyledTile));
@@ -547,7 +554,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         break;
                     case OnesOwnWind.West:
                         var valueTilesWest = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<West>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesWest)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesWest)
                         {
                             //役牌 自風牌 西
                             rh.Yakus.Add(new ValueTiles<West>(ValueType.SelfStyledTile));
@@ -555,7 +562,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         break;
                     case OnesOwnWind.North:
                         var valueTilesNorth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<North>()))) == 1;
-                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesNorth)
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && valueTilesNorth)
                         {
                             //役牌 自風牌 北
                             rh.Yakus.Add(new ValueTiles<North>(ValueType.SelfStyledTile));
