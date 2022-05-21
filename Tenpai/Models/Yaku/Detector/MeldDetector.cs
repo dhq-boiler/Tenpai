@@ -469,6 +469,99 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     //三槓子
                     rh.Yakus.Add(new ThreeQuads());
                 }
+
+                var valueTilesWhite = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<White>()))) == 1;
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesWhite)
+                {
+                    //役牌白
+                    rh.Yakus.Add(new ValueTiles<White>(ValueType.ThreeElementTille));
+                }
+
+                var valueTilesGreen = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<Green>()))) == 1;
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesGreen)
+                {
+                    //役牌發
+                    rh.Yakus.Add(new ValueTiles<Green>(ValueType.ThreeElementTille));
+                }
+
+                var valueTilesRed = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<Red>()))) == 1;
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesRed)
+                {
+                    //役牌中
+                    rh.Yakus.Add(new ValueTiles<Red>(ValueType.ThreeElementTille));
+                }
+
+                switch (windOfTheRound)
+                {
+                    case WindOfTheRound.East:
+                        var valueTilesEast = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<East>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesEast)
+                        {
+                            //役牌 場風牌 東
+                            rh.Yakus.Add(new ValueTiles<East>(ValueType.FiledStyleTiles));
+                        }
+                        break;
+                    case WindOfTheRound.South:
+                        var valueTilesSouth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<South>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesSouth)
+                        {
+                            //役牌 場風牌 南
+                            rh.Yakus.Add(new ValueTiles<South>(ValueType.FiledStyleTiles));
+                        }
+                        break;
+                    case WindOfTheRound.West:
+                        var valueTilesWest = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<West>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesWest)
+                        {
+                            //役牌 場風牌 西
+                            rh.Yakus.Add(new ValueTiles<West>(ValueType.FiledStyleTiles));
+                        }
+                        break;
+                    case WindOfTheRound.North:
+                        var valueTilesNorth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<North>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesNorth)
+                        {
+                            //役牌 場風牌 北
+                            rh.Yakus.Add(new ValueTiles<North>(ValueType.FiledStyleTiles));
+                        }
+                        break;
+                }
+
+                switch (onesOwnWind)
+                {
+                    case OnesOwnWind.East:
+                        var valueTilesEast = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<East>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesEast)
+                        {
+                            //役牌 自風牌 東
+                            rh.Yakus.Add(new ValueTiles<East>(ValueType.SelfStyledTile));
+                        }
+                        break;
+                    case OnesOwnWind.South:
+                        var valueTilesSouth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<South>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesSouth)
+                        {
+                            //役牌 自風牌 南
+                            rh.Yakus.Add(new ValueTiles<South>(ValueType.SelfStyledTile));
+                        }
+                        break;
+                    case OnesOwnWind.West:
+                        var valueTilesWest = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<West>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesWest)
+                        {
+                            //役牌 自風牌 西
+                            rh.Yakus.Add(new ValueTiles<West>(ValueType.SelfStyledTile));
+                        }
+                        break;
+                    case OnesOwnWind.North:
+                        var valueTilesNorth = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y.EqualsRedSuitedTileIncluding(Tile.CreateInstance<North>()))) == 1;
+                        if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && valueTilesNorth)
+                        {
+                            //役牌 自風牌 北
+                            rh.Yakus.Add(new ValueTiles<North>(ValueType.SelfStyledTile));
+                        }
+                        break;
+                }
             }
         }
 
