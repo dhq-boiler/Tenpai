@@ -49,7 +49,7 @@ namespace Tenpai.Models.Yaku.Meld
 
         public override int GetHashCode()
         {
-            return Tiles[0].GetHashCode();
+            return base.GetHashCode();
         }
     }
 

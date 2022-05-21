@@ -54,6 +54,23 @@ namespace Tenpai.Models.Yaku.Meld
             _Waiting.Add(_Set.Single());
         }
 
+        public override void ComputeWaitTiles(TileCollection tiles2)
+        {
+            Debug.Assert(_Set.Count() == 1);
+            _Waiting.Clear();
+            var red = Tile.CreateRedInstance(_Set.Single().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+            var normal = Tile.CreateInstance(_Set.Single().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+
+            if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(red)).Count() == 0)
+            {
+                _Waiting.Add(red);
+            }
+            if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(normal)).Count() <= 3)
+            {
+                _Waiting.Add(normal);
+            }
+        }
+
         public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
         {
             var newObj = new Single(status);

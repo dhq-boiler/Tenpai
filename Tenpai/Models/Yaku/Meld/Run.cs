@@ -20,12 +20,7 @@ namespace Tenpai.Models.Yaku.Meld
 
         public override int GetHashCode()
         {
-            int hash = 0;
-            foreach (var tile in Tiles)
-            {
-                hash ^= tile.GetHashCode();
-            }
-            return hash;
+            return base.GetHashCode();
         }
 
         public override string ToString()

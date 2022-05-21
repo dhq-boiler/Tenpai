@@ -23,11 +23,26 @@ namespace Tenpai.Models.Yaku.Meld
             _Set.Add(wait);
             _Waiting.Add(wait);
         }
-
         public override void ComputeWaitTiles()
         {
             _Waiting.Clear();
             _Waiting.Add(_Set[0]);
+        }
+
+        public override void ComputeWaitTiles(TileCollection tiles2)
+        {
+            _Waiting.Clear(); 
+            var red = Tile.CreateRedInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+            var normal = Tile.CreateInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+
+            if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(red)).Count() == 0)
+            {
+                _Waiting.Add(red);
+            }
+            if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(normal)).Count() <= 3)
+            {
+                _Waiting.Add(normal);
+            }
         }
 
         public override bool Equals(object obj)

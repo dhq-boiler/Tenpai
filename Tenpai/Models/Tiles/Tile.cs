@@ -352,15 +352,23 @@ namespace Tenpai.Models.Tiles
             return a && b && c && d;
         }
 
-        public override int GetHashCode()
+        public bool EqualsConsiderCodeAndRed(object obj)
         {
-            int hash = Code.GetHashCode();
-            if (this is IRedSuitedTile r)
-            {
-                hash ^= r.IsRedSuited.GetHashCode();
-            }
-            return hash;
+            if (!(obj is Tile t)) return false;
+            var a = Code.Equals(t.Code);
+            var d = ((this is IRedSuitedTile rthis && obj is IRedSuitedTile r && rthis.IsRedSuited == r.IsRedSuited) || !(this is IRedSuitedTile && obj is IRedSuitedTile));
+            return a && d;
         }
+
+        //public override int GetHashCode()
+        //{
+        //    int hash = Code.GetHashCode();
+        //    if (this is IRedSuitedTile r)
+        //    {
+        //        hash ^= r.IsRedSuited.GetHashCode();
+        //    }
+        //    return hash;
+        //}
 
         public object Clone()
         {

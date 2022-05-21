@@ -78,13 +78,23 @@ namespace Tenpai.Models.Yaku.Meld
                 return false;
             return true;
         }
-
         public override int GetHashCode()
         {
-            int hash = base.GetHashCode();
+            int hash = 0;
             foreach (var meld in Melds)
             {
                 hash ^= meld.GetHashCode();
+            }
+            foreach (var wait in WaitingTiles)
+            {
+                if (wait is IRedSuitedTile r)
+                {
+                    hash ^= wait.GetHashCode() ^ (r.IsRedSuited ? 1 : 0);
+                }
+                else
+                {
+                    hash ^= wait.GetHashCode();
+                }
             }
             return hash;
         }

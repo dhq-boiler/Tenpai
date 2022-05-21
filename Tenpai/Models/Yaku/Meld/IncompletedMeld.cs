@@ -93,17 +93,29 @@ namespace Tenpai.Models.Yaku.Meld
 
         public virtual void ComputeWaitTiles()
         {
+            Console.WriteLine($"{GetType().Name}");
+            throw new NotImplementedException();
+        }
+
+        public virtual void ComputeWaitTiles(TileCollection tiles2)
+        {
+            Console.WriteLine($"{GetType().Name}");
             throw new NotImplementedException();
         }
 
         public override int GetHashCode()
         {
-            int hash = 0;
-            foreach (var waittile in WaitTiles)
+            int hashcode = 0;
+            hashcode ^= GetType().Name.GetHashCode();
+            foreach (var tile in Tiles)
             {
-                hash ^= waittile.GetHashCode();
+                hashcode ^= tile.GetHashCode();
             }
-            return hash;
+            //foreach (var waittile in WaitTiles)
+            //{
+            //    hashcode ^= waittile.GetHashCode();
+            //}
+            return hashcode;
         }
 
         public override string ToString()

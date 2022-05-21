@@ -25,6 +25,12 @@ namespace Tenpai.Models.Yaku.Meld
             WaitingTiles = new Tile[] { wait1, wait2 };
         }
 
+        public ManualWaitReadyHand(Tile[] waitTiles, params Meld[] melds)
+            : base(melds)
+        {
+            WaitingTiles = waitTiles;
+        }
+
         private Tile[] _WaitTiles;
         public override Tile[] WaitingTiles
         {
@@ -34,9 +40,9 @@ namespace Tenpai.Models.Yaku.Meld
 
         public override bool Equals(object obj)
         {
-            if (!(obj is ManualWaitReadyHand))
+            if (!(obj is ReadyHand))
                 return false;
-            var other = obj as ManualWaitReadyHand;
+            var other = obj as ReadyHand;
             foreach (var meld in Melds)
             {
                 if (!other.Melds.Contains(meld))
@@ -49,10 +55,21 @@ namespace Tenpai.Models.Yaku.Meld
 
         public override int GetHashCode()
         {
-            int hash = base.GetHashCode();
-            foreach (var w in WaitingTiles)
+            int hash = 0;
+            foreach (var meld in Melds)
             {
-                hash ^= w.GetHashCode();
+                hash ^= meld.GetHashCode();
+            }
+            foreach (var wait in WaitingTiles)
+            {
+                if (wait is IRedSuitedTile r)
+                {
+                    hash ^= wait.GetHashCode() ^ (r.IsRedSuited ? 1 : 0);
+                }
+                else
+                {
+                    hash ^= wait.GetHashCode();
+                }
             }
             return hash;
         }

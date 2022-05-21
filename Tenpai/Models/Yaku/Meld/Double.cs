@@ -36,7 +36,40 @@ namespace Tenpai.Models.Yaku.Meld
         {
             Debug.Assert(_Set.Count() == 2);
             _Waiting.Clear();
-            _Waiting.Add(_Set.First());
+
+            if (_Set.First() is IRedSuitedTile)
+            {
+                var red = Tile.CreateRedInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, _Set.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+                if (_Set.Where(x => x.EqualsConsiderCodeAndRed(red)).Count() == 0)
+                {
+                    _Waiting.Add(red);
+                }
+            }
+            var normal = Tile.CreateInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, _Set.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+            if (_Set.Where(x => x.EqualsConsiderCodeAndRed(normal)).Count() < 3)
+            {
+                _Waiting.Add(normal);
+            }
+        }
+
+        public override void ComputeWaitTiles(TileCollection tiles2)
+        {
+            Debug.Assert(_Set.Count() == 2);
+            _Waiting.Clear();
+
+            if (_Set.First() is IRedSuitedTile)
+            {
+                var red = Tile.CreateRedInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+                if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(red)).Count() == 0)
+                {
+                    _Waiting.Add(red);
+                }
+            }
+            var normal = Tile.CreateInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
+            if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(normal)).Count() <= 3)
+            {
+                _Waiting.Add(normal);
+            }
         }
 
         public override bool Equals(object obj)

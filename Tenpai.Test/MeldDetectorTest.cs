@@ -28,6 +28,141 @@ namespace Tenpai.Test
         }
 
         [Test]
+        public void Dictinct試験2()
+        {
+            var completedHands = new CompletedHand[]
+            {
+                new CompletedHand(new Triple<Character_2>(),
+                                  new Triple<Character_3>(),
+                                  new Triple<Character_4>(),
+                                  new Triple<Dot_5>(),
+                                  new Double<Character_8>()),
+                new CompletedHand(new Triple<Character_2>(),
+                                  new Triple<Character_3>(),
+                                  new Triple<Character_4>(),
+                                  new Triple<Dot_5>(),
+                                  new Double<Character_8>()),
+                new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
+                                  new Run<Character_2, Character_3, Character_4>(),
+                                  new Run<Character_2, Character_3, Character_4>(),
+                                  new Triple<Dot_5>(),
+                                  new Double<Character_8>()),
+                new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
+                                  new Run<Character_2, Character_3, Character_4>(),
+                                  new Run<Character_2, Character_3, Character_4>(),
+                                  new Triple<Dot_5>(),
+                                  new Double<Character_8>()),
+            };
+            var distincted = completedHands.Distinct(new DelegateComparer<ReadyHand, int>(x =>
+            {
+                var hash = x.GetHashCode();
+                Console.WriteLine($"{x} {hash}");
+                return hash;
+            }));
+            Assert.That(distincted.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void Dictinct試験3()
+        {
+            var readyHands = new ReadyHand[]
+            {
+                new ManualWaitReadyHand(Tile.CreateInstance<Character_2>(),
+                                        new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Triple<Dot_5>(),
+                                        new Double<Character_8>()),
+                new ManualWaitReadyHand(Tile.CreateInstance<Character_5>(),
+                                        new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Triple<Dot_5>(),
+                                        new Double<Character_8>()),
+                new ManualWaitReadyHand(Tile.CreateRedInstance<Character_5>(),
+                                        new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Triple<Dot_5>(),
+                                        new Double<Character_8>()),
+                new ManualWaitReadyHand(Tile.CreateInstance<Character_5R>(),
+                                        new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Triple<Dot_5>(),
+                                        new Double<Character_8>()),
+                new ManualWaitReadyHand(Tile.CreateRedInstance<Character_5R>(),
+                                        new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Run<Character_3, Character_4, Character_5>(),
+                                        new Triple<Dot_5>(),
+                                        new Double<Character_8>()),
+            };
+            var distincted = readyHands.Distinct(new DelegateComparer<ReadyHand, int>(x =>
+            {
+                var hash = x.GetHashCode();
+                Console.WriteLine($"{x} {hash}");
+                return hash;
+            }));
+            Assert.That(distincted.Count(), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void Distinct試験4()
+        {
+            TileCollection tiles = new TileCollection(new Tile[]
+                {
+                    Tile.CreateInstance<Character_2>(),
+                    Tile.CreateInstance<Character_2>(),
+                    Tile.CreateInstance<Character_2>(),
+                    Tile.CreateInstance<Character_3>(),
+                    Tile.CreateInstance<Character_3>(),
+                    Tile.CreateInstance<Character_3>(),
+                    Tile.CreateInstance<Character_4>(),
+                    Tile.CreateInstance<Character_4>(),
+                    Tile.CreateInstance<Character_4>(),
+                    Tile.CreateInstance<Dot_5>(),
+                    Tile.CreateInstance<Dot_5>(),
+                    Tile.CreateInstance<Character_8>(),
+                    Tile.CreateInstance<Character_8>(),
+                });
+            var readyHands = new ReadyHand[]
+            {
+                new ManualWaitReadyHand(Tile.CreateInstance<Dot_5>(),
+                                        new Run<Character_2, Character_3, Character_4>(),
+                                        new Run<Character_2, Character_3, Character_4>(),
+                                        new Run<Character_2, Character_3, Character_4>(),
+                                        new Double<Dot_5>(),
+                                        new Double<Character_8>()),
+                new ManualWaitReadyHand(Tile.CreateInstance<Character_8>(),
+                                        new Run<Character_2, Character_3, Character_4>(),
+                                        new Run<Character_2, Character_3, Character_4>(),
+                                        new Run<Character_2, Character_3, Character_4>(),
+                                        new Double<Dot_5>(),
+                                        new Double<Character_8>()),
+                new ManualWaitReadyHand(Tile.CreateInstance<Dot_5>(),
+                                        new Triple<Character_2>(),
+                                        new Triple<Character_3>(),
+                                        new Triple<Character_4>(),
+                                        new Double<Dot_5>(),
+                                        new Double<Character_8>()),
+                new ManualWaitReadyHand(Tile.CreateInstance<Character_8>(),
+                                        new Triple<Character_2>(),
+                                        new Triple<Character_3>(),
+                                        new Triple<Character_4>(),
+                                        new Double<Dot_5>(),
+                                        new Double<Character_8>()),
+            };
+            var distincted = readyHands.Distinct(new DelegateComparer<ReadyHand, int>(x =>
+            {
+                var hash = x.GetHashCode();
+                Console.WriteLine($"{x} {hash}");
+                return hash;
+            }));
+            Assert.That(distincted.Count(), Is.EqualTo(4));
+        }
+
+        [Test]
         public void FindCompletedHandsTest1()
         {
             TileCollection tiles = new TileCollection(new Tile[]
@@ -56,10 +191,12 @@ namespace Tenpai.Test
                                                            new Run<Dot_3,Dot_4,Dot_5>(),
                                                            new Double<Dot_1>(),
                                                            new Run<Bamboo_4, Bamboo_5, Bamboo_6>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -93,10 +230,12 @@ namespace Tenpai.Test
                                                         new Double<Bamboo_6>(),
                                                         new Triple<Bamboo_7>(),
                                                         new Run<Character_6, Character_7, Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -130,16 +269,20 @@ namespace Tenpai.Test
                                                            new Triple<Character_4>(),
                                                            new Triple<Dot_5>(),
                                                            new Double<Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (completedHand.Equals(new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
                                                                 new Run<Character_2, Character_3, Character_4>(),
                                                                 new Run<Character_2, Character_3, Character_4>(),
                                                                 new Triple<Dot_5>(),
                                                                 new Double<Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
             Assert.That(completedHands, Has.Length.EqualTo(2));
@@ -176,10 +319,12 @@ namespace Tenpai.Test
                                                            new Double<Character_8>(),
                                                            new Double<East>(),
                                                            new Double<White>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -228,94 +373,124 @@ namespace Tenpai.Test
                                                        new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                        new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                        new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Double<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
                                                             new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
                                                             new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
                                                             new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                             new Run<Bamboo_3, Bamboo_4, Bamboo_5>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
                                                             new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
                                                             new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                             new Run<Bamboo_3, Bamboo_4, Bamboo_5>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                             new Run<Bamboo_8, Bamboo_9, Bamboo_7>(),
                                                             new Double<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Double<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Double<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Double<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Double<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Double<Bamboo_2>(),
                                                             new Run<Bamboo_3, Bamboo_4, Bamboo_5>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Double<Bamboo_5>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                             new Double<Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else
                     {
-                        Assert.Fail();
+                        Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
                 }
             }
@@ -379,7 +554,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                                new Double<Character_9>(),
                                                                new Single<Dot_1>(),
@@ -393,7 +570,9 @@ namespace Tenpai.Test
                                                                new Single<White>(),
                                                                new Single<Green>(),
                                                                new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Double<Dot_1>(),
@@ -407,7 +586,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -421,7 +602,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -435,7 +618,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -449,7 +634,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -463,7 +650,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -477,7 +666,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -491,7 +682,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -505,7 +698,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -519,7 +714,9 @@ namespace Tenpai.Test
                                                            new Double<White>(),
                                                            new Single<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -533,7 +730,9 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Double<Green>(),
                                                            new Single<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
                                                            new Single<Character_9>(),
                                                            new Single<Dot_1>(),
@@ -547,10 +746,12 @@ namespace Tenpai.Test
                                                            new Single<White>(),
                                                            new Single<Green>(),
                                                            new Double<Red>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else
                     {
-                        Assert.Fail();
+                        Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
                 }
             }
@@ -598,16 +799,20 @@ namespace Tenpai.Test
                                                                new Double<Dot_1>(),
                                                                new Run<Dot_6, Dot_7, Dot_8>(),
                                                                new Run<Bamboo_6, Bamboo_7, Bamboo_8>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                                     new Run<Character_3, Character_4, Character_5>(),
                                                                     new Double<Dot_1>(),
                                                                     new Run<Dot_6, Dot_7, Dot_8>(),
                                                                     new Run<Bamboo_6, Bamboo_7, Bamboo_8>())))
-                    { }
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else
                     {
-                        Assert.Fail();
+                        Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
                 }
             }
@@ -644,17 +849,21 @@ namespace Tenpai.Test
                                                              new Run<Dot_3, Dot_4, Dot_5>(),
                                                              new Double<Dot_1>(),
                                                              new OpenWait<Bamboo_4, Bamboo_5, Bamboo_6, Bamboo_7>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_7>(),
                                                                   new Run<Character_1, Character_2, Character_3>(),
                                                                   new Run<Character_4, Character_5, Character_6>(),
                                                                   new Run<Dot_3, Dot_4, Dot_5>(),
                                                                   new Double<Dot_1>(),
                                                                   new OpenWait<Bamboo_4, Bamboo_5, Bamboo_6, Bamboo_7>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -690,17 +899,21 @@ namespace Tenpai.Test
                                                              new Double<Bamboo_6>(),
                                                              new Double<Bamboo_7>(),
                                                              new Run<Character_6, Character_7, Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_7>(),
                                                                   new Run<Character_2, Character_3, Character_4>(),
                                                                   new Run<Dot_5, Dot_6, Dot_7>(),
                                                                   new Double<Bamboo_6>(),
                                                                   new Double<Bamboo_7>(),
                                                                   new Run<Character_6, Character_7, Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -728,6 +941,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Dummy>(),
                 });
             var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            Console.WriteLine("=========================================");
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Dot_5>(),
@@ -736,31 +950,39 @@ namespace Tenpai.Test
                                                              new Triple<Character_4>(),
                                                              new Double<Dot_5>(),
                                                              new Double<Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Dot_5>(),
                                                              new Run<Character_2, Character_3, Character_4>(),
                                                              new Run<Character_2, Character_3, Character_4>(),
                                                              new Run<Character_2, Character_3, Character_4>(),
                                                              new Double<Dot_5>(),
                                                              new Double<Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_8>(),
                                                                   new Triple<Character_2>(),
                                                                   new Triple<Character_3>(),
                                                                   new Triple<Character_4>(),
                                                                   new Double<Dot_5>(),
                                                                   new Double<Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_8>(),
                                                              new Run<Character_2, Character_3, Character_4>(),
                                                              new Run<Character_2, Character_3, Character_4>(),
                                                              new Run<Character_2, Character_3, Character_4>(),
                                                              new Double<Dot_5>(),
                                                              new Double<Character_8>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(readyHand.ToString());
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -797,10 +1019,12 @@ namespace Tenpai.Test
                                                              new Double<Character_8>(),
                                                              new Double<East>(),
                                                              new Single<White>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -835,7 +1059,7 @@ namespace Tenpai.Test
                                                              new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                              new Double<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_9>(),
                                                                   new Double<Bamboo_1>(),
@@ -844,7 +1068,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
                                                                   new Double<Bamboo_1>(),
@@ -853,7 +1077,7 @@ namespace Tenpai.Test
                                                                   new OpenWait<Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_9>(),
                                                                   new Double<Bamboo_1>(),
@@ -862,7 +1086,7 @@ namespace Tenpai.Test
                                                                   new OpenWait<Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_3>(),
                                                                   new Double<Bamboo_1>(),
@@ -871,7 +1095,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
                                                                   new Double<Bamboo_1>(),
@@ -880,7 +1104,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_3>(),
                                                                   new Double<Bamboo_1>(),
@@ -889,7 +1113,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_7>(),
                                                                   new Triple<Bamboo_1>(),
@@ -898,7 +1122,7 @@ namespace Tenpai.Test
                                                                   new EdgeWait<Bamboo_8, Bamboo_9, Bamboo_7>(),
                                                                   new Double<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_4>(),
                                                                   new Triple<Bamboo_1>(),
@@ -907,7 +1131,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_7>(),
                                                                   new Triple<Bamboo_1>(),
@@ -916,7 +1140,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_1>(),
                                                                   new Triple<Bamboo_1>(),
@@ -925,7 +1149,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_4>(),
                                                                   new Triple<Bamboo_1>(),
@@ -934,7 +1158,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                                   new Double<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_2>(),
                                                                   new Triple<Bamboo_1>(),
@@ -943,7 +1167,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_5>(),
                                                                   new Triple<Bamboo_1>(),
@@ -952,7 +1176,7 @@ namespace Tenpai.Test
                                                                   new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_8>(),
                                                                   new Triple<Bamboo_1>(),
@@ -961,12 +1185,11 @@ namespace Tenpai.Test
                                                                   new Single<Bamboo_8>(),
                                                                   new Triple<Bamboo_9>())))
                 {
-                    Console.WriteLine(readyHand);
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
                 else
                 {
-                    Console.WriteLine($"FAILED:{readyHand}");
-                    Assert.Fail();
+                    Assert.Fail($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1009,7 +1232,9 @@ namespace Tenpai.Test
                                                              new Single<White>(),
                                                              new Single<Green>(),
                                                              new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_9>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1024,7 +1249,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Dot_1>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1039,7 +1266,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Dot_9>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1054,7 +1283,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_1>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1069,7 +1300,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_9>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1084,7 +1317,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<East>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1099,7 +1334,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<South>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1114,7 +1351,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<West>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1129,7 +1368,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<North>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1144,7 +1385,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<White>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1159,7 +1402,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Green>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1174,7 +1419,9 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Red>(),
                                                                   new Single<Character_1>(),
                                                                   new Single<Character_9>(),
@@ -1189,10 +1436,12 @@ namespace Tenpai.Test
                                                                   new Single<White>(),
                                                                   new Single<Green>(),
                                                                   new Single<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1236,10 +1485,12 @@ namespace Tenpai.Test
                                                              new Single<White>(),
                                                              new Single<Green>(),
                                                              new Double<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail();
+                    Assert.Fail($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1501,7 +1752,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_6>(),
             });
             var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
-            Assert.That(readyHands, Has.Length.EqualTo(5));
+            Console.WriteLine("=========================================");
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_2>(),
@@ -1510,40 +1761,51 @@ namespace Tenpai.Test
                                                              new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
                                                              new Run<Dot_7, Dot_8, Dot_9>(),
                                                              new Double<Bamboo_6>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_2>(),
                                                                   new Double<Character_2>(),
                                                                   new Triple<Character_3>(),
                                                                   new Triple<Character_4>(),
                                                                   new Run<Dot_7, Dot_8, Dot_9>(),
                                                                   new Double<Bamboo_6>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Character_5>(),
                                                                   new Run<Character_2, Character_3, Character_4>(),
                                                                   new Run<Character_2, Character_3, Character_4>(),
                                                                   new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
                                                                   new Run<Dot_7, Dot_8, Dot_9>(),
                                                                   new Double<Bamboo_6>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateRedInstance<Character_5>(),
                                                                   new Run<Character_2, Character_3, Character_4>(),
                                                                   new Run<Character_2, Character_3, Character_4>(),
                                                                   new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
                                                                   new Run<Dot_7, Dot_8, Dot_9>(),
                                                                   new Double<Bamboo_6>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
                                                                   new Double<Character_2>(),
                                                                   new Triple<Character_3>(),
                                                                   new Triple<Character_4>(),
                                                                   new Run<Dot_7, Dot_8, Dot_9>(),
                                                                   new Double<Bamboo_6>())))
-                { }
+                {
+                    Console.WriteLine($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(readyHand.ToString());
+                    Assert.Fail($"{readyHand} {Convert.ToString(readyHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
+            Assert.That(readyHands, Has.Length.EqualTo(5));
         }
 
         [Test]
@@ -1575,10 +1837,12 @@ namespace Tenpai.Test
                                                            new Triple<Red>(),
                                                            new Triple<North>(),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1617,10 +1881,12 @@ namespace Tenpai.Test
                                                            new Triple<Red>(),
                                                            new Quad<North>(KongType.LargeMeldedKong),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1659,10 +1925,12 @@ namespace Tenpai.Test
                                                            new Triple<Red>(),
                                                            new Quad<North>(KongType.ConcealedKong),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1697,10 +1965,12 @@ namespace Tenpai.Test
                                                            new Triple<Character_1>(),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                            new Double<Dot_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1739,10 +2009,12 @@ namespace Tenpai.Test
                                                            new Triple<Character_1>(),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                            new Double<Dot_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1782,10 +2054,12 @@ namespace Tenpai.Test
                                                            new Quad<Character_1>(KongType.ConcealedKong),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                            new Double<Dot_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1825,10 +2099,12 @@ namespace Tenpai.Test
                                                            new Quad<Character_1>(KongType.LargeMeldedKong),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                            new Double<Dot_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1868,10 +2144,12 @@ namespace Tenpai.Test
                                                            new Quad<Character_1>(KongType.SmallMeldedKong),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                            new Double<Dot_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1906,10 +2184,12 @@ namespace Tenpai.Test
                                                            new Triple<Red>(),
                                                            new Triple<North>(),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1948,10 +2228,12 @@ namespace Tenpai.Test
                                                            new Triple<Red>(),
                                                            new Triple<North>(),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -1991,10 +2273,12 @@ namespace Tenpai.Test
                                                            new Quad<Red>(KongType.ConcealedKong),
                                                            new Triple<North>(),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2034,10 +2318,12 @@ namespace Tenpai.Test
                                                            new Quad<Red>(KongType.LargeMeldedKong),
                                                            new Triple<North>(),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2077,10 +2363,12 @@ namespace Tenpai.Test
                                                            new Quad<Red>(KongType.SmallMeldedKong),
                                                            new Triple<North>(),
                                                            new Double<East>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2114,10 +2402,12 @@ namespace Tenpai.Test
                                                            new Triple<Bamboo_1>(),
                                                            new Triple<Character_1>(),
                                                            new Double<Character_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2155,10 +2445,12 @@ namespace Tenpai.Test
                                                            new Triple<Bamboo_1>(),
                                                            new Triple<Character_1>(),
                                                            new Double<Character_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2197,10 +2489,12 @@ namespace Tenpai.Test
                                                            new Quad<Bamboo_1>(KongType.ConcealedKong),
                                                            new Triple<Character_1>(),
                                                            new Double<Character_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2239,10 +2533,12 @@ namespace Tenpai.Test
                                                            new Quad<Bamboo_1>(KongType.LargeMeldedKong),
                                                            new Triple<Character_1>(),
                                                            new Double<Character_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2281,10 +2577,12 @@ namespace Tenpai.Test
                                                            new Quad<Bamboo_1>(KongType.SmallMeldedKong),
                                                            new Triple<Character_1>(),
                                                            new Double<Character_9>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2323,10 +2621,12 @@ namespace Tenpai.Test
                                                            new Triple<Bamboo_3>(),
                                                            new Triple<White>(),
                                                            new Double<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }
@@ -2365,10 +2665,12 @@ namespace Tenpai.Test
                                                            new Triple<East>(),
                                                            new Triple<White>(),
                                                            new Double<Red>())))
-                { }
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
                 else
                 {
-                    Assert.Fail(completedHand.ToString());
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
         }

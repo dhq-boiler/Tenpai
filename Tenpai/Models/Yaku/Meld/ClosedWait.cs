@@ -45,7 +45,27 @@ namespace Tenpai.Models.Yaku.Meld
             if (tile is IRedSuitedTile r)
             {
                 tile = Tile.CreateRedInstance(tile.Code, Visibility.Visible, new RotateTransform(90));
-                _Waiting.Add(tile);
+                if (_Set.Where(x => x.EqualsConsiderCodeAndRed(tile)).Count() == 0)
+                {
+                    _Waiting.Add(tile);
+                }
+            }
+        }
+
+        public override void ComputeWaitTiles(TileCollection tiles2)
+        {
+            Debug.Assert(_Set.Count() == 2);
+            var tiles = _Set.ToArray();
+            _Waiting.Clear();
+            var tile = Tile.CreateInstance((int)tiles.Average(a => a.Code), Visibility.Visible, new RotateTransform(90));
+            _Waiting.Add(tile);
+            if (tile is IRedSuitedTile r)
+            {
+                tile = Tile.CreateRedInstance(tile.Code, Visibility.Visible, new RotateTransform(90));
+                if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(tile)).Count() == 0)
+                {
+                    _Waiting.Add(tile);
+                }
             }
         }
 

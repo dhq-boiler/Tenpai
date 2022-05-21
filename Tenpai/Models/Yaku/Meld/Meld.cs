@@ -83,13 +83,26 @@ namespace Tenpai.Models.Yaku.Meld
             }
             return true;
         }
-        
+
+        public int HashCode
+        {
+            get { return GetHashCode(); }
+        }
+
         public override int GetHashCode()
         {
             int hashcode = 0;
+            hashcode ^= GetType().Name.GetHashCode();
             foreach (var tile in Tiles)
             {
-                hashcode ^= tile.Code.GetHashCode();
+                if (tile is IRedSuitedTile r)
+                {
+                    hashcode ^= tile.GetHashCode() ^ (r.IsRedSuited ? 1 : 0);
+                }
+                else
+                {
+                    hashcode ^= tile.GetHashCode();
+                }
             }
             return hashcode;
         }

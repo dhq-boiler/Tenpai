@@ -47,6 +47,18 @@ namespace Tenpai.Models.Yaku.Meld
             _Waiting.Add(Tile.CreateInstance(next_hash - diff, Visibility.Visible, new RotateTransform(90)));
         }
 
+        public override void ComputeWaitTiles(TileCollection tiles2)
+        {
+            Debug.Assert(_Set.Count() == 2);
+            var terminal = _Set.Where(a => a is ITerminals).Single();
+            var next = _Set.Where(a => !(a is ITerminals)).Single();
+            int terminal_hash = terminal.Code;
+            int next_hash = next.Code;
+            int diff = terminal_hash - next_hash;
+            _Waiting.Clear();
+            _Waiting.Add(Tile.CreateInstance(next_hash - diff, Visibility.Visible, new RotateTransform(90)));
+        }
+
         public override bool Equals(object obj)
         {
             var a = obj is EdgeWait;

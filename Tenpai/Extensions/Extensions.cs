@@ -40,5 +40,12 @@ namespace Tenpai.Extensions
             }
             return true;
         }
+
+        public static TileCollection CloneAndUnion(this TileCollection collection, Tile[] targets)
+        {
+            var clone = new TileCollection(collection);
+            clone.AddRange(targets);
+            return clone;
+        }
     }
 }
