@@ -432,28 +432,28 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new TwoDoubleRuns());
                 }
 
-                var allSimples = rh.Melds.All(x => x.Tiles.CloneAndUnion(rh.WaitingTiles).All(y => !(y is ITerminals) && !(y is Honors)));
+                var allSimples = rh.Melds.All(x => PrepareTileCollectionAndEvaluate(x, rh, (collection) => collection.All(y => !(y is ITerminals) && !(y is Honors))));
                 if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && allSimples)
                 {
                     //断么九
                     rh.Yakus.Add(new AllSimples());
                 }
 
-                var pureOutside = rh.Melds.All(x => x.Tiles.CloneAndUnion(rh.WaitingTiles).Has(y => y is ITerminals));
+                var pureOutside = rh.Melds.All(x => PrepareTileCollectionAndEvaluate(x, rh, (collection) => collection.Has(y => y is ITerminals)));
                 if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && pureOutside)
                 {
                     //純全帯么九
                     rh.Yakus.Add(new PureOutsideHand());
                 }
 
-                var allTerminalsAndHonors = rh.Melds.All(x => x.Tiles.CloneAndUnion(rh.WaitingTiles).All(y => y is Honors) || x.Tiles.All(y => y is ITerminals));
+                var allTerminalsAndHonors = rh.Melds.All(x => PrepareTileCollectionAndEvaluate(x, rh, (collection) => collection.All(y => y is Honors) || x.Tiles.All(y => y is ITerminals)));
                 if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && allTerminalsAndHonors)
                 {
                     //混老頭
                     rh.Yakus.Add(new AllTerminalsAndHonors());
                 }
 
-                var mixedOutside = rh.Melds.All(x => x.Tiles.CloneAndUnion(rh.WaitingTiles).All(y => y is Honors) || x.Tiles.Has(y => y is ITerminals));
+                var mixedOutside = rh.Melds.All(x => PrepareTileCollectionAndEvaluate(x, rh, (collection) => collection.All(y => y is Honors) || x.Tiles.Has(y => y is ITerminals)));
                 if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !pureOutside && !allTerminalsAndHonors && mixedOutside)
                 {
                     //混全帯么九
@@ -595,6 +595,21 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new LittleDragons());
                 }
             }
+        }
+
+        private static bool PrepareTileCollectionAndEvaluate(Meld target, ReadyHand rh, Func<TileCollection, bool> evaluate)
+        {
+            TileCollection collection = null;
+            if (target == rh.Waiting.SingleOrDefault())
+            {
+                //ターゲットのMeldが待ち状態である時
+                collection = target.Tiles.CloneAndUnion(rh.WaitingTiles);
+            }
+            else
+            {
+                collection = target.Tiles;
+            }
+            return evaluate.Invoke(collection);
         }
 
         private static bool IsThreeConcealedTriplesTsumo<T>(AgariType agariType, T rh) where T : ReadyHand
