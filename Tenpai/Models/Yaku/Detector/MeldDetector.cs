@@ -416,9 +416,16 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new AllHonors());
                 }
 
+                var allGreen = rh.ComplementAndGetCompletedHand().Any(x => x.Melds.All(y => y.Tiles.All(z => z is Bamboo_2 || z is Bamboo_3 || z is Bamboo_4 || z is Bamboo_6 || z is Bamboo_8 || z is Green)));
+                if (allGreen)
+                {
+                    //緑一色
+                    rh.Yakus.Add(new AllGreen());
+                }
+
                 #endregion //役満
 
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors && !allGreen)
                 {
                     var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                     var isTumo = agariType == ViewModels.AgariType.Tsumo;
@@ -487,7 +494,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         rh.Yakus.Add(new MixedOutsideHand());
                     }
 
-                    var allTriple = rh.Melds.All(x => x is not Run);
+                    var allTriple = rh.Melds.All(x => x is not Run && x is not OpenWait && x is not ClosedWait && x is not EdgeWait);
                     if (allTriple)
                     {
                         //対々和
