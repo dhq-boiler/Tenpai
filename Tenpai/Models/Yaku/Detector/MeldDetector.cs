@@ -599,7 +599,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         private static bool PrepareTileCollectionAndEvaluate(Meld target, ReadyHand rh, Func<TileCollection, bool> evaluate)
         {
             TileCollection collection = null;
-            if (target == rh.Waiting.SingleOrDefault())
+            if (target == rh.Waiting.FirstOrDefault())
             {
                 //ターゲットのMeldが待ち状態である時
                 collection = target.Tiles.CloneAndUnion(rh.WaitingTiles);
