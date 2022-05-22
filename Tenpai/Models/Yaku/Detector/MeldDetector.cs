@@ -409,9 +409,16 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new SmallFourWinds());
                 }
 
+                var allHonors = rh.ComplementAndGetCompletedHand().Any(z => z.Melds.All(y => y.Tiles.All(x => x is Honors)));
+                if (allHonors)
+                {
+                    //字一色
+                    rh.Yakus.Add(new AllHonors());
+                }
+
                 #endregion //役満
 
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors)
                 {
                     var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                     var isTumo = agariType == ViewModels.AgariType.Tsumo;
