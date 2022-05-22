@@ -494,7 +494,8 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         rh.Yakus.Add(new MixedOutsideHand());
                     }
 
-                    var allTriple = rh.Melds.All(x => x is not Run && x is not OpenWait && x is not ClosedWait && x is not EdgeWait);
+                    var allTriple = rh.ComplementAndGetCompletedHand().Any(x => x.Melds.All(y => y is not Run && y is not OpenWait && y is not ClosedWait && y is not EdgeWait)
+                                                                             && x.Melds.Count(y => y is Double) == 1);
                     if (allTriple)
                     {
                         //対々和
@@ -666,6 +667,13 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     {
                         //一気通貫
                         rh.Yakus.Add(new FullStraight());
+                    }
+
+                    var sevenPairs = rh.ComplementAndGetCompletedHand().Any(x => x.Melds.Count(y => y is Double) == 7);
+                    if (sevenPairs)
+                    {
+                        //七対子
+                        rh.Yakus.Add(new SevenPairs());
                     }
                 }
             }
