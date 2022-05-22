@@ -647,17 +647,24 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         rh.Yakus.Add(new HalfFlush());
                     }
 
-                    var threeColorRuns = rh.ComplementAndGetCompletedHand().Any(x => Combination.Enumerate(x.Melds, 3, false).Any(y => y.All(z => z is Run) && IsThreeColorRuns(y[0], y[1], y[2])));
+                    var threeColorRuns = rh.ComplementAndGetCompletedHand().Any(x => Combination.Enumerate(x.Melds, 3, false).Any(y => y.All(z => z is Run) && IsThreeColor(y[0], y[1], y[2])));
                     if (threeColorRuns)
                     {
                         //三色同順
                         rh.Yakus.Add(new ThreeColorRuns());
                     }
+
+                    var threeColorTriples = rh.ComplementAndGetCompletedHand().Any(x => Combination.Enumerate(x.Melds, 3, false).Any(y => y.All(z => z is Triple || z is Quad) && IsThreeColor(y[0], y[1], y[2])));
+                    if (threeColorTriples)
+                    {
+                        //三色同刻
+                        rh.Yakus.Add(new ThreeColorTriples());
+                    }
                 }
             }
         }
 
-        private static bool IsThreeColorRuns(Meld meld1, Meld meld2, Meld meld3)
+        private static bool IsThreeColor(Meld meld1, Meld meld2, Meld meld3)
         {
             var m1Avg = meld1.Tiles.Cast<Suits>().Average(x => x.Number);
             var m2Avg = meld2.Tiles.Cast<Suits>().Average(x => x.Number);
