@@ -48,7 +48,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ReactivePropertySlim‘ã“üŒ±_ã‰Æ()
+        public void ReactivePropertySlimä»£å…¥è©¦é¨“_ä¸Šå®¶()
         {
             var vm = new MainWindowViewModel();
             var t0 = vm.Tile0.Value = Tile.CreateInstance<North>(Visibility.Visible, null, 0);
@@ -114,12 +114,12 @@ namespace Tenpai.Test
             Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null);
 
-            Assert.That(vm.Tiles, Has.ItemAt(0).Matches<Tile>(t => t.ToString().Equals("“Œ")));
-            Assert.That(vm.Tiles, Has.ItemAt(1).Matches<Tile>(t => t.ToString().Equals("“ì")));
-            Assert.That(vm.Tiles, Has.ItemAt(2).Matches<Tile>(t => t.ToString().Equals("¼")));
-            Assert.That(vm.Tiles, Has.ItemAt(3).Matches<Tile>(t => t.ToString().Equals("–k")));
-            Assert.That(vm.Tiles, Has.ItemAt(4).Matches<Tile>(t => t.ToString().Equals("–k")));
-            Assert.That(vm.Tiles, Has.ItemAt(5).Matches<Tile>(t => t.ToString().Equals("–k")));
+            Assert.That(vm.Tiles, Has.ItemAt(0).Matches<Tile>(t => t.ToString().Equals("æ±")));
+            Assert.That(vm.Tiles, Has.ItemAt(1).Matches<Tile>(t => t.ToString().Equals("å—")));
+            Assert.That(vm.Tiles, Has.ItemAt(2).Matches<Tile>(t => t.ToString().Equals("è¥¿")));
+            Assert.That(vm.Tiles, Has.ItemAt(3).Matches<Tile>(t => t.ToString().Equals("åŒ—")));
+            Assert.That(vm.Tiles, Has.ItemAt(4).Matches<Tile>(t => t.ToString().Equals("åŒ—")));
+            Assert.That(vm.Tiles, Has.ItemAt(5).Matches<Tile>(t => t.ToString().Equals("åŒ—")));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
@@ -130,7 +130,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ReactivePropertySlim‘ã“üŒ±_‘Î–Ê()
+        public void ReactivePropertySlimä»£å…¥è©¦é¨“_å¯¾é¢()
         {
             var vm = new MainWindowViewModel();
             var t0 = vm.Tile0.Value = Tile.CreateInstance<North>(Visibility.Visible, null, 0);
@@ -194,12 +194,12 @@ namespace Tenpai.Test
             Assert.That(vm.Tile4.Value, Has.Property("Rotate").Not.Null);
             Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null);
 
-            Assert.That(vm.Tiles, Has.ItemAt(0).Matches<Tile>(t => t.ToString().Equals("“Œ")));
-            Assert.That(vm.Tiles, Has.ItemAt(1).Matches<Tile>(t => t.ToString().Equals("“ì")));
-            Assert.That(vm.Tiles, Has.ItemAt(2).Matches<Tile>(t => t.ToString().Equals("¼")));
-            Assert.That(vm.Tiles, Has.ItemAt(3).Matches<Tile>(t => t.ToString().Equals("–k")));
-            Assert.That(vm.Tiles, Has.ItemAt(4).Matches<Tile>(t => t.ToString().Equals("–k")));
-            Assert.That(vm.Tiles, Has.ItemAt(5).Matches<Tile>(t => t.ToString().Equals("–k")));
+            Assert.That(vm.Tiles, Has.ItemAt(0).Matches<Tile>(t => t.ToString().Equals("æ±")));
+            Assert.That(vm.Tiles, Has.ItemAt(1).Matches<Tile>(t => t.ToString().Equals("å—")));
+            Assert.That(vm.Tiles, Has.ItemAt(2).Matches<Tile>(t => t.ToString().Equals("è¥¿")));
+            Assert.That(vm.Tiles, Has.ItemAt(3).Matches<Tile>(t => t.ToString().Equals("åŒ—")));
+            Assert.That(vm.Tiles, Has.ItemAt(4).Matches<Tile>(t => t.ToString().Equals("åŒ—")));
+            Assert.That(vm.Tiles, Has.ItemAt(5).Matches<Tile>(t => t.ToString().Equals("åŒ—")));
 
             Assert.That(vm.Tile0.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null);
@@ -210,7 +210,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void Tile_EqualsŒ±()
+        public void Tile_Equalsè©¦é¨“()
         {
             var a = Tile.CreateInstance<Bamboo_3>(Visibility.Visible, new RotateTransform(90));
             var b = Tile.CreateInstance<Bamboo_3>(Visibility.Visible, new RotateTransform(90));
@@ -220,7 +220,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void TileCollection_ContainsŒ±()
+        public void TileCollection_Containsè©¦é¨“()
         {
             var tc = new TileCollection();
             tc.Add(Tile.CreateInstance<Bamboo_1>(Visibility.Visible, null));
@@ -232,7 +232,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ã‰Æ‚©‚çˆêäİ‚ğƒ|ƒ“()
+        public void ä¸Šå®¶ã‹ã‚‰ä¸€è¬ã‚’ãƒãƒ³()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_1>();
@@ -291,7 +291,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ã‰Æ‚©‚çŒÜäİ‚ğƒ|ƒ“()
+        public void ä¸Šå®¶ã‹ã‚‰äº”è¬ã‚’ãƒãƒ³()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -353,7 +353,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‘Î–Ê‚©‚çŒÜäİ‚ğƒ|ƒ“()
+        public void å¯¾é¢ã‹ã‚‰äº”è¬ã‚’ãƒãƒ³()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -415,7 +415,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‰º‰Æ‚©‚çŒÜäİ‚ğƒ|ƒ“()
+        public void ä¸‹å®¶ã‹ã‚‰äº”è¬ã‚’ãƒãƒ³()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -477,7 +477,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ã‰Æ‚©‚çÔƒhƒ‰‚ğƒ|ƒ“()
+        public void ä¸Šå®¶ã‹ã‚‰èµ¤ãƒ‰ãƒ©ã‚’ãƒãƒ³()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -547,7 +547,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‘Î–Ê‚©‚çÔƒhƒ‰‚ğƒ|ƒ“()
+        public void å¯¾é¢ã‹ã‚‰èµ¤ãƒ‰ãƒ©ã‚’ãƒãƒ³()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -617,7 +617,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‰º‰Æ‚©‚çÔƒhƒ‰‚ğƒ|ƒ“()
+        public void ä¸‹å®¶ã‹ã‚‰èµ¤ãƒ‰ãƒ©ã‚’ãƒãƒ³()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -687,7 +687,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ã‰Æ‚©‚çƒ`[()
+        public void ä¸Šå®¶ã‹ã‚‰ãƒãƒ¼()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>();
@@ -757,7 +757,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‘Î–Ê‚©‚çƒ`[()
+        public void å¯¾é¢ã‹ã‚‰ãƒãƒ¼()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>();
@@ -827,7 +827,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‰º‰Æ‚©‚çƒ`[()
+        public void ä¸‹å®¶ã‹ã‚‰ãƒãƒ¼()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>();
@@ -898,7 +898,7 @@ namespace Tenpai.Test
 
 
         [Test]
-        public void ã‰Æ‚©‚çÔƒhƒ‰‚ğƒ`[()
+        public void ä¸Šå®¶ã‹ã‚‰èµ¤ãƒ‰ãƒ©ã‚’ãƒãƒ¼()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>(Visibility.Visible, null);
@@ -968,7 +968,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‘Î–Ê‚©‚çÔƒhƒ‰‚ğƒ`[()
+        public void å¯¾é¢ã‹ã‚‰èµ¤ãƒ‰ãƒ©ã‚’ãƒãƒ¼()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>(Visibility.Visible, null);
@@ -1038,7 +1038,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‰º‰Æ‚©‚çÔƒhƒ‰‚ğƒ`[()
+        public void ä¸‹å®¶ã‹ã‚‰èµ¤ãƒ‰ãƒ©ã‚’ãƒãƒ¼()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_3>(Visibility.Visible, null);
@@ -1108,7 +1108,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ˆêäİ‚ğˆÃƒJƒ“()
+        public void ä¸€è¬ã‚’æš—ã‚«ãƒ³()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_1>();
@@ -1179,7 +1179,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ŒÜäİ‚ğˆÃƒJƒ“()
+        public void äº”è¬ã‚’æš—ã‚«ãƒ³()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_5>(Visibility.Visible, null);
@@ -1251,7 +1251,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ã‰Æ‚©‚çˆêäİ‚ğ‘å–¾È()
+        public void ä¸Šå®¶ã‹ã‚‰ä¸€è¬ã‚’å¤§æ˜æ§“()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_1>();
@@ -1323,7 +1323,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‘Î–Ê‚©‚çˆêäİ‚ğ‘å–¾È()
+        public void å¯¾é¢ã‹ã‚‰ä¸€è¬ã‚’å¤§æ˜æ§“()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_1>(Visibility.Visible, null, 0);
@@ -1395,7 +1395,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‰º‰Æ‚©‚çˆêäİ‚ğ‘å–¾È()
+        public void ä¸‹å®¶ã‹ã‚‰ä¸€è¬ã‚’å¤§æ˜æ§“()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<Character_1>(Visibility.Visible, null, 0);
@@ -1467,7 +1467,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ã‰Æ‚©‚çŒÜäİ‚ğƒ|ƒ“‚µ‚Ä‰ÁÈ()
+        public void ä¸Šå®¶ã‹ã‚‰äº”è¬ã‚’ãƒãƒ³ã—ã¦åŠ æ§“()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -1535,7 +1535,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‘Î–Ê‚©‚çŒÜäİ‚ğƒ|ƒ“‚µ‚Ä‰ÁÈ()
+        public void å¯¾é¢ã‹ã‚‰äº”è¬ã‚’ãƒãƒ³ã—ã¦åŠ æ§“()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -1602,7 +1602,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void ‰º‰Æ‚©‚çŒÜäİ‚ğƒ|ƒ“‚µ‚Ä‰ÁÈ()
+        public void ä¸‹å®¶ã‹ã‚‰äº”è¬ã‚’ãƒãƒ³ã—ã¦åŠ æ§“()
         {
             var vm = new MainWindowViewModel();
             var mock = new Mock<IDialogService>();
@@ -1668,7 +1668,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void “Œ“ì¼‘Îq‚©‚ç‚Ì“Œƒ|ƒ““ìƒ|ƒ“¼ƒ|[ƒ“()
+        public void æ±å—è¥¿å¯¾å­ã‹ã‚‰ã®æ±ãƒãƒ³å—ãƒãƒ³è¥¿ãƒãƒ¼ãƒ³()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<East>(Visibility.Visible, null, 1);
@@ -1774,7 +1774,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void “Œ“ì¼‘Îq‚©‚ç‚Ì“Œƒ|ƒ“‚©‚ç‚Ì“Œƒcƒ‚()
+        public void æ±å—è¥¿å¯¾å­ã‹ã‚‰ã®æ±ãƒãƒ³ã‹ã‚‰ã®æ±ãƒ„ãƒ¢()
         {
             var vm = new MainWindowViewModel();
             vm.Tile0.Value = Tile.CreateInstance<East>(Visibility.Visible, null, 0);
@@ -1853,7 +1853,7 @@ namespace Tenpai.Test
         }
 
         [Test]
-        public void “Œ“ì¼‚ğƒ|ƒ“‚µ‚Ä‰ÁÈ()
+        public void æ±å—è¥¿ã‚’ãƒãƒ³ã—ã¦åŠ æ§“()
         {
             var vm = new MainWindowViewModel();
             //var mock = new Mock<IDialogService>();
@@ -1870,37 +1870,37 @@ namespace Tenpai.Test
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Kamicha));
             //Tile6 = East
 
-            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Triple>(t => t.ToString().Equals("“Œ“Œ“Œ")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Triple>(t => t.ToString().Equals("æ±æ±æ±")));
 
             ponTile = Tile.CreateInstance<South>(Visibility.Visible, new RotateTransform(90), 1);
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Toimen));
             //Tile7 = South
 
-            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Triple>(t => t.ToString().Equals("“ì“ì“ì")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Triple>(t => t.ToString().Equals("å—å—å—")));
 
             ponTile = Tile.CreateInstance<West>(Visibility.Visible, new RotateTransform(90), 2);
             vm.PonCommand.Execute(new Call(ponTile, EOpponent.Shimocha));
             //Tile8 = West
 
-            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Triple>(t => t.ToString().Equals("¼¼¼")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Triple>(t => t.ToString().Equals("è¥¿è¥¿è¥¿")));
 
-            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Triple>(t => t.ToString().Equals("“Œ“Œ“Œ")));
-            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Triple>(t => t.ToString().Equals("“ì“ì“ì")));
-            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Triple>(t => t.ToString().Equals("¼¼¼")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Triple>(t => t.ToString().Equals("æ±æ±æ±")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Triple>(t => t.ToString().Equals("å—å—å—")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Triple>(t => t.ToString().Equals("è¥¿è¥¿è¥¿")));
             
             Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
-            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //“Œ
-            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Not.Null); //“ì
-            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Not.Null); //¼
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //æ±
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Not.Null); //å—
+            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Not.Null); //è¥¿
             Assert.That(vm.Tile9.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile10.Value, Has.Property("Rotate").Null);
             Assert.That(vm.Tile11.Value, Has.Property("Rotate").Null);
@@ -1920,22 +1920,22 @@ namespace Tenpai.Test
             
             vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(ponTile, kanTile, kanTile.Clone() as Tile, kanTile.Clone() as Tile)));
 
-            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Quad>(q => q.ToString().Equals("“Œ“Œ“Œ“Œ")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(0).Matches<Quad>(q => q.ToString().Equals("æ±æ±æ±æ±")));
 
             Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
-            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //“Œ
-            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null); //“Œ
-            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Not.Null); //“ì
-            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile9.Value, Has.Property("Rotate").Not.Null); //¼
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //æ±
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null); //æ±
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Not.Null); //å—
+            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile9.Value, Has.Property("Rotate").Not.Null); //è¥¿
             Assert.That(vm.Tile10.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile11.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile12.Value, Has.Property("Rotate").Null); //X
@@ -1954,19 +1954,19 @@ namespace Tenpai.Test
 
             vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(kanTile.Clone() as Tile, ponTile, kanTile, kanTile.Clone() as Tile)));
 
-            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Quad>(q => q.ToString().Equals("“ì“ì“ì“ì")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(1).Matches<Quad>(q => q.ToString().Equals("å—å—å—å—")));
 
-            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //“Œ
-            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null); //“Œ
-            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Not.Null); //“ì
-            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Not.Null); //“ì
-            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile9.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile10.Value, Has.Property("Rotate").Not.Null); //¼
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //æ±
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null); //æ±
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Not.Null); //å—
+            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Not.Null); //å—
+            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile9.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile10.Value, Has.Property("Rotate").Not.Null); //è¥¿
             Assert.That(vm.Tile11.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile12.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile13.Value, Has.Property("Rotate").Null); //X
@@ -1984,24 +1984,24 @@ namespace Tenpai.Test
 
             vm.ShouminkanCommand.Execute(new Call(kanTile, new Quad(kanTile.Clone() as Tile, kanTile.Clone() as Tile, ponTile, kanTile)));
 
-            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Quad>(q => q.ToString().Equals("¼¼¼¼")));
+            Assert.That(vm.SarashiHai, Has.ItemAt(2).Matches<Quad>(q => q.ToString().Equals("è¥¿è¥¿è¥¿è¥¿")));
 
             Console.WriteLine(string.Join<Tile>(',', vm.Tiles.ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Rotate != null ? R(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
             Console.WriteLine(string.Join<string>(',', vm.Tiles.Select(x => x.Visibility.Value == System.Windows.Visibility.Visible ? V(x.Display.Length) : Underbar(x.Display.Length)).ToArray()));
 
-            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //“Œ
-            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null); //“Œ
-            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //“Œ
-            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Not.Null); //“ì
-            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Not.Null); //“ì
-            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //“ì
-            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile9.Value, Has.Property("Rotate").Null); //¼
-            Assert.That(vm.Tile10.Value, Has.Property("Rotate").Not.Null); //¼
-            Assert.That(vm.Tile11.Value, Has.Property("Rotate").Not.Null); //¼
+            Assert.That(vm.Tile0.Value, Has.Property("Rotate").Not.Null); //æ±
+            Assert.That(vm.Tile1.Value, Has.Property("Rotate").Not.Null); //æ±
+            Assert.That(vm.Tile2.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile3.Value, Has.Property("Rotate").Null); //æ±
+            Assert.That(vm.Tile4.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile5.Value, Has.Property("Rotate").Not.Null); //å—
+            Assert.That(vm.Tile6.Value, Has.Property("Rotate").Not.Null); //å—
+            Assert.That(vm.Tile7.Value, Has.Property("Rotate").Null); //å—
+            Assert.That(vm.Tile8.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile9.Value, Has.Property("Rotate").Null); //è¥¿
+            Assert.That(vm.Tile10.Value, Has.Property("Rotate").Not.Null); //è¥¿
+            Assert.That(vm.Tile11.Value, Has.Property("Rotate").Not.Null); //è¥¿
             Assert.That(vm.Tile12.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile13.Value, Has.Property("Rotate").Null); //X
             Assert.That(vm.Tile14.Value, Has.Property("Rotate").Null); //X
