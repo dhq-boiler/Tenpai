@@ -800,6 +800,10 @@ namespace Tenpai.ViewModels
             {
                 ConstructReadyHands();
             }
+            else
+            {
+                ReadyHands.Clear();
+            }
         }
 
         private void ConstructCompleteHands()
