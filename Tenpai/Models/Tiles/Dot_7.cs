@@ -12,6 +12,7 @@ namespace Tenpai.Models.Tiles
         {
             get { return "p7"; }
         }
+        public override int Number => 7;
 
         public override int GetHashCode()
         {

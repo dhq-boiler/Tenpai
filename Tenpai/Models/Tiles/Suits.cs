@@ -9,5 +9,7 @@ namespace Tenpai.Models.Tiles
     public abstract class Suits : Tile
     {
         public abstract Tile[] Suji();
+
+        public abstract int Number { get; }
     }
 }

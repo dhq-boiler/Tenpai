@@ -12,6 +12,7 @@ namespace Tenpai.Models.Tiles
         {
             IsRedSuited = true;
         }
+        public override int Number => 5;
 
         public override bool Equals(object obj)
         {

@@ -1,8 +1,10 @@
 ﻿using Reactive.Bindings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku.Meld.Detector;
 
 namespace Tenpai.Models.Yaku.Meld
 {
@@ -66,9 +68,15 @@ namespace Tenpai.Models.Yaku.Meld
             var hands = new List<CompletedHand>();
             var list = new List<Meld>();
             list.AddRange(Melds);
-            foreach (var wait in Waiting)
+            //国士無双13面待ちの完成形を作ろうとしている場合はlistから待ちを除外しない
+            if (MeldDetector.ThirteenOrphansTiles().IsAllContained(list.ToArray()))
+            { }
+            else
             {
-                list.Remove(wait);
+                foreach (var wait in Waiting)
+                {
+                    list.Remove(wait);
+                }
             }
             foreach (var wait in Waiting)
             {
@@ -77,7 +85,14 @@ namespace Tenpai.Models.Yaku.Meld
                 {
                     if (wait.WaitTiles.ContainsRedSuitedTileIncluding(wtile))
                     {
-                        hands.Add(new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3]));
+                        if (wait is ThirteenWait)
+                        {
+                            hands.Add(new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3], list[4], list[5], list[6], list[7], list[8], list[9], list[10], list[11]));
+                        }
+                        else
+                        {
+                            hands.Add(new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3]));
+                        }
                     }
                 }
             }

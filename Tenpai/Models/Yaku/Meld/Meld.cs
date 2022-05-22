@@ -204,6 +204,10 @@ namespace Tenpai.Models.Yaku.Meld
             {
                 return new Double(s.Tiles[0], tile);
             }
+            else if (meld is ThirteenWait t)
+            {
+                return new Single(tile);
+            }
             else
             {
                 throw new Exception("Something wrong!");

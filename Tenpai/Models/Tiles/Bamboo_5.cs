@@ -29,6 +29,7 @@ namespace Tenpai.Models.Tiles
                 return "s5";
             }
         }
+        public override int Number => 5;
 
         public override int GetHashCode()
         {

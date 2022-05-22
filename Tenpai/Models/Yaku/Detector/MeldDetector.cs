@@ -646,7 +646,29 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         //混一色
                         rh.Yakus.Add(new HalfFlush());
                     }
+
+                    var threeColorRuns = rh.ComplementAndGetCompletedHand().Any(x => Combination.Enumerate(x.Melds, 3, false).Any(y => y.All(z => z is Run) && IsThreeColorRuns(y[0], y[1], y[2])));
+                    if (threeColorRuns)
+                    {
+                        //三色同順
+                        rh.Yakus.Add(new ThreeColorRuns());
+                    }
                 }
+            }
+        }
+
+        private static bool IsThreeColorRuns(Meld meld1, Meld meld2, Meld meld3)
+        {
+            var m1Avg = meld1.Tiles.Cast<Suits>().Average(x => x.Number);
+            var m2Avg = meld2.Tiles.Cast<Suits>().Average(x => x.Number);
+            var m3Avg = meld3.Tiles.Cast<Suits>().Average(x => x.Number);
+            if (m1Avg == m2Avg && m1Avg == m3Avg)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -1018,9 +1040,9 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
-        private static List<Tile> ThirteenOrphansTiles()
+        public static TileCollection ThirteenOrphansTiles()
         {
-            return new List<Tile>(new Tile[]
+            return new TileCollection(new Tile[]
             {
                 Tile.CreateInstance<Character_1>(),
                 Tile.CreateInstance<Character_9>(),
