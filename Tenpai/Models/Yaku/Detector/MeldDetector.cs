@@ -373,7 +373,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new FourConcealedTriplesSingleWait());
                 }
 
-                var allTerminals = rh.Melds.All(x => x.Tiles.All(y => y is ITerminals));
+                var allTerminals = rh.ComplementAndGetCompletedHand().Any(z => z.Melds.All(x => x.Tiles.All(y => y is ITerminals)));
                 if (allTerminals)
                 {
                     //清老頭
@@ -387,23 +387,31 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new FourQuads());
                 }
 
-                var bigDragons = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y is Dragons)) == 3;
+                var bigDragons = rh.ComplementAndGetCompletedHand().Any(z => z.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y is Dragons)) == 3);
                 if (bigDragons)
                 {
                     //大三元
                     rh.Yakus.Add(new BigDragons());
                 }
 
-                var bigFourWinds = rh.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y is Winds)) == 4;
+                var bigFourWinds = rh.ComplementAndGetCompletedHand().Any(z => z.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y is Winds)) == 4);
                 if (bigFourWinds)
                 {
                     //大四喜
                     rh.Yakus.Add(new BigFourWinds());
                 }
 
+                var smallFourWinds = rh.ComplementAndGetCompletedHand().Any(z => z.Melds.Count(x => (x is Triple || x is Quad) && x.Tiles.All(y => y is Winds)) == 3
+                                                                              && z.Melds.Count(x => (x is Double && x.Tiles.All(y => y is Winds))) == 1);
+                if (!bigFourWinds && smallFourWinds)
+                {
+                    //小四喜
+                    rh.Yakus.Add(new SmallFourWinds());
+                }
+
                 #endregion //役満
 
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds)
                 {
                     var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                     var isTumo = agariType == ViewModels.AgariType.Tsumo;
@@ -878,6 +886,9 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                                 }
                             }
                         }
+
+                        if (head.Equals(wait))
+                            continue;
 
                         CreateReadyHandWhenOneHeadCreated(ret, tiles, head, selectedMeld, wait);
                     }

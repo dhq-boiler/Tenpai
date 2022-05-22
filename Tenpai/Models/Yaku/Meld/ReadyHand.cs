@@ -61,6 +61,29 @@ namespace Tenpai.Models.Yaku.Meld
             }
         }
 
+        public CompletedHand[] ComplementAndGetCompletedHand()
+        {
+            var hands = new List<CompletedHand>();
+            var list = new List<Meld>();
+            list.AddRange(Melds);
+            foreach (var wait in Waiting)
+            {
+                list.Remove(wait);
+            }
+            foreach (var wait in Waiting)
+            {
+                (wait as IncompletedMeld).ComputeWaitTiles();
+                foreach (var wtile in WaitingTiles)
+                {
+                    if (wait.WaitTiles.ContainsRedSuitedTileIncluding(wtile))
+                    {
+                        hands.Add(new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3]));
+                    }
+                }
+            }
+            return hands.ToArray();
+        }
+
         public Tile[] Odd { get; private set; }
 
         public override bool Equals(object obj)
