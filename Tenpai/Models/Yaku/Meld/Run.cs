@@ -15,7 +15,10 @@ namespace Tenpai.Models.Yaku.Meld
 
         public override bool Equals(object obj)
         {
-            return obj is Run && Tiles.SequenceEqual((obj as Run).Tiles);
+            return obj is Run r
+                && Tiles[0].Code == r.Tiles[0].Code
+                && Tiles[1].Code == r.Tiles[1].Code
+                && Tiles[2].Code == r.Tiles[2].Code;
         }
 
         public override int GetHashCode()

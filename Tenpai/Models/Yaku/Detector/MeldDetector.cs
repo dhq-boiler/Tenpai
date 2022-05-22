@@ -660,8 +660,32 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         //三色同刻
                         rh.Yakus.Add(new ThreeColorTriples());
                     }
+
+                    var fullStraight = rh.ComplementAndGetCompletedHand().Any(hand => Combination.Enumerate(hand.Melds, 3, false).Any(meldArr => IsFullStraight(meldArr)));
+                    if (fullStraight)
+                    {
+                        //一気通貫
+                        rh.Yakus.Add(new FullStraight());
+                    }
                 }
             }
+        }
+
+        private static bool IsFullStraight(Meld[] meldArr)
+        {
+            var bamboo1 = meldArr.All(meld => meld.Tiles.All(tile => tile is Bamboos));
+            var bamboo2 = meldArr[0].Equals(new Run<Bamboo_1, Bamboo_2, Bamboo_3>());
+            var bamboo3 = meldArr[1].Equals(new Run<Bamboo_4, Bamboo_5, Bamboo_6>()) || meldArr[1].Equals(new Run<Bamboo_4, Bamboo_5R, Bamboo_6>());
+            var bamboo4 = meldArr[2].Equals(new Run<Bamboo_7, Bamboo_8, Bamboo_9>());
+            var character1 = meldArr.All(meld => meld.Tiles.All(tile => tile is Characters));
+            var character2 = meldArr[0].Equals(new Run<Character_1, Character_2, Character_3>());
+            var character3 = meldArr[1].Equals(new Run<Character_4, Character_5, Character_6>()) || meldArr[1].Equals(new Run<Character_4, Character_5R, Character_6>());
+            var character4 = meldArr[2].Equals(new Run<Character_7, Character_8, Character_9>());
+            var dot1 = meldArr.All(meld => meld.Tiles.All(tile => tile is Dots));
+            var dot2 = meldArr[0].Equals(new Run<Dot_1, Dot_2, Dot_3>());
+            var dot3 = meldArr[1].Equals(new Run<Dot_4, Dot_5, Dot_6>()) || meldArr[1].Equals(new Run<Dot_4, Dot_5R, Dot_6>());
+            var dot4 = meldArr[2].Equals(new Run<Dot_7, Dot_8, Dot_9>());
+            return (bamboo1 && bamboo2 && bamboo3 && bamboo4) || (character1 && character2 && character3 && character4) || (dot1 && dot2 && dot3 && dot4);
         }
 
         private static bool IsThreeColor(Meld meld1, Meld meld2, Meld meld3)
