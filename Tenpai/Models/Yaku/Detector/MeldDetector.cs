@@ -614,6 +614,15 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         //小三元
                         rh.Yakus.Add(new LittleDragons());
                     }
+
+                    var halfFlush = rh.ComplementAndGetCompletedHand().Any(x => x.Melds.All(y => y.Tiles.All(z => z is Bamboos || z is Honors)))
+                                 || rh.ComplementAndGetCompletedHand().Any(x => x.Melds.All(y => y.Tiles.All(z => z is Characters || z is Honors)))
+                                 || rh.ComplementAndGetCompletedHand().Any(x => x.Melds.All(y => y.Tiles.All(z => z is Dots || z is Honors)));
+                    if (halfFlush)
+                    {
+                        //混一色
+                        rh.Yakus.Add(new HalfFlush());
+                    }
                 }
             }
         }
