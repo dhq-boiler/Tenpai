@@ -1,5 +1,4 @@
 ﻿using Reactive.Bindings;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Tenpai.Extensions;
@@ -34,7 +33,7 @@ namespace Tenpai.Models.Yaku.Meld
         /// <summary>
         /// 役のコレクション
         /// </summary>
-        public ReactiveCollection<Tenpai.Models.Yaku.Yaku> Yakus { get; set; } = new ReactiveCollection<Tenpai.Models.Yaku.Yaku>();
+        public ReactiveCollection<Yaku> Yakus { get; set; } = new ReactiveCollection<Yaku>();
 
         public Meld[] Waiting
         {
