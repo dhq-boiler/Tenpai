@@ -87,7 +87,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var heads = FindDoubles(hand);
             var singles = FindSingles(hand);
 
-            AddYaku(ref ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
 
             return ret.Distinct().ToArray();
         }
@@ -336,7 +336,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             //4面子1雀頭
             ReadyHandsBasicForm(hand, exposed, ref ret, runs, triples, heads, singles, quads);
 
-            AddYaku(ref ret, hand, exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
 
             return ret.Distinct(new DelegateComparer<ReadyHand, int>(x =>
             {
@@ -346,7 +346,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             })).ToArray();
         }
 
-        private static void AddYaku<T>(ref List<T> ret, Tile[] hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind) where T : ReadyHand
+        private static void AddYaku<T>(ref List<T> ret, TileCollection hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind) where T : ReadyHand
         {
             foreach (var rh in ret)
             {
@@ -423,9 +423,19 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new AllGreen());
                 }
 
+                var nineGatesNineWaits = (hand.Enumerate<Bamboo_1>(3).Enumerate<Bamboo_2>(1).Enumerate<Bamboo_3>(1).Enumerate<Bamboo_4>(1).Enumerate<Bamboo_5>(1).Enumerate<Bamboo_6>(1).Enumerate<Bamboo_7>(1).Enumerate<Bamboo_8>(1).Enumerate<Bamboo_9>(3).Evaluate()
+                             || hand.Enumerate<Character_1>(3).Enumerate<Character_2>(1).Enumerate<Character_3>(1).Enumerate<Character_4>(1).Enumerate<Character_5>(1).Enumerate<Character_6>(1).Enumerate<Character_7>(1).Enumerate<Character_8>(1).Enumerate<Character_9>(3).Evaluate()
+                             || hand.Enumerate<Dot_1>(3).Enumerate<Dot_2>(1).Enumerate<Dot_3>(1).Enumerate<Dot_4>(1).Enumerate<Dot_5>(1).Enumerate<Dot_6>(1).Enumerate<Dot_7>(1).Enumerate<Dot_8>(1).Enumerate<Dot_9>(3).Evaluate())
+                             && (exposed == null || exposed.Length == 0);
+                if (nineGatesNineWaits)
+                {
+                    //九蓮宝燈9面待ち
+                    rh.Yakus.Add(new NineGatesNineWaits());
+                }
+
                 #endregion //役満
 
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors && !allGreen)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors && !allGreen && !nineGatesNineWaits)
                 {
                     var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                     var isTumo = agariType == ViewModels.AgariType.Tsumo;

@@ -55,11 +55,11 @@ namespace Tenpai.Models.Tiles
             return false;
         }
 
-        public void RemoveTiles(Tile args, int v)
+        public bool RemoveTiles(Tile args, int v)
         {
             var count = this.Where(x => x != null && x.EqualsRedSuitedTileIncluding(args)).Count();
             int processed = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < count && i < v; i++)
             {
                 for (int j = 0; j < this.Count(); j++)
                 {
@@ -68,17 +68,18 @@ namespace Tenpai.Models.Tiles
                         continue;
                     if (args.EqualsRedSuitedTileIncluding(targetTile))
                     {
-                        this[j] = null;
+                        this[j] = new Dummy();
                         processed++;
                     }
                     if (processed == v)
                     {
-                        Arrange();
-                        return;
+                        return true;
                     }
                 }
                 Arrange();
             }
+            Arrange();
+            return processed == v;
         }
 
         public void Arrange()
@@ -166,6 +167,37 @@ namespace Tenpai.Models.Tiles
                 str += tile.ToString();
             }
             return str;
+        }
+
+        public A Enumerate<T>(int count) where T : Tile, new()
+        {
+            var collection = new TileCollection(this);
+            return new A(collection.RemoveTiles(Tile.CreateInstance<T>(), count), collection);
+        }
+
+        public class A
+        {
+            public A(bool isEnable, TileCollection collection)
+            {
+                IsEnable = isEnable;
+                this.collection = collection;
+            }
+
+            public bool IsEnable { get; set; }
+            public TileCollection collection { get; set; }
+
+            public A Enumerate<T>(int count) where T : Tile, new()
+            {
+                if (this.IsEnable)
+                    return collection.Enumerate<T>(count);
+                else
+                    return new A(false, new TileCollection());
+            }
+
+            public bool Evaluate()
+            {
+                return this.IsEnable;
+            }
         }
     }
 }
