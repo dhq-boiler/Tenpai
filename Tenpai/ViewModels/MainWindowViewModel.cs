@@ -486,10 +486,21 @@ namespace Tenpai.ViewModels
                 {
                     var position = GetMousePosition();
                     IDialogResult dialogResult = null;
-                    dialogService.ShowDialog(nameof(TumoOrRon), new DialogParameters() { { "Left", position.X }, { "Top", position.Y } }, (result) =>
+                    ConstructReadyHands();
+                    if (Yakus.Single(x => x is AddAQuad).IsEnable.Value && ReadyHands.Count() > 0)
                     {
-                        dialogResult = result;
-                    });
+                        dialogService.ShowDialog(nameof(Ron), new DialogParameters() { { "Left", position.X }, { "Top", position.Y } }, (result) =>
+                        {
+                            dialogResult = result;
+                        });
+                    }
+                    else
+                    {
+                        dialogService.ShowDialog(nameof(TumoOrRon), new DialogParameters() { { "Left", position.X }, { "Top", position.Y } }, (result) =>
+                        {
+                            dialogResult = result;
+                        });
+                    }
                     if (dialogResult != null && dialogResult.Result == ButtonResult.OK)
                     {
                         IDialogResult dialogResult2 = null;
@@ -763,6 +774,7 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<FinalTileWin_Tumo>(false);
                     SwitchIsEnable<FinalTileWin_Ron>(false);
                     SwitchIsEnable<EarthlyWin>(false);
+                    SwitchIsEnable<AddAQuad>(false);
                     ConstructHand();
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
@@ -781,7 +793,20 @@ namespace Tenpai.ViewModels
                     SwitchIsEnable<FinalTileWin_Tumo>(false);
                     SwitchIsEnable<FinalTileWin_Ron>(false);
                     SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<AddAQuad>(false);
                     ConstructHand();
+                }),
+                UncheckedCommand = new DelegateCommand(() =>
+                {
+                    ConstructHand();
+                }),
+            });
+            Yakus.Add(new AddAQuad()
+            {
+                CheckedCommand = new DelegateCommand(() =>
+                {
+                    SwitchIsEnable<HeavenlyWin>(false);
+                    SwitchIsEnable<EarthlyWin>(false);
                 }),
                 UncheckedCommand = new DelegateCommand(() =>
                 {
@@ -813,6 +838,7 @@ namespace Tenpai.ViewModels
             var tiles = Tiles.Where(x => !(x is Dummy)).ToList();
             var readyHands = MeldDetector.FindCompletedHands(tiles.ToArray(), SarashiHai.ToArray(), tileCount.Value + 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
+            RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands);
         }
 
@@ -822,7 +848,23 @@ namespace Tenpai.ViewModels
             ReadyHands.Clear();
             var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
+            RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands);
+        }
+
+        private void RemoveUnder12HanYakuFromYakuList<T>(List<T> readyHands) where T : ReadyHand
+        {
+            readyHands.ToList().ForEach(x =>
+            {
+                if (x.Yakus.Count(y => y.HanCount(SarashiHai.Where(x => (x is Quad q && q.Type != KongType.ConcealedKong) || (x is not Quad)).Count() > 0) >= 13) > 0) //役満以上の役が1つ以上成立している
+                {
+                    var under12hanYakus = x.Yakus.Where(x => x.HanCount(SarashiHai.Where(x => (x is Quad q && q.Type != KongType.ConcealedKong) || (x is not Quad)).Count() > 0) <= 12).ToList();
+                    foreach (var under12hanYaku in under12hanYakus)
+                    {
+                        x.Yakus.Remove(under12hanYaku);
+                    }
+                }
+            });
         }
 
         public static Point GetMousePosition()
