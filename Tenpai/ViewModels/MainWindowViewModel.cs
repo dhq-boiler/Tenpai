@@ -864,6 +864,14 @@ namespace Tenpai.ViewModels
                         x.Yakus.Remove(under12hanYaku);
                     }
                 }
+                if (AgariType.Value != ViewModels.AgariType.Ron)
+                {
+                    var addAQuad = x.Yakus.Where(x => x is AddAQuad).SingleOrDefault();
+                    if (addAQuad != null)
+                    {
+                        x.Yakus.Remove(addAQuad);
+                    }
+                }
             });
         }
 
