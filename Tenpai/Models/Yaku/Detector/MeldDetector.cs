@@ -655,7 +655,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         rh.Yakus.Add(new ThreeColorRuns());
                     }
 
-                    var threeColorTriples = rh.ComplementAndGetCompletedHand().Any(x => Combination.Enumerate(x.Melds, 3, false).Any(y => y.All(z => z is Triple || z is Quad) && IsThreeColor(y[0], y[1], y[2])));
+                    var threeColorTriples = rh.ComplementAndGetCompletedHand().Any(x => Combination.Enumerate(x.Melds, 3, false).Any(y => y.All(z => (z is Triple || z is Quad) && z.Tiles.All(o => o is Suits)) && IsThreeColor(y[0], y[1], y[2])));
                     if (threeColorTriples)
                     {
                         //三色同刻
