@@ -156,7 +156,7 @@ namespace Tenpai.Models.Yaku.Meld
 
         public bool HasYaku(WindOfTheRound windOfTheRound, OnesOwnWind onesOwnWind)
         {
-            Debug.Assert(this is Double || this is Triple || this is Quad);
+            Debug.Assert(this is Double || this is Triple || this is Quad || this is Single);
             return HasYakuByWindOfTheRound(windOfTheRound) || HasYakuByOnesOwnWind(onesOwnWind);
         }
 
