@@ -75,6 +75,7 @@ namespace Tenpai.ViewModels
         private int sarashiCount = 0;
 
         public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, AgariTile.Value }; } }
+        public Tile[] TilesWithoutAgariTile { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value }; } }
 
         private bool sortflag = false;
 
@@ -846,7 +847,7 @@ namespace Tenpai.ViewModels
         {
             SortIf();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(Tiles.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value).OrderBy(x => x.WaitingTiles[0]).ToList();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands);
