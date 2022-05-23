@@ -8,6 +8,8 @@ namespace Tenpai.Models.Tiles
 {
     public class South : Winds
     {
+        public override string FileName => "nan";
+
         public override string Display
         {
             get { return "南"; }

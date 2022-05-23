@@ -8,6 +8,8 @@ namespace Tenpai.Models.Tiles
 {
     public abstract class Dots : Suits
     {
+        public override string FileName => Display;
+
         public override bool IsSameType(Tile other)
         {
             return other is Dots;

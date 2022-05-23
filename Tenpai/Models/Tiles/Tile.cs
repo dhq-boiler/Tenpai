@@ -40,6 +40,8 @@ namespace Tenpai.Models.Tiles
 
         public ReactivePropertySlim<Visibility> Visibility { get; } = new ReactivePropertySlim<Visibility>();
 
+        public abstract string FileName { get; }
+
         public abstract string Display { get; }
 
         public int Code { get { return GetHashCode(); } }

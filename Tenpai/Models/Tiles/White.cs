@@ -8,6 +8,8 @@ namespace Tenpai.Models.Tiles
 {
     public class White : Dragons
     {
+        public override string FileName => "haku";
+
         public override string Display
         {
             get { return "白"; }

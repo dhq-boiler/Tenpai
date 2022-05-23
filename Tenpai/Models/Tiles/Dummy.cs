@@ -8,6 +8,8 @@ namespace Tenpai.Models.Tiles
 {
     public class Dummy : Tile
     {
+        public override string FileName => string.Empty;
+
         public override string Display
         {
             get { return "X"; }
