@@ -149,7 +149,7 @@ namespace Tenpai.Test
             };
             var waits = new Tile[]
             {
-                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_1>(),
             };
             var evaluationValue = bambooArr.Any(y => waits.Any(x => 
                                                             tileCollection.Add(x, 1)

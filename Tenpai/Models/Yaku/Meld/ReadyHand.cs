@@ -85,9 +85,14 @@ namespace Tenpai.Models.Yaku.Meld
                 {
                     if (wait.WaitTiles.ContainsRedSuitedTileIncluding(wtile))
                     {
-                        if (wait is ThirteenWait)
+                        var w = new TileCollection(Waiting.SelectMany(x => x.Tiles));
+                        var a = wait is Single;
+                        var b = w.Equals(MeldDetector.ThirteenOrphansTiles());
+                        if (a && b)
                         {
-                            hands.Add(new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3], list[4], list[5], list[6], list[7], list[8], list[9], list[10], list[11]));
+                            var l = list.ToList();
+                            l.Remove(wait);
+                            hands.Add(new CompletedHand(wait + wtile, l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11]));
                         }
                         else if (list.Count(x => x is Double) == 6)
                         {

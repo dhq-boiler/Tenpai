@@ -548,18 +548,6 @@
                                                 <DataTemplate DataType="{x:Type meld:ThirteenWait}">
                                                     <StackPanel Orientation="Horizontal" Margin="5">
                                                         <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[3]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[4]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[5]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[6]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[7]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[8]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[9]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[10]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[11]}" />
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[12]}" />
                                                     </StackPanel>
                                                 </DataTemplate>
                                                 <DataTemplate DataType="{x:Type meld:Single}">

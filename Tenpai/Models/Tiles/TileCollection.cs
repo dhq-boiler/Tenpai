@@ -47,6 +47,28 @@ namespace Tenpai.Models.Tiles
             this.AddRange(wait);
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (!(obj is TileCollection collection))
+                return false;
+            if (Count != collection.Count)
+                return false;
+            for (int i = 0; i < Count; i++)
+            {
+                var left = this[i];
+                var right = collection[i];
+                if (left.Code != right.Code)
+                {
+                    return false;
+                }
+                else if (left is IRedSuitedTile rleft && right is IRedSuitedTile rright && rleft.IsRedSuited != rright.IsRedSuited)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public bool IsMoreThan4TilesOfTheSameType()
         {
             foreach (var tile in this)

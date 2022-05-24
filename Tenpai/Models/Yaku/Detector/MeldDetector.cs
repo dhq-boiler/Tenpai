@@ -512,6 +512,66 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new NineGates());
                 }
 
+                bool thirteenOrphansThirteenWaits = false;
+
+                if (thirteenOrphansThirteenWaits = (hand.Enumerate<Bamboo_1>(1)
+                                                        .Enumerate<Bamboo_9>(1)
+                                                        .Enumerate<Character_1>(1)
+                                                        .Enumerate<Character_9>(1)
+                                                        .Enumerate<Dot_1>(1)
+                                                        .Enumerate<Dot_9>(1)
+                                                        .Enumerate<East>(1)
+                                                        .Enumerate<South>(1)
+                                                        .Enumerate<West>(1)
+                                                        .Enumerate<North>(1)
+                                                        .Enumerate<White>(1)
+                                                        .Enumerate<Green>(1)
+                                                        .Enumerate<Red>(1).Evaluate())
+                                    && (exposed == null || exposed.Length == 0))
+                {
+                    //国士無双13面待ち
+                    rh.Yakus.Add(new ThirteenOrphansThirteenWaits());
+                }
+
+                var thirteenArr = new Tile[] { Tile.CreateInstance<Bamboo_1>(),
+                                               Tile.CreateInstance<Bamboo_9>(),
+                                               Tile.CreateInstance<Character_1>(),
+                                               Tile.CreateInstance<Character_9>(),
+                                               Tile.CreateInstance<Dot_1>(),
+                                               Tile.CreateInstance<Dot_9>(),
+                                               Tile.CreateInstance<East>(),
+                                               Tile.CreateInstance<South>(),
+                                               Tile.CreateInstance<West>(),
+                                               Tile.CreateInstance<North>(),
+                                               Tile.CreateInstance<White>(),
+                                               Tile.CreateInstance<Green>(),
+                                               Tile.CreateInstance<Red>()
+                };
+                var thirteenOrphans = rh.WaitingTiles.Any(y =>
+                                           thirteenArr.Any(x => new TileCollection(new Tile[] { }, rh.Melds.ToArray()).LookIn()
+                                                                                                                      .Add(y, 1)
+                                                                                                                      .Reduce(x, 1)
+                                                                                                                      .LookIn()
+                                                                                                                      .Enumerate<Bamboo_1>(1)
+                                                                                                                      .Enumerate<Bamboo_9>(1)
+                                                                                                                      .Enumerate<Character_1>(1)
+                                                                                                                      .Enumerate<Character_9>(1)
+                                                                                                                      .Enumerate<Dot_1>(1)
+                                                                                                                      .Enumerate<Dot_9>(1)
+                                                                                                                      .Enumerate<East>(1)
+                                                                                                                      .Enumerate<South>(1)
+                                                                                                                      .Enumerate<West>(1)
+                                                                                                                      .Enumerate<North>(1)
+                                                                                                                      .Enumerate<White>(1)
+                                                                                                                      .Enumerate<Green>(1)
+                                                                                                                      .Enumerate<Red>(1).Evaluate()))
+                                    && (exposed == null || exposed.Length == 0);
+                if (!thirteenOrphansThirteenWaits && thirteenOrphans)
+                {
+                    //国士無双
+                    rh.Yakus.Add(new ThirteenOrphans());
+                }
+
                 #endregion //役満
 
                 if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors && !allGreen && !nineGatesNineWaits && !nineGates)
