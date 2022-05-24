@@ -324,17 +324,35 @@ namespace Tenpai.Models.Tiles
             else if (Code < other.Code) return -1;
             else
             {
-                if (this.Order.CompareTo(other.Order) != 0)
-                    return this.Order.CompareTo(other.Order);
-                else if (this.Rotate?.Value == null && other.Rotate?.Value == null)
-                    return this.Visibility.Value.CompareTo(other.Visibility.Value);
-                else if (this.Rotate?.Value != null && other.Rotate?.Value == null)
-                    return 1;
-                else if (this.Rotate?.Value == null && other.Rotate?.Value != null)
-                    return -1;
-                else
-                    return this.Visibility.Value.CompareTo(other.Visibility.Value);
-                //return _Guid.CompareTo(other._Guid);
+                return GetApplication().Dispatcher.Invoke(() =>
+                {
+                    if (this.Order.CompareTo(other.Order) != 0)
+                        return this.Order.CompareTo(other.Order);
+                    else if (this.Rotate?.Value == null && other.Rotate?.Value == null)
+                        return this.Visibility.Value.CompareTo(other.Visibility.Value);
+                    else if (this.Rotate?.Value != null && other.Rotate?.Value == null)
+                        return 1;
+                    else if (this.Rotate?.Value == null && other.Rotate?.Value != null)
+                        return -1;
+                    else
+                        return this.Visibility.Value.CompareTo(other.Visibility.Value);
+                    //return _Guid.CompareTo(other._Guid);
+                });
+            }
+        }
+
+        private Application GetApplication()
+        {
+            if (Application.Current == null)
+            {
+                return new Application()
+                {
+                    ShutdownMode = ShutdownMode.OnExplicitShutdown
+                };
+            }
+            else
+            {
+                return Application.Current;
             }
         }
 
