@@ -423,19 +423,98 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     rh.Yakus.Add(new AllGreen());
                 }
 
-                var nineGatesNineWaits = (hand.Enumerate<Bamboo_1>(3).Enumerate<Bamboo_2>(1).Enumerate<Bamboo_3>(1).Enumerate<Bamboo_4>(1).Enumerate<Bamboo_5>(1).Enumerate<Bamboo_6>(1).Enumerate<Bamboo_7>(1).Enumerate<Bamboo_8>(1).Enumerate<Bamboo_9>(3).Evaluate()
-                             || hand.Enumerate<Character_1>(3).Enumerate<Character_2>(1).Enumerate<Character_3>(1).Enumerate<Character_4>(1).Enumerate<Character_5>(1).Enumerate<Character_6>(1).Enumerate<Character_7>(1).Enumerate<Character_8>(1).Enumerate<Character_9>(3).Evaluate()
-                             || hand.Enumerate<Dot_1>(3).Enumerate<Dot_2>(1).Enumerate<Dot_3>(1).Enumerate<Dot_4>(1).Enumerate<Dot_5>(1).Enumerate<Dot_6>(1).Enumerate<Dot_7>(1).Enumerate<Dot_8>(1).Enumerate<Dot_9>(3).Evaluate())
-                             && (exposed == null || exposed.Length == 0);
-                if (nineGatesNineWaits)
+                bool nineGatesNineWaits = false;
+
+                if (nineGatesNineWaits = (hand.Enumerate<Bamboo_1>(3)
+                                              .Enumerate<Bamboo_2>(1)
+                                              .Enumerate<Bamboo_3>(1)
+                                              .Enumerate<Bamboo_4>(1)
+                                              .Enumerate<Bamboo_5>(1)
+                                              .Enumerate<Bamboo_6>(1)
+                                              .Enumerate<Bamboo_7>(1)
+                                              .Enumerate<Bamboo_8>(1)
+                                              .Enumerate<Bamboo_9>(3).Evaluate()
+                                    || hand.Enumerate<Character_1>(3)
+                                           .Enumerate<Character_2>(1)
+                                           .Enumerate<Character_3>(1)
+                                           .Enumerate<Character_4>(1)
+                                           .Enumerate<Character_5>(1)
+                                           .Enumerate<Character_6>(1)
+                                           .Enumerate<Character_7>(1)
+                                           .Enumerate<Character_8>(1)
+                                           .Enumerate<Character_9>(3).Evaluate()
+                                    || hand.Enumerate<Dot_1>(3)
+                                           .Enumerate<Dot_2>(1)
+                                           .Enumerate<Dot_3>(1)
+                                           .Enumerate<Dot_4>(1)
+                                           .Enumerate<Dot_5>(1)
+                                           .Enumerate<Dot_6>(1)
+                                           .Enumerate<Dot_7>(1)
+                                           .Enumerate<Dot_8>(1)
+                                           .Enumerate<Dot_9>(3).Evaluate())
+                                    && (exposed == null || exposed.Length == 0))
                 {
                     //九蓮宝燈9面待ち
                     rh.Yakus.Add(new NineGatesNineWaits());
                 }
 
+                var bambooArr = new Tile[] { Tile.CreateInstance<Bamboo_1>(), Tile.CreateInstance<Bamboo_2>(), Tile.CreateInstance<Bamboo_3>(), Tile.CreateInstance<Bamboo_4>(), Tile.CreateInstance<Bamboo_5>(), Tile.CreateInstance<Bamboo_6>(), Tile.CreateInstance<Bamboo_7>(), Tile.CreateInstance<Bamboo_8>(), Tile.CreateInstance<Bamboo_9>() };
+                var characterArr = new Tile[] { Tile.CreateInstance<Character_1>(), Tile.CreateInstance<Character_2>(), Tile.CreateInstance<Character_3>(), Tile.CreateInstance<Character_4>(), Tile.CreateInstance<Character_5>(), Tile.CreateInstance<Character_6>(), Tile.CreateInstance<Character_7>(), Tile.CreateInstance<Character_8>(), Tile.CreateInstance<Character_9>() };
+                var dotArr = new Tile[] { Tile.CreateInstance<Dot_1>(), Tile.CreateInstance<Dot_2>(), Tile.CreateInstance<Dot_3>(), Tile.CreateInstance<Dot_4>(), Tile.CreateInstance<Dot_5>(), Tile.CreateInstance<Dot_6>(), Tile.CreateInstance<Dot_7>(), Tile.CreateInstance<Dot_8>(), Tile.CreateInstance<Dot_9>() };
+                var nineGates = rh.WaitingTiles.Any(y =>
+                                           bambooArr.Any(x => new TileCollection(new Tile[] { }, rh.Melds.ToArray()).LookIn()
+                                                                                                                    .Add(y, 1)
+                                                                                                                    .Reduce(x, 1)
+                                                                                                                    .LookIn()
+                                                                                                                    .Enumerate<Bamboo_1>(3)
+                                                                                                                    .Enumerate<Bamboo_2>(1)
+                                                                                                                    .Enumerate<Bamboo_3>(1)
+                                                                                                                    .Enumerate<Bamboo_4>(1)
+                                                                                                                    .Enumerate<Bamboo_5>(1)
+                                                                                                                    .Enumerate<Bamboo_6>(1)
+                                                                                                                    .Enumerate<Bamboo_7>(1)
+                                                                                                                    .Enumerate<Bamboo_8>(1)
+                                                                                                                    .Enumerate<Bamboo_9>(3)
+                                                                                                                    .Evaluate()))
+                                  || rh.WaitingTiles.Any(y =>
+                                           characterArr.Any(x => new TileCollection(new Tile[] { }, rh.Melds.ToArray()).LookIn()
+                                                                                                                       .Add(y, 1)
+                                                                                                                       .Reduce(x, 1)
+                                                                                                                       .LookIn()
+                                                                                                                       .Enumerate<Character_1>(3)
+                                                                                                                       .Enumerate<Character_2>(1)
+                                                                                                                       .Enumerate<Character_3>(1)
+                                                                                                                       .Enumerate<Character_4>(1)
+                                                                                                                       .Enumerate<Character_5>(1)
+                                                                                                                       .Enumerate<Character_6>(1)
+                                                                                                                       .Enumerate<Character_7>(1)
+                                                                                                                       .Enumerate<Character_8>(1)
+                                                                                                                       .Enumerate<Character_9>(3)
+                                                                                                                       .Evaluate()))
+                                  || rh.WaitingTiles.Any(y =>
+                                           dotArr.Any(x => new TileCollection(new Tile[] { }, rh.Melds.ToArray()).LookIn()
+                                                                                                                 .Add(y, 1)
+                                                                                                                 .Reduce(x, 1)
+                                                                                                                 .LookIn()
+                                                                                                                 .Enumerate<Dot_1>(3)
+                                                                                                                 .Enumerate<Dot_2>(1)
+                                                                                                                 .Enumerate<Dot_3>(1)
+                                                                                                                 .Enumerate<Dot_4>(1)
+                                                                                                                 .Enumerate<Dot_5>(1)
+                                                                                                                 .Enumerate<Dot_6>(1)
+                                                                                                                 .Enumerate<Dot_7>(1)
+                                                                                                                 .Enumerate<Dot_8>(1)
+                                                                                                                 .Enumerate<Dot_9>(3)
+                                                                                                                 .Evaluate()));
+                if (!nineGatesNineWaits && nineGates)
+                {
+                    //九蓮宝燈
+                    rh.Yakus.Add(new NineGates());
+                }
+
                 #endregion //役満
 
-                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors && !allGreen && !nineGatesNineWaits)
+                if (!fourConcealedTriples && !fourConcealedTriplesSingleWait && !allTerminals && !fourQuads && !bigDragons && !bigFourWinds && !smallFourWinds && !allHonors && !allGreen && !nineGatesNineWaits && !nineGates)
                 {
                     var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                     var isTumo = agariType == ViewModels.AgariType.Tsumo;
@@ -449,7 +528,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     var allRuns = rh.Melds.Except(rh.Melds.Where(x => x is Double || x is Single)).All(x => x is Run || x is OpenWait);
                     var headIsNotYakuhai = (rh.Melds.Count(x => x is Double) == 1)
                                          ? !rh.Melds.First(x => x is Double).HasYaku(windOfTheRound, onesOwnWind)
-                                         : (rh.Melds.Count(x => x is Single) == 1 
+                                         : (rh.Melds.Count(x => x is Single) == 1
                                          ? !rh.Melds.First(x => x is Single).HasYaku(windOfTheRound, onesOwnWind)
                                          : false);
                     if (isMenzen && runsAreThree && allRuns && headIsNotYakuhai)

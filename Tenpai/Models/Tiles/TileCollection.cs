@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using Tenpai.Extensions;
 using Tenpai.Models.Yaku.Meld;
@@ -85,6 +87,7 @@ namespace Tenpai.Models.Tiles
         public void Arrange()
         {
             RemoveAll(x => x is null);
+            RemoveAll(x => x is Dummy);
             Sort();
         }
 
@@ -105,6 +108,14 @@ namespace Tenpai.Models.Tiles
                 {
                     return;
                 }
+            }
+        }
+
+        public void AddTile(Tile tile, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                this.Add(tile);
             }
         }
 
@@ -172,7 +183,28 @@ namespace Tenpai.Models.Tiles
         public A Enumerate<T>(int count) where T : Tile, new()
         {
             var collection = new TileCollection(this);
-            return new A(collection.RemoveTiles(Tile.CreateInstance<T>(), count), collection);
+            var result = collection.RemoveTiles(Tile.CreateInstance<T>(), count);
+            Debug.WriteLine($"{Thread.GetCurrentProcessorId()} Enumerate:{typeof(T).Name},{count}=>{result}");
+            return new A(result, collection);
+        }
+
+        public A Reduce(Tile tile, int count)
+        {
+            var collection = new TileCollection(this);
+            var result = collection.RemoveTiles(tile, count);
+            return new A(result, collection);
+        }
+
+        public A Add(Tile tile, int count)
+        {
+            var newcollection = new TileCollection(this);
+            newcollection.AddTile(tile, count);
+            return new A(true, newcollection);
+        }
+        public A LookIn()
+        {
+            Debug.WriteLine(string.Join(string.Empty, this.Cast<object>()));
+            return new A(true, this);
         }
 
         public class A
@@ -189,14 +221,41 @@ namespace Tenpai.Models.Tiles
             public A Enumerate<T>(int count) where T : Tile, new()
             {
                 if (this.IsEnable)
-                    return collection.Enumerate<T>(count);
+                {
+                    var ret = collection.Enumerate<T>(count);
+                    Debug.WriteLine($"{Thread.GetCurrentProcessorId()} Enumerate:{typeof(T).Name},{count}=>{ret.IsEnable}");
+                    return ret;
+                }
                 else
+                {
+                    Debug.WriteLine($"{Thread.GetCurrentProcessorId()} Enumerate:{typeof(T).Name},{count}=>{false}");
                     return new A(false, new TileCollection());
+                }
             }
 
             public bool Evaluate()
             {
                 return this.IsEnable;
+            }
+
+            public A LookIn()
+            {
+                Debug.WriteLine(string.Join(string.Empty, collection.Cast<object>()));
+                return new A(IsEnable, collection);
+            }
+
+            public A Reduce(Tile tile, int count)
+            {
+                var newcollection = new TileCollection(collection);
+                var result = newcollection.RemoveTiles(tile, count);
+                return new A(IsEnable && result, newcollection);
+            }
+
+            public A Add(Tile tile, int count)
+            {
+                var newcollection = new TileCollection(collection);
+                newcollection.AddTile(tile, count);
+                return new A(IsEnable, newcollection);
             }
         }
     }
