@@ -107,7 +107,14 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
 
                 //待ちの形
-                huSum += rh.Waiting.Max(wait => wait.Hu(windOfTheRound, onesOwnWind));
+                if (rh is CompletedHand ch)
+                {
+                    huSum += ch.WaitForm.Max(wait => wait.Hu(windOfTheRound, onesOwnWind));
+                }
+                else
+                {
+                    huSum += rh.Waiting.Max(wait => wait.Hu(windOfTheRound, onesOwnWind));
+                }
 
                 //あがり方
                 if (agariType == AgariType.Tsumo)
