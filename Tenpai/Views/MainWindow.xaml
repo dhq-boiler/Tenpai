@@ -660,36 +660,56 @@
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </StackPanel>
-                                <WrapPanel Orientation="Vertical">
-                                    <ItemsControl ItemsSource="{Binding Yakus}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <DataTemplate.Resources>
-                                                    <Style TargetType="Label">
-                                                        <Setter Property="FontSize" Value="30" />
-                                                        <Setter Property="FontFamily" Value="HGS行書体" />
-                                                    </Style>
-                                                </DataTemplate.Resources>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Label Content="{Binding Name}"
-                                                           FontSize="30" />
-                                                    <Label>
-                                                        <TextBlock>
-                                                            <Run>
-                                                                <Run.Text>
-                                                                    <MultiBinding Converter="{StaticResource HanCountToString}" Mode="OneWay">
-                                                                        <Binding />
-                                                                        <Binding Path="DataContext.SarashiHai" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}" />
-                                                                    </MultiBinding>
-                                                                </Run.Text>
-                                                            </Run>
-                                                        </TextBlock>
-                                                    </Label>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </WrapPanel>
+                                <StackPanel DockPanel.Dock="Right">
+                                    <Label VerticalAlignment="Center"
+                                           HorizontalAlignment="Right">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontSize" Value="50" />
+                                                <Setter Property="FontFamily" Value="HGS行書体" />
+                                            </Style>
+                                        </Label.Style>
+                                        <TextBlock>
+                                            <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                            <Run Text="符" />
+                                            <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                            <Run Text="翻" />
+                                        </TextBlock>
+                                    </Label>
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding Yakus}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Vertical" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="FontSize" Value="30" />
+                                                    <Setter Property="FontFamily" Value="HGS行書体" />
+                                                </Style>
+                                            </DataTemplate.Resources>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Label Content="{Binding Name}"
+                                                        FontSize="30" />
+                                                <Label>
+                                                    <TextBlock>
+                                                        <Run>
+                                                            <Run.Text>
+                                                                <MultiBinding Converter="{StaticResource HanCountToString}" Mode="OneWay">
+                                                                    <Binding />
+                                                                    <Binding Path="DataContext.SarashiHai" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}" />
+                                                                </MultiBinding>
+                                                            </Run.Text>
+                                                        </Run>
+                                                    </TextBlock>
+                                                </Label>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </DockPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

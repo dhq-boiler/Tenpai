@@ -26,15 +26,23 @@ namespace Tenpai.Models.Yaku.Meld
         /// <summary>
         /// 合計翻数
         /// </summary>
-        public int SumHanCount(bool called)
+        public int SumHanCount
         {
-            return Yakus.Sum(x => x.HanCount(called));
+            get
+            {
+                return Yakus.Sum(x => x.HanCount(Melds.Where(x => x.CallFrom != EOpponent.Unknown && (x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong))).Count() > 0));
+            }
         }
 
         /// <summary>
         /// 役のコレクション
         /// </summary>
         public ReactiveCollection<Yaku> Yakus { get; set; } = new ReactiveCollection<Yaku>();
+
+        /// <summary>
+        /// 符の合計
+        /// </summary>
+        public ReactivePropertySlim<int> HuSum { get; } = new ReactivePropertySlim<int>();
 
         public Meld[] Waiting
         {

@@ -63,6 +63,66 @@ namespace Tenpai.Models.Yaku.Meld
             }
         }
 
+        public int Hu(WindOfTheRound windOfTheRound, OnesOwnWind onesOwnWind)
+        {
+            if (this is Quad q && q.Type == KongType.ConcealedKong)
+            {
+                if (Tiles.All(x => x is ITerminals || x is Honors))
+                {
+                    return 32;
+                }
+                else
+                {
+                    return 16;
+                }
+            }
+            else if (this is Quad q2 && (q2.Type == KongType.LargeMeldedKong || q2.Type == KongType.SmallMeldedKong))
+            {
+                if (Tiles.All(x => x is ITerminals || x is Honors))
+                {
+                    return 16;
+                }
+                else
+                {
+                    return 8;
+                }
+            }
+            else if (this is Triple t && CallFrom == EOpponent.Unknown)
+            {
+                if (Tiles.All(x => x is ITerminals || x is Honors))
+                {
+                    return 8;
+                }
+                else
+                {
+                    return 4;
+                }
+            }
+            else if (this is Triple t2 && CallFrom != EOpponent.Unknown && CallFrom != EOpponent.Default)
+            {
+                if (Tiles.All(x => x is ITerminals || x is Honors))
+                {
+                    return 4;
+                }
+                else
+                {
+                    return 2;
+                }
+            }
+            else if (this is Double d && d.Tiles.All(x => HasYaku(windOfTheRound, onesOwnWind)))
+            {
+                return 2;
+            }
+            else if (this is ClosedWait || this is EdgeWait || this is Single || this is ThirteenWait)
+            {
+                return 2;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
 
         public virtual int TextWidth()
         {

@@ -89,8 +89,42 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
             AddDora(ref ret, new TileCollection(hand), exposed, doras);
+            CalcHu(ref ret, exposed, windOfTheRound, onesOwnWind, agariType);
 
             return ret.Distinct().ToArray();
+        }
+
+        private static void CalcHu<T>(ref List<T> readyHands, Meld[] exposed, WindOfTheRound windOfTheRound, OnesOwnWind onesOwnWind, AgariType agariType) where T : ReadyHand
+        {
+            foreach (var rh in readyHands)
+            {
+                int huSum = 20;
+
+                //牌の構成
+                foreach (var meld in rh.Melds)
+                {
+                    huSum += meld.Hu(windOfTheRound, onesOwnWind);
+                }
+
+                //待ちの形
+                huSum += rh.Waiting.Max(wait => wait.Hu(windOfTheRound, onesOwnWind));
+
+                //あがり方
+                if (agariType == AgariType.Tsumo)
+                {
+                    huSum += 2;
+                }
+                else if (agariType == AgariType.Ron)
+                {
+                    var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
+                    if (isMenzen)
+                    {
+                        huSum += 10;
+                    }
+                }
+
+                rh.HuSum.Value = (huSum / 10) * 10;
+            }
         }
 
         private static void ConstructWaitForm(Tile agariTile, List<CompletedHand> ret, ReadyHand incompletedHand, CompletedHand completedHand)
@@ -339,6 +373,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
             AddDora(ref ret, new TileCollection(hand), exposed, doras);
+            CalcHu(ref ret, exposed, windOfTheRound, onesOwnWind, agariType);
 
             return ret.Distinct(new DelegateComparer<ReadyHand, int>(x =>
             {
