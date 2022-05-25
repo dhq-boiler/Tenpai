@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Models.Yaku.Meld
