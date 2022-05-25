@@ -17,6 +17,9 @@ namespace Tenpai.Models.Tiles
         public TileCollection(int capacity) : base(capacity)
         { }
 
+        public TileCollection(params Tile[] collection) : base(collection)
+        { }
+
         public TileCollection(IEnumerable<Tile> collection) : base(collection)
         { }
 

@@ -63,6 +63,27 @@ namespace Tenpai.Models.Yaku.Meld
             }
         }
 
+        private IEnumerable<Meld[]> MakeRoundRobinCombinationByThirteenOrphans(Meld[] @base)
+        {
+            var thirteenOrphansTiles = MeldDetector.ThirteenOrphansTiles();
+            foreach (var thirteenOrphansTile in thirteenOrphansTiles)
+            {
+                var melds = new List<Meld>();
+                foreach (var meld in @base)
+                {
+                    if (meld.Tiles.IsContained(new TileCollection(thirteenOrphansTile)))
+                    {
+                        melds.Add(meld + thirteenOrphansTile);
+                    }
+                    else
+                    {
+                        melds.Add(meld);
+                    }
+                }
+                yield return melds.ToArray();
+            }
+        }
+
         public CompletedHand[] ComplementAndGetCompletedHand()
         {
             var hands = new List<CompletedHand>();
@@ -70,6 +91,9 @@ namespace Tenpai.Models.Yaku.Meld
             list.AddRange(Melds);
             //国士無双13面待ちの完成形を作ろうとしている場合はlistから待ちを除外しない
             if (MeldDetector.ThirteenOrphansTiles().IsAllContained(list.ToArray()))
+            { }
+            //国士無双単騎待ちの完成形を作ろうとしている場合はlistから待ちを除外しない
+            else if (MakeRoundRobinCombinationByThirteenOrphans(list.ToArray()).Any(x => new TileCollection(Melds.SelectMany(x => x.Tiles).ToArray()).IsAllContained(x)))
             { }
             else
             {
@@ -89,6 +113,12 @@ namespace Tenpai.Models.Yaku.Meld
                         var a = wait is Single;
                         var b = w.Equals(MeldDetector.ThirteenOrphansTiles());
                         if (a && b)
+                        {
+                            var l = list.ToList();
+                            l.Remove(wait);
+                            hands.Add(new CompletedHand(wait + wtile, l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11]));
+                        }
+                        else if (MakeRoundRobinCombinationByThirteenOrphans(list.ToArray()).Any(x => new TileCollection(Melds.SelectMany(x => x.Tiles).ToArray()).IsAllContained(x)))
                         {
                             var l = list.ToList();
                             l.Remove(wait);

@@ -546,9 +546,6 @@
                                                     </StackPanel>
                                                 </DataTemplate>
                                                 <DataTemplate DataType="{x:Type meld:ThirteenWait}">
-                                                    <StackPanel Orientation="Horizontal" Margin="5">
-                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
-                                                    </StackPanel>
                                                 </DataTemplate>
                                                 <DataTemplate DataType="{x:Type meld:Single}">
                                                     <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
