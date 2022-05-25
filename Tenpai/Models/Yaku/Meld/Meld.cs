@@ -190,7 +190,12 @@ namespace Tenpai.Models.Yaku.Meld
 
         public static Meld operator +(Meld meld, Tile tile)
         {
-            if (meld is OpenWait || meld is EdgeWait || meld is ClosedWait)
+            if (meld is Triple)
+            {
+                var tiles = new Tile[] { meld.Tiles[0], meld.Tiles[1], meld.Tiles[2], tile }.ToList();
+                return new Quad(tiles[0], tiles[1], tiles[2], tiles[3]);
+            }
+            else if (meld is OpenWait || meld is EdgeWait || meld is ClosedWait)
             {
                 var tiles = new Tile[] { meld.Tiles[0], meld.Tiles[1], tile }.ToList();
                 tiles.Sort();

@@ -72,6 +72,11 @@ namespace Tenpai.Models.Yaku.Meld
                 {
                     if (meld.Tiles.IsContained(new TileCollection(thirteenOrphansTile)))
                     {
+                        if (meld is Quad)
+                        {
+                            melds.Add(meld);
+                            continue;
+                        }
                         melds.Add(meld + thirteenOrphansTile);
                     }
                     else
