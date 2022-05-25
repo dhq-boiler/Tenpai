@@ -123,7 +123,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     }
                 }
 
-                rh.HuSum.Value = (huSum / 10) * 10;
+                rh.HuSum.Value = (int)(Math.Ceiling(huSum / 10d) * 10);
             }
         }
 
