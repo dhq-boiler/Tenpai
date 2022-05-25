@@ -6,6 +6,7 @@ using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku.Meld;
 using Tenpai.Models.Yaku.Meld.Detector;
+using Tenpai.ViewModels;
 
 namespace Tenpai.Test
 {
@@ -182,7 +183,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_5>(),
                     Tile.CreateInstance<Bamboo_6>(),
                 });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.AreEqual(1, completedHands.Count());
             foreach (var completedHand in completedHands)
             {
@@ -222,7 +223,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_7>(),
                     Tile.CreateInstance<Character_8>(),
                 });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             foreach (var completedHand in completedHands)
             {
                 if (completedHand.Equals(new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
@@ -260,7 +261,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_8>(),
                     Tile.CreateInstance<Character_8>(),
                 });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_8>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_8>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             foreach (var completedHand in completedHands)
             {
                 Console.WriteLine(completedHand);
@@ -309,7 +310,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<White>(),
                     Tile.CreateInstance<White>(),
                 });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<White>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<White>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             foreach (var completedHand in completedHands)
             {
                 if (completedHand.Equals(new CompletedHand(new Double<Character_2>(),
@@ -365,7 +366,7 @@ namespace Tenpai.Test
             {
                 TileCollection addedTiles = new TileCollection(tiles);
                 addedTiles.Add(add);
-                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, add, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, add, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
                 foreach (var completedHand in completedHands)
                 {
                     if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
@@ -537,7 +538,7 @@ namespace Tenpai.Test
                 TileCollection addedTiles = new TileCollection(tiles);
                 addedTiles.Add(add);
                 Console.WriteLine(addedTiles);
-                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_1>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_1>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
                 Assert.AreEqual(1, completedHands.Count());
                 foreach (var completedHand in completedHands)
                 {
@@ -790,7 +791,7 @@ namespace Tenpai.Test
             {
                 var ts = new TileCollection(tiles);
                 ts.Add(add);
-                var completedHands = MeldDetector.FindCompletedHands(ts, exposed, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+                var completedHands = MeldDetector.FindCompletedHands(ts, exposed, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_6>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
                 Assert.AreEqual(1, completedHands.Count());
                 foreach (var completedHand in completedHands)
                 {
@@ -840,7 +841,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_6>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_4>(),
@@ -890,7 +891,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_7>(),
                     Tile.CreateInstance<Character_8>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
@@ -940,7 +941,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_8>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Console.WriteLine("=========================================");
             foreach (var readyHand in readyHands)
             {
@@ -1008,7 +1009,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<White>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<White>(),
@@ -1049,7 +1050,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_9>(),
                     Tile.CreateInstance<Bamboo_9>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection()).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_1>(),
@@ -1214,7 +1215,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Green>(),
                     Tile.CreateInstance<Red>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.AreEqual(13, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
@@ -1467,7 +1468,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Red>(),
                     Tile.CreateInstance<Red>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.AreEqual(1, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
@@ -1715,7 +1716,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_6>(),
                 Tile.CreateInstance<Bamboo_6>(),
             });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_5>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_5>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -1751,7 +1752,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_6>(),
                 Tile.CreateInstance<Bamboo_6>(),
             });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Console.WriteLine("=========================================");
             foreach (var readyHand in readyHands)
             {
@@ -1828,7 +1829,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
             });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -1872,7 +1873,7 @@ namespace Tenpai.Test
             {
                 new Quad<North>(KongType.LargeMeldedKong)
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -1916,7 +1917,7 @@ namespace Tenpai.Test
             {
                 new Quad<North>(KongType.ConcealedKong)
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -1956,7 +1957,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Dot_9>(),
 
             });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2000,7 +2001,7 @@ namespace Tenpai.Test
             {
                 new Triple<Character_1>(),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2045,7 +2046,7 @@ namespace Tenpai.Test
             {
                 new Quad<Character_1>(KongType.ConcealedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2090,7 +2091,7 @@ namespace Tenpai.Test
             {
                 new Quad<Character_1>(KongType.LargeMeldedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2135,7 +2136,7 @@ namespace Tenpai.Test
             {
                 new Quad<Character_1>(KongType.SmallMeldedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Dot_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2175,7 +2176,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<East>(),
                 Tile.CreateInstance<East>(),
             });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2219,7 +2220,7 @@ namespace Tenpai.Test
             {
                 new Triple<Red>(),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2264,7 +2265,7 @@ namespace Tenpai.Test
             {
                 new Quad<Red>(KongType.ConcealedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2309,7 +2310,7 @@ namespace Tenpai.Test
             {
                 new Quad<Red>(KongType.LargeMeldedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2354,7 +2355,7 @@ namespace Tenpai.Test
             {
                 new Quad<Red>(KongType.SmallMeldedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<East>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2393,7 +2394,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Character_9>(),
                 Tile.CreateInstance<Character_9>(),
             });
-            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2436,7 +2437,7 @@ namespace Tenpai.Test
             {
                 new Triple<Bamboo_1>(),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2480,7 +2481,7 @@ namespace Tenpai.Test
             {
                 new Quad<Bamboo_1>(KongType.ConcealedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2524,7 +2525,7 @@ namespace Tenpai.Test
             {
                 new Quad<Bamboo_1>(KongType.LargeMeldedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2568,7 +2569,7 @@ namespace Tenpai.Test
             {
                 new Quad<Bamboo_1>(KongType.SmallMeldedKong),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 15, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2612,7 +2613,7 @@ namespace Tenpai.Test
                 new Triple<Bamboo_3>(),
                 new Triple<White>(),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Red>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Red>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
@@ -2656,7 +2657,7 @@ namespace Tenpai.Test
                 new Triple<Character_9>(),
                 new Triple<White>(),
             };
-            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Red>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East);
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Red>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection());
             Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {

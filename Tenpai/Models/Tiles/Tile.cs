@@ -140,6 +140,85 @@ namespace Tenpai.Models.Tiles
             }
         }
 
+        public static Tile Next(int hashCode, Visibility visibility, RotateTransform rotate, int order = 0)
+        {
+            switch (hashCode)
+            {
+                case 0:
+                    return CreateInstance<Character_2>(visibility, rotate, order);
+                case 1:
+                    return CreateInstance<Character_3>(visibility, rotate, order);
+                case 2:
+                    return CreateInstance<Character_4>(visibility, rotate, order);
+                case 3:
+                    return CreateInstance<Character_5>(visibility, rotate, order);
+                case 4:
+                    return CreateInstance<Character_6>(visibility, rotate, order);
+                case 5:
+                    return CreateInstance<Character_7>(visibility, rotate, order);
+                case 6:
+                    return CreateInstance<Character_8>(visibility, rotate, order);
+                case 7:
+                    return CreateInstance<Character_9>(visibility, rotate, order);
+                case 8:
+                    return CreateInstance<Character_1>(visibility, rotate, order);
+                case 9:
+                    return CreateInstance<Dot_2>(visibility, rotate, order);
+                case 10:
+                    return CreateInstance<Dot_3>(visibility, rotate, order);
+                case 11:
+                    return CreateInstance<Dot_4>(visibility, rotate, order);
+                case 12:
+                    return CreateInstance<Dot_5>(visibility, rotate, order);
+                case 13:
+                    return CreateInstance<Dot_6>(visibility, rotate, order);
+                case 14:
+                    return CreateInstance<Dot_7>(visibility, rotate, order);
+                case 15:
+                    return CreateInstance<Dot_8>(visibility, rotate, order);
+                case 16:
+                    return CreateInstance<Dot_9>(visibility, rotate, order);
+                case 17:
+                    return CreateInstance<Dot_1>(visibility, rotate, order);
+                case 18:
+                    return CreateInstance<Bamboo_2>(visibility, rotate, order);
+                case 19:
+                    return CreateInstance<Bamboo_3>(visibility, rotate, order);
+                case 20:
+                    return CreateInstance<Bamboo_4>(visibility, rotate, order);
+                case 21:
+                    return CreateInstance<Bamboo_5>(visibility, rotate, order);
+                case 22:
+                    return CreateInstance<Bamboo_6>(visibility, rotate, order);
+                case 23:
+                    return CreateInstance<Bamboo_7>(visibility, rotate, order);
+                case 24:
+                    return CreateInstance<Bamboo_8>(visibility, rotate, order);
+                case 25:
+                    return CreateInstance<Bamboo_9>(visibility, rotate, order);
+                case 26:
+                    return CreateInstance<Bamboo_1>(visibility, rotate, order);
+                case 27:
+                    return CreateInstance<South>(visibility, rotate, order);
+                case 28:
+                    return CreateInstance<West>(visibility, rotate, order);
+                case 29:
+                    return CreateInstance<North>(visibility, rotate, order);
+                case 30:
+                    return CreateInstance<East>(visibility, rotate, order);
+                case 31:
+                    return CreateInstance<Green>(visibility, rotate, order);
+                case 32:
+                    return CreateInstance<Red>(visibility, rotate, order);
+                case 33:
+                    return CreateInstance<White>(visibility, rotate, order);
+                case int.MaxValue:
+                    return CreateInstance<Dummy>(visibility, rotate, order);
+                default:
+                    throw new NotSupportedException("No corresponding Tile");
+            }
+        }
+
         public static Tile CreateInstance(string code, Visibility visibility, RotateTransform rotate, int order = 0)
         {
             switch (code)

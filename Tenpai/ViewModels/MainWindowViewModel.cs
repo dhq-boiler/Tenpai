@@ -627,6 +627,31 @@ namespace Tenpai.ViewModels
                 ConstructHand();
             })
             .AddTo(_disposables);
+            DoraDisplayTile0.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            DoraDisplayTile1.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            DoraDisplayTile2.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            DoraDisplayTile3.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            DoraDisplayTile4.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
             AgariTile.Subscribe(_ =>
             {
                 ConstructHand();
@@ -842,7 +867,7 @@ namespace Tenpai.ViewModels
             SortIf();
             ReadyHands.Clear();
             var tiles = Tiles.Where(x => !(x is Dummy)).ToList();
-            var readyHands = MeldDetector.FindCompletedHands(tiles.ToArray(), SarashiHai.ToArray(), tileCount.Value + 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value).ToList();
+            var readyHands = MeldDetector.FindCompletedHands(tiles.ToArray(), SarashiHai.ToArray(), tileCount.Value + 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] {DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value})).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands);
@@ -852,7 +877,7 @@ namespace Tenpai.ViewModels
         {
             SortIf();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value).OrderBy(x => x.WaitingTiles[0]).ToList();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands);

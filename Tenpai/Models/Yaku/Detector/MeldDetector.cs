@@ -11,7 +11,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 {
     public static class MeldDetector
     {
-        public static CompletedHand[] FindCompletedHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType, Tile agariTile, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind)
+        public static CompletedHand[] FindCompletedHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType, Tile agariTile, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind, DoraDisplayTileCollection doras)
         {
             List<CompletedHand> ret = new List<CompletedHand>();
             TileCollection allTiles = new TileCollection(hand, exposed);
@@ -20,7 +20,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             handCollection.RemoveTiles(agariTile, 1);
             var handArr = handCollection.ToArray();
 
-            var incompletedHands = FindReadyHands(handArr, exposed, tileCount - 1, agariType, windOfTheRound, onesOwnWind);
+            var incompletedHands = FindReadyHands(handArr, exposed, tileCount - 1, agariType, windOfTheRound, onesOwnWind, doras);
 
             foreach (var incompletedHand in incompletedHands)
             {
@@ -88,6 +88,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var singles = FindSingles(hand);
 
             AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddDora(ref ret, new TileCollection(hand), exposed, doras);
 
             return ret.Distinct().ToArray();
         }
@@ -309,7 +310,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
         /// <param name="hand">手牌の牌リスト</param>
         /// <param name="exposed">晒し牌のリスト</param>
         /// <returns></returns>
-        public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind)
+        public static ReadyHand[] FindReadyHands(Tile[] hand, Meld[] exposed, int tileCount, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind, DoraDisplayTileCollection doras)
         {
             hand = hand.Where(x => !(x is Dummy)).ToArray();
             var tcount = hand.Count();
@@ -337,6 +338,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             ReadyHandsBasicForm(hand, exposed, ref ret, runs, triples, heads, singles, quads);
 
             AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddDora(ref ret, new TileCollection(hand), exposed, doras);
 
             return ret.Distinct(new DelegateComparer<ReadyHand, int>(x =>
             {
@@ -344,6 +346,44 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 Console.WriteLine($"{x} {Convert.ToString(hash, 2).PadLeft(32, '0')}");
                 return hash;
             })).ToArray();
+        }
+
+        private static void AddDora<T>(ref List<T> ret, TileCollection tileCollection, Meld[] exposed, DoraDisplayTileCollection doras) where T : ReadyHand
+        {
+            foreach (var rh in ret)
+            {
+                int doraCount = 0;
+                foreach (var dora in doras)
+                {
+                    var next = Tile.Next(dora.Code, System.Windows.Visibility.Visible, null);
+                    foreach (var z in rh.Melds.ToTileCollection().CloneAndUnion(rh.WaitingTiles))
+                    {
+                        if (next.EqualsRedSuitedTileIncluding(z))
+                        {
+                            doraCount++;
+                        }
+                    }
+                }
+                //ドラ
+                if (doraCount > 0)
+                {
+                    rh.Yakus.Add(new Dora(doraCount));
+                }
+
+                int redDoraCount = 0;
+                foreach (var z in rh.Melds.ToTileCollection().CloneAndUnion(rh.WaitingTiles))
+                {
+                    if (z is IRedSuitedTile r && r.IsRedSuited)
+                    {
+                        redDoraCount++;
+                    }
+                }
+                //赤ドラ
+                if (redDoraCount > 0)
+                {
+                    rh.Yakus.Add(new RedDora(redDoraCount));
+                }
+            }
         }
 
         private static void AddYaku<T>(ref List<T> ret, TileCollection hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind) where T : ReadyHand
