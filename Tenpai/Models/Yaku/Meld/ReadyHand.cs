@@ -117,7 +117,7 @@ namespace Tenpai.Models.Yaku.Meld
                             l.Remove(wait);
                             hands.Add(new CompletedHand(wait + wtile, l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11]));
                         }
-                        else if (MakeRoundRobinCombinationByThirteenOrphans(list.ToArray()).Any(x => new TileCollection(Melds.SelectMany(x => x.Tiles).ToArray()).IsAllContained(x)))
+                        else if (MakeRoundRobinCombinationByThirteenOrphans(list.ToArray()).Any(x => new TileCollection(Melds.SelectMany(x => x.Tiles).ToArray()).IsAllContained(x)) && list.Count() == 13)
                         {
                             var l = list.ToList();
                             l.Remove(wait);

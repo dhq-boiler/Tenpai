@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using Reactive.Bindings;
+using System.Linq;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku.Meld;
 
 namespace Tenpai.Extensions
 {
@@ -46,6 +48,16 @@ namespace Tenpai.Extensions
             var clone = new TileCollection(collection);
             clone.AddRange(targets);
             return clone;
+        }
+
+        public static TileCollection ToTileCollection(this ReactiveCollection<Meld> melds)
+        {
+            var collection = new TileCollection();
+            foreach (var meld in melds)
+            {
+                collection.AddRange(meld.Tiles);
+            }
+            return collection;
         }
     }
 }
