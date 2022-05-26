@@ -117,7 +117,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
 
                 //あがり方
-                if (!rh.Yakus.Contains(new AllRuns()) && agariType == AgariType.Tsumo)
+                if (!rh.Yakus.Contains(new AllRuns()) && agariType == AgariType.Tsumo) //平和ツモの時は符を付けない
                 {
                     huSum += 2;
                 }
