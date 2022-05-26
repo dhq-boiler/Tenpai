@@ -55,6 +55,11 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Tile> DoraDisplayTile2 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> DoraDisplayTile3 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<Tile> DoraDisplayTile4 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> UraDoraDisplayTile0 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> UraDoraDisplayTile1 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> UraDoraDisplayTile2 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> UraDoraDisplayTile3 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
+        public ReactivePropertySlim<Tile> UraDoraDisplayTile4 { get; set; } = new ReactivePropertySlim<Tile>(Tile.CreateInstance<Dummy>());
         public ReactivePropertySlim<bool> IsArrangingTiles { get; } = new ReactivePropertySlim<bool>(true);
         public ReactiveCollection<MenuItem> ContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
         public ReactiveCollection<MenuItem> SarashiHaiTripleContextMenuItems { get; } = new ReactiveCollection<MenuItem>();
@@ -652,6 +657,31 @@ namespace Tenpai.ViewModels
                 ConstructHand();
             })
             .AddTo(_disposables);
+            UraDoraDisplayTile0.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            UraDoraDisplayTile1.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            UraDoraDisplayTile2.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            UraDoraDisplayTile3.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
+            UraDoraDisplayTile4.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
             AgariTile.Subscribe(_ =>
             {
                 ConstructHand();
@@ -867,7 +897,7 @@ namespace Tenpai.ViewModels
             SortIf();
             ReadyHands.Clear();
             var tiles = Tiles.Where(x => !(x is Dummy)).ToList();
-            var readyHands = MeldDetector.FindCompletedHands(tiles.ToArray(), SarashiHai.ToArray(), tileCount.Value + 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] {DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value})).ToList();
+            var readyHands = MeldDetector.FindCompletedHands(tiles.ToArray(), SarashiHai.ToArray(), tileCount.Value + 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands);
@@ -877,7 +907,7 @@ namespace Tenpai.ViewModels
         {
             SortIf();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x => x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value)));
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands);

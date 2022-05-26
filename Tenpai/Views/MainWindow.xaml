@@ -82,23 +82,43 @@
         <DockPanel DockPanel.Dock="Top"
                    Margin="30">
             <DockPanel DockPanel.Dock="Top">
-                <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Vertical"
                             DockPanel.Dock="Right">
-                    <views:TilePlaceholder TileType="{Binding DoraDisplayTile0.Value, Mode=TwoWay}"
-                                       SelectCommand="{Binding SelectCommand}"
-                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
-                    <views:TilePlaceholder TileType="{Binding DoraDisplayTile1.Value, Mode=TwoWay}"
-                                       SelectCommand="{Binding SelectCommand}"
-                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
-                    <views:TilePlaceholder TileType="{Binding DoraDisplayTile2.Value, Mode=TwoWay}"
-                                       SelectCommand="{Binding SelectCommand}"
-                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
-                    <views:TilePlaceholder TileType="{Binding DoraDisplayTile3.Value, Mode=TwoWay}"
-                                       SelectCommand="{Binding SelectCommand}"
-                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
-                    <views:TilePlaceholder TileType="{Binding DoraDisplayTile4.Value, Mode=TwoWay}"
-                                       SelectCommand="{Binding SelectCommand}"
-                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                    <StackPanel Orientation="Horizontal">
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile0.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile1.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile2.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile3.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile4.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                DockPanel.Dock="Right">
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile0.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile1.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile2.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile3.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile4.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <StackPanel.Resources>
