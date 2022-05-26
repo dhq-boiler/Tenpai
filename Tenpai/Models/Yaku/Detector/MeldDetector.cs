@@ -117,7 +117,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
 
                 //あがり方
-                if (agariType == AgariType.Tsumo)
+                if (!rh.Yakus.Contains(new AllRuns()) && agariType == AgariType.Tsumo)
                 {
                     huSum += 2;
                 }
@@ -1085,6 +1085,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     icMelds.AddRange(icRuns);
                     icMelds.AddRange(icTriples);
                     icMelds = icMelds.Distinct(new IncompletedMeldComparer()).ToList();
+                    RemoveDuplicateWaits(icMelds);
                     for (int p = 0; p < icMelds.Count(); ++p)
                     {
                         if (!tiles2.IsAllContained(twoHead[0], twoHead[1], selectedMeld[0], selectedMeld[1], selectedMeld[2]))
@@ -1214,7 +1215,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     var icMelds = new List<IncompletedMeld>();
                     icMelds.AddRange(icRuns);
                     icMelds.AddRange(icTriples);
-                    a:
+                    RemoveDuplicateWaits(icMelds);
                     for (int p = 0; p < icMelds.Count(); ++p)
                     {
                         var wait = icMelds[p];
@@ -1247,6 +1248,38 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         CreateReadyHandWhenOneHeadCreated(ret, tiles, head, selectedMeld, wait);
                     }
                 }
+            }
+        }
+
+        private static void RemoveDuplicateWaits(List<IncompletedMeld> icMelds)
+        {
+            var list = new List<Tile[]>();
+            var removes = new List<IncompletedMeld>();
+            for (int p = 0; p < icMelds.Count(); ++p)
+            {
+                var wait = icMelds[p];
+                if (list.Any(x => B(x, wait.WaitTiles)))
+                {
+                    removes.Add(wait);
+                }
+                list.Add(wait.WaitTiles);
+            }
+            removes.ToList().ForEach(x => icMelds.Remove(x));
+        }
+
+        private static bool B(Tile[] x, TileCollection waitTiles)
+        {
+            if (waitTiles.Count() == 2)
+            {
+                return x[0].EqualsRedSuitedTileIncluding(waitTiles.ElementAt(0)) && x[1].EqualsRedSuitedTileIncluding(waitTiles.ElementAt(1));
+            }
+            else if (waitTiles.Count() == 1)
+            {
+                return x[0].EqualsRedSuitedTileIncluding(waitTiles.ElementAt(0));
+            }
+            else
+            {
+                return false;
             }
         }
 

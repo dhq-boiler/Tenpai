@@ -76,5 +76,17 @@ namespace Tenpai.Models.Yaku
                     break;
             }
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is null)
+                return false;
+            return GetType().Equals(obj.GetType());
+        }
+
+        public override int GetHashCode()
+        {
+            return GetType().GetHashCode();
+        }
     }
 }
