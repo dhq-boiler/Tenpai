@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tenpai.Models.Tiles;
 
 namespace Tenpai.Models.Yaku.Meld
 {
@@ -17,6 +18,7 @@ namespace Tenpai.Models.Yaku.Meld
         { }
 
         public Meld[] WaitForm { get; set; }
+        public Tile AgariTile { get; internal set; }
 
         public override bool Equals(object obj)
         {

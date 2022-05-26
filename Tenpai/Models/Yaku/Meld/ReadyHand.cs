@@ -89,7 +89,7 @@ namespace Tenpai.Models.Yaku.Meld
                     }
                     else
                     {
-                        melds.Add(meld);
+                        //melds.Add(meld);
                     }
                 }
                 yield return melds.ToArray();
@@ -105,7 +105,7 @@ namespace Tenpai.Models.Yaku.Meld
             if (MeldDetector.ThirteenOrphansTiles().IsAllContained(list.ToArray()))
             { }
             //国士無双単騎待ちの完成形を作ろうとしている場合はlistから待ちを除外しない
-            else if (MakeRoundRobinCombinationByThirteenOrphans(list.ToArray()).Any(x => new TileCollection(Melds.SelectMany(x => x.Tiles).ToArray()).IsAllContained(x)))
+            else if (MakeRoundRobinCombinationByThirteenOrphans(list.ToArray()).Any(x => new TileCollection(x.SelectMany(y => y.Tiles)).IsAllContained(Melds.ToArray())))
             { }
             else
             {
@@ -128,21 +128,33 @@ namespace Tenpai.Models.Yaku.Meld
                         {
                             var l = list.ToList();
                             l.Remove(wait);
-                            hands.Add(new CompletedHand(wait + wtile, l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11]));
+                            var ret = new CompletedHand(wait + wtile, l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11]);
+                            ret.WaitForm = new Meld[] { wait };
+                            ret.AgariTile = wtile;
+                            hands.Add(ret);
                         }
                         else if (MakeRoundRobinCombinationByThirteenOrphans(list.ToArray()).Any(x => new TileCollection(Melds.SelectMany(x => x.Tiles).ToArray()).IsAllContained(x)) && list.Count() == 13)
                         {
                             var l = list.ToList();
                             l.Remove(wait);
-                            hands.Add(new CompletedHand(wait + wtile, l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11]));
+                            var ret = new CompletedHand(wait + wtile, l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11]);
+                            ret.WaitForm = new Meld[] { wait };
+                            ret.AgariTile = wtile;
+                            hands.Add(ret);
                         }
                         else if (list.Count(x => x is Double) == 6)
                         {
-                            hands.Add(new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3], list[4], list[5]));
+                            var ret = new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3], list[4], list[5]);
+                            ret.WaitForm = new Meld[] { wait };
+                            ret.AgariTile = wtile;
+                            hands.Add(ret);
                         }
                         else
                         {
-                            hands.Add(new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3]));
+                            var ret = new CompletedHand(wait + wtile, list[0], list[1], list[2], list[3]);
+                            ret.WaitForm = new Meld[] { wait };
+                            ret.AgariTile = wtile;
+                            hands.Add(ret);
                         }
                     }
                 }

@@ -63,7 +63,7 @@ namespace Tenpai.Models.Yaku.Meld
             }
         }
 
-        public int Hu(WindOfTheRound windOfTheRound, OnesOwnWind onesOwnWind)
+        public int Hu(WindOfTheRound windOfTheRound, OnesOwnWind onesOwnWind, Tile agariTile)
         {
             if (this is Quad q && q.Type == KongType.ConcealedKong)
             {
@@ -87,7 +87,7 @@ namespace Tenpai.Models.Yaku.Meld
                     return 8;
                 }
             }
-            else if (this is Triple t && CallFrom == EOpponent.Unknown)
+            else if (this is Triple t && !t.Tiles.First().EqualsRedSuitedTileIncluding(agariTile) && (CallFrom is null || CallFrom == EOpponent.Unknown))
             {
                 if (Tiles.All(x => x is ITerminals || x is Honors))
                 {
@@ -98,7 +98,7 @@ namespace Tenpai.Models.Yaku.Meld
                     return 4;
                 }
             }
-            else if (this is Triple t2 && CallFrom != EOpponent.Unknown && CallFrom != EOpponent.Default)
+            else if (this is Triple t2 && (t2.Tiles.First().EqualsRedSuitedTileIncluding(agariTile) || (CallFrom != EOpponent.Unknown && CallFrom != EOpponent.Default)))
             {
                 if (Tiles.All(x => x is ITerminals || x is Honors))
                 {
