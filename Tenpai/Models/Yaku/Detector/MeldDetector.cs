@@ -155,6 +155,48 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                             break;
                     }
                 }
+                else if (rh.SumHanCount >= 13 && rh.SumHanCount < 26) //役満
+                {
+                    switch (onesOwnWind)
+                    {
+                        case OnesOwnWind.East:
+                            rh.Score = 48000;
+                            break;
+                        case OnesOwnWind.South:
+                        case OnesOwnWind.West:
+                        case OnesOwnWind.North:
+                            rh.Score = 32000;
+                            break;
+                    }
+                }
+                else if (rh.SumHanCount >= 26 && rh.SumHanCount < 39) //二倍役満
+                {
+                    switch (onesOwnWind)
+                    {
+                        case OnesOwnWind.East:
+                            rh.Score = 96000;
+                            break;
+                        case OnesOwnWind.South:
+                        case OnesOwnWind.West:
+                        case OnesOwnWind.North:
+                            rh.Score = 64000;
+                            break;
+                    }
+                }
+                else if (rh.SumHanCount >= 39 && rh.SumHanCount < 52) //三倍役満
+                {
+                    switch (onesOwnWind)
+                    {
+                        case OnesOwnWind.East:
+                            rh.Score = 144000;
+                            break;
+                        case OnesOwnWind.South:
+                        case OnesOwnWind.West:
+                        case OnesOwnWind.North:
+                            rh.Score = 96000;
+                            break;
+                    }
+                }
                 else
                 {
                     var score = Score.Scores.Single(x => x.Equals(new Score(pOrC, rh.HuSum.Value, rh.SumHanCount)));
