@@ -904,7 +904,7 @@ namespace Tenpai.ViewModels
                 MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value);
             });
             RemoveUnder12HanYakuFromYakuList(readyHands);
-            ReadyHands.AddRange(readyHands);
+            ReadyHands.AddRange(readyHands.OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum));
         }
 
         private void ConstructReadyHands()
@@ -918,7 +918,7 @@ namespace Tenpai.ViewModels
                 MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value);
             });
             RemoveUnder12HanYakuFromYakuList(readyHands);
-            ReadyHands.AddRange(readyHands);
+            ReadyHands.AddRange(readyHands.OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum));
         }
 
         private void RemoveUnder12HanYakuFromYakuList<T>(List<T> readyHands) where T : ReadyHand
