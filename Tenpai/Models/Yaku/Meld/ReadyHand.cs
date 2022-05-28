@@ -30,7 +30,7 @@ namespace Tenpai.Models.Yaku.Meld
         {
             get
             {
-                return Yakus.Sum(x => x.HanCount(Melds.Where(x => x.CallFrom != EOpponent.Unknown && (x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong))).Count() > 0));
+                return Yakus.Sum(x => x.HanCount(Melds.Where(x => (x.CallFrom is not null && x.CallFrom != EOpponent.Unknown) && (x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong))).Count() > 0));
             }
         }
 
