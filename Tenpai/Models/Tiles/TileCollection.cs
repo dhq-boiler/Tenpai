@@ -248,12 +248,10 @@ namespace Tenpai.Models.Tiles
                 if (this.IsEnable)
                 {
                     var ret = collection.Enumerate<T>(count);
-                    Debug.WriteLine($"{Thread.GetCurrentProcessorId()} Enumerate:{typeof(T).Name},{count}=>{ret.IsEnable}");
                     return ret;
                 }
                 else
                 {
-                    Debug.WriteLine($"{Thread.GetCurrentProcessorId()} Enumerate:{typeof(T).Name},{count}=>{false}");
                     return new A(false, new TileCollection());
                 }
             }
