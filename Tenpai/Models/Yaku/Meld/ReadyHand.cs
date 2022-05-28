@@ -114,6 +114,10 @@ namespace Tenpai.Models.Yaku.Meld
                     list.Remove(wait);
                 }
             }
+            if (Waiting.Count() == 0 && this is CompletedHand ch)
+            {
+                hands.Add(ch);
+            }
             foreach (var wait in Waiting)
             {
                 (wait as IncompletedMeld).ComputeWaitTiles();
