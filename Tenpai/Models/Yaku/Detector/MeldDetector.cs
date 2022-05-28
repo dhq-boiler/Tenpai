@@ -94,6 +94,28 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             return ret.Distinct().ToArray();
         }
 
+        public static void CalcScore<T>(ref List<T> ret, OnesOwnWind onesOwnWind) where T : ReadyHand
+        {
+            foreach (var rh in ret)
+            {
+                Score.ParentOrChild pOrC = Score.ParentOrChild.Parent;
+                
+                switch (onesOwnWind)
+                {
+                    case OnesOwnWind.East:
+                        pOrC = Score.ParentOrChild.Parent;
+                        break;
+                    case OnesOwnWind.South:
+                    case OnesOwnWind.West:
+                    case OnesOwnWind.North:
+                        pOrC = Score.ParentOrChild.Child;
+                        break;
+                }
+                var score = Score.Scores.Single(x => x.Equals(new Score(pOrC, rh.HuSum.Value, rh.SumHanCount)));
+                rh.Score = score.Scr;
+            }
+        }
+
         private static void CalcHu<T>(ref List<T> readyHands, Meld[] exposed, WindOfTheRound windOfTheRound, OnesOwnWind onesOwnWind, AgariType agariType) where T : ReadyHand
         {
             foreach (var rh in readyHands)

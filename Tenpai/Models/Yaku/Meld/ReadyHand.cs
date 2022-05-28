@@ -163,6 +163,7 @@ namespace Tenpai.Models.Yaku.Meld
         }
 
         public Tile[] Odd { get; private set; }
+        public int Score { get; internal set; }
 
         public override bool Equals(object obj)
         {
