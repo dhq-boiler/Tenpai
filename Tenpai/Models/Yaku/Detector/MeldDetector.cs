@@ -111,8 +111,72 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         pOrC = Score.ParentOrChild.Child;
                         break;
                 }
-                var score = Score.Scores.Single(x => x.Equals(new Score(pOrC, rh.HuSum.Value, rh.SumHanCount)));
-                rh.Score = score.Scr;
+
+
+                if (rh.SumHanCount == 6 || rh.SumHanCount == 7) //跳満
+                {
+                    switch (onesOwnWind)
+                    {
+                        case OnesOwnWind.East:
+                            rh.Score = 18000;
+                            break;
+                        case OnesOwnWind.South:
+                        case OnesOwnWind.West:
+                        case OnesOwnWind.North:
+                            rh.Score = 12000;
+                            break;
+                    }
+                }
+                else if (rh.SumHanCount >= 8 && rh.SumHanCount <= 10) //倍満
+                {
+                    switch (onesOwnWind)
+                    {
+                        case OnesOwnWind.East:
+                            rh.Score = 24000;
+                            break;
+                        case OnesOwnWind.South:
+                        case OnesOwnWind.West:
+                        case OnesOwnWind.North:
+                            rh.Score = 16000;
+                            break;
+                    }
+                }
+                else if (rh.SumHanCount == 11 && rh.SumHanCount == 12) //三倍満
+                {
+                    switch (onesOwnWind)
+                    {
+                        case OnesOwnWind.East:
+                            rh.Score = 36000;
+                            break;
+                        case OnesOwnWind.South:
+                        case OnesOwnWind.West:
+                        case OnesOwnWind.North:
+                            rh.Score = 24000;
+                            break;
+                    }
+                }
+                else
+                {
+                    var score = Score.Scores.Single(x => x.Equals(new Score(pOrC, rh.HuSum.Value, rh.SumHanCount)));
+                    if (score is Slum) //満貫の時
+                    {
+                        switch (onesOwnWind)
+                        {
+                            case OnesOwnWind.East:
+                                rh.Score = 12000;
+                                break;
+                            case OnesOwnWind.South:
+                            case OnesOwnWind.West:
+                            case OnesOwnWind.North:
+                                rh.Score = 8000;
+                                break;
+                        }
+                    }
+                    else //1翻～4翻まで（切り上げ満貫まで対応）
+                    {
+                        rh.Score = score.Scr;
+                    }
+                }
             }
         }
 
