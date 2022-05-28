@@ -191,19 +191,19 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 foreach (var meld in ch.Melds)
                 {
                     var add = meld.Hu(windOfTheRound, onesOwnWind, ch.AgariTile);
-                    Trace.WriteLine($"{meld} : {add}符");
+                    Debug.WriteLine($"{meld} : {add}符");
                     huSum += add;
                 }
 
                 //待ちの形
                 var add2 = ch.WaitForm.Max(wait => wait.Hu(windOfTheRound, onesOwnWind, ch.AgariTile));
-                Trace.WriteLine($"{string.Join(',', ch.WaitForm.Cast<object>())} : {add2}符");
+                Debug.WriteLine($"{string.Join(',', ch.WaitForm.Cast<object>())} : {add2}符");
                 huSum += add2;
 
                 //あがり方
                 if (!ch.Yakus.Contains(new AllRuns()) && agariType == AgariType.Tsumo) //平和ツモの時は符を付けない
                 {
-                    Trace.WriteLine($"ツモ : 2符");
+                    Debug.WriteLine($"ツモ : 2符");
                     huSum += 2;
                 }
                 else if (agariType == AgariType.Ron)
@@ -211,7 +211,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     var isMenzen = exposed == null || exposed.Where(x => x is Run || x is Triple || (x is Quad quad && quad.Type != KongType.ConcealedKong)).Count() == 0;
                     if (isMenzen)
                     {
-                        Trace.WriteLine($"門前ロン : 10符");
+                        Debug.WriteLine($"門前ロン : 10符");
                         huSum += 10;
                     }
                 }
