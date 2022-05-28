@@ -141,7 +141,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                             break;
                     }
                 }
-                else if (rh.SumHanCount == 11 && rh.SumHanCount == 12) //三倍満
+                else if (rh.SumHanCount == 11 || rh.SumHanCount == 12) //三倍満
                 {
                     switch (onesOwnWind)
                     {
