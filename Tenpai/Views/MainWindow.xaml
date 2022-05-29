@@ -31,9 +31,13 @@
         </ObjectDataProvider>
         <converters:WindOfTheRoundConverter x:Key="WindOfTheRoundConverter" />
         <converters:OnesOwnWindConverter x:Key="OnesOwnWindConverter" />
-        <converters:FullConverter x:Key="Full" />
-        <converters:DoubleFullConverter x:Key="DoubleFull" />
-        <converters:TripleFullConverter x:Key="TripleFull" />
+        <converters:SlumConverter x:Key="CSlum" />
+        <converters:OneAndAHalfOfSlumConverter x:Key="COneAndHalfOfSlum" />
+        <converters:DoubleSlumConverter x:Key="CDoubleSlum" />
+        <converters:ThreeTimesofTheSlumConverter x:Key="CThreeTimesOfTheSlum" />
+        <converters:FullConverter x:Key="CFull" />
+        <converters:DoubleFullConverter x:Key="CDoubleFull" />
+        <converters:TripleFullConverter x:Key="CTripleFull" />
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -688,9 +692,55 @@
                                         <Label VerticalAlignment="Center"
                                                HorizontalAlignment="Right">
                                             <Label.Resources>
-                                                <TextBlock x:Key="F" Text="役満" />
-                                                <TextBlock x:Key="DF" Text="二倍役満" />
-                                                <TextBlock x:Key="TF" Text="三倍役満" />
+                                                <TextBlock x:Key="Slum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="満貫" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="OneAndHalfSlum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="跳満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="DoubleSlum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="倍満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="TribleSlum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="三倍満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="F">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="役満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="DF">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="二倍役満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="TF">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="三倍役満" />
+                                                </TextBlock>
                                                 <TextBlock x:Key="N">
                                                     <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
                                                     <Run Text="符" />
@@ -703,16 +753,28 @@
                                                     <Setter Property="FontSize" Value="50" />
                                                     <Setter Property="FontFamily" Value="HGS行書体" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource Full}}" Value="False">
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CSlum}}" Value="False">
                                                             <Setter Property="Content" Value="{StaticResource N}" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource Full}}" Value="True">
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource Slum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource COneAndHalfOfSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource OneAndHalfSlum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CDoubleSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource DoubleSlum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CThreeTimesOfTheSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource TribleSlum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CFull}}" Value="True">
                                                             <Setter Property="Content" Value="{StaticResource F}" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource DoubleFull}}" Value="True">
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CDoubleFull}}" Value="True">
                                                             <Setter Property="Content" Value="{StaticResource DF}" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource TripleFull}}" Value="True">
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CTripleFull}}" Value="True">
                                                             <Setter Property="Content" Value="{StaticResource TF}" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
