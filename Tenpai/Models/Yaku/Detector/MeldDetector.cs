@@ -1168,14 +1168,19 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
             }
 
-            OneHeadCreated(hand, exposed, ret, newHeads.ToArray(), melds);
-            OneHeadCreating(hand, exposed, ret, singles, melds);
-            TwoHeadCreated(hand, exposed, ret, newHeads.ToArray(), melds);
+            var temp = new List<Tuple<string, ReadyHand>>();
+
+            OneHeadCreated(hand, exposed, temp, newHeads.ToArray(), melds);
+            OneHeadCreating(hand, exposed, temp, singles, melds);
+            TwoHeadCreated(hand, exposed, temp, newHeads.ToArray(), melds);
+
+            temp = temp.Distinct(new DelegateComparer<Tuple<string, ReadyHand>, Tile[]>(x => x.Item2.WaitingTiles)).ToList();
+            ret = temp.Select(x => x.Item2).ToList();
 
             ret = ret.Distinct(new DelegateComparer<ReadyHand, Tile[]>(x => x.WaitingTiles)).ToList();
         }
 
-        private static void TwoHeadCreated(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] heads, List<Meld> melds)
+        private static void TwoHeadCreated(Tile[] hand, Meld[] exposed, List<Tuple<string, ReadyHand>> ret, Meld[] heads, List<Meld> melds)
         {
             //2対子完成
             var listHeads = new List<Meld>();
@@ -1213,6 +1218,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     icMelds.AddRange(icRuns);
                     icMelds.AddRange(icTriples);
                     icMelds = icMelds.Distinct(new IncompletedMeldComparer()).ToList();
+                    RemoveRedTile(tiles2, twoHead[0], twoHead[1], selectedMeld[0], selectedMeld[1], icMelds);
                     RemoveDuplicateWaits(icMelds);
                     for (int p = 0; p < icMelds.Count(); ++p)
                     {
@@ -1226,7 +1232,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
-        private static void GenerateHand(List<ReadyHand> ret, Meld targetHead, Meld otherHead, Meld[] selectedMeld, TileCollection tiles2)
+        private static void GenerateHand(List<Tuple<string, ReadyHand>> ret, Meld targetHead, Meld otherHead, Meld[] selectedMeld, TileCollection tiles2)
         {
             if (targetHead is IncompletedMeld y)
             {
@@ -1236,6 +1242,21 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 {
                     return;
                 }
+
+                var tiles = new TileCollection(new Tile[] { }, otherHead, targetHead, selectedMeld[0], selectedMeld[1], selectedMeld[2]);
+                var redableTiles = tiles.Where(x => x is IRedSuitedTile);
+                foreach (var redableTile in redableTiles)
+                {
+                    var normalTilesCount = tiles.Count(x => x.Code == redableTile.Code && x is IRedSuitedTile xr && !xr.IsRedSuited);
+                    var redTilesCount = tiles.Count(x => x.Code == redableTile.Code && x is IRedSuitedTile xr && xr.IsRedSuited);
+                    if (normalTilesCount + redTilesCount <= 4 && redTilesCount <= 1 && normalTilesCount <= 3)
+                    { }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 foreach (var w in y.WaitTiles)
                 {
                     if (w is IRedSuitedTile r)
@@ -1252,13 +1273,13 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         }
                     }
                     //1雀頭・3面子完成済み，1搭子
-                    ret.Add(new ManualWaitReadyHand(w, (targetHead as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (otherHead as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2]));
+                    ret.Add(new Tuple<string, ReadyHand>("TwoHeadCreated", new ManualWaitReadyHand(w, (targetHead as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT), (otherHead as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2])));
                 }
             }
 
         }
 
-        private static void OneHeadCreating(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] singles, List<Meld> melds)
+        private static void OneHeadCreating(Tile[] hand, Meld[] exposed, List<Tuple<string, ReadyHand>> ret, Meld[] singles, List<Meld> melds)
         {
             //1雀頭完成待ち
             for (int l = 0; l < singles.Count(); ++l)
@@ -1283,7 +1304,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
-        private static void CreateReadyHandWhenOneHeadCreating(List<ReadyHand> ret, TileCollection tiles, Meld wait, Meld[] selectedMeld)
+        private static void CreateReadyHandWhenOneHeadCreating(List<Tuple<string, ReadyHand>> ret, TileCollection tiles, Meld wait, Meld[] selectedMeld)
         {
             var ww = (wait as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.WAIT);
             ww.ComputeWaitTiles();
@@ -1311,10 +1332,10 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var odd = tiles.Odd(wait, selectedMeld[0], selectedMeld[1], selectedMeld[2], selectedMeld[3]);
 
             //4面子完成済み，1雀頭完成待ち
-            ret.Add(new ManualWaitReadyHand(ww.WaitTiles, (wait as Single).Clone(IncompletedMeld.MeldStatus.WAIT), selectedMeld[0], selectedMeld[1], selectedMeld[2], selectedMeld[3]));
+            ret.Add(new Tuple<string, ReadyHand>("OneHeadCreating", new ManualWaitReadyHand(ww.WaitTiles, (wait as Single).Clone(IncompletedMeld.MeldStatus.WAIT), selectedMeld[0], selectedMeld[1], selectedMeld[2], selectedMeld[3])));
         }
 
-        private static void OneHeadCreated(Tile[] hand, Meld[] exposed, List<ReadyHand> ret, Meld[] heads, List<Meld> melds)
+        private static void OneHeadCreated(Tile[] hand, Meld[] exposed, List<Tuple<string, ReadyHand>> ret, Meld[] heads, List<Meld> melds)
         {
             //1雀頭完成済み
             for (int l = 0; l < heads.Count() && (exposed == null || exposed.Count() <= 3); ++l)
@@ -1343,6 +1364,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                     var icMelds = new List<IncompletedMeld>();
                     icMelds.AddRange(icRuns);
                     icMelds.AddRange(icTriples);
+                    RemoveRedTile(tiles, head, selectedMeld[0], selectedMeld[1], selectedMeld[2], icMelds);
                     RemoveDuplicateWaits(icMelds);
                     for (int p = 0; p < icMelds.Count(); ++p)
                     {
@@ -1379,6 +1401,36 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
+        private static void RemoveRedTile(TileCollection tiles, Meld head, Meld meld, Meld meld1, Meld meld2, List<IncompletedMeld> icMelds)
+        {
+            var removes = new List<IncompletedMeld>();
+            for (int p = 0; p < icMelds.Count(); ++p)
+            {
+                var wait = icMelds[p];
+                foreach (var t in wait.Tiles)
+                {
+                    if (t is IRedSuitedTile tr && tr.IsRedSuited)
+                    {
+                        if (!tiles.IsAllContained(head, meld, meld1, meld2, wait))
+                        {
+                            removes.Add(wait);
+                        }
+                    }
+                }
+                foreach (var w in wait.WaitTiles)
+                {
+                    if (w is IRedSuitedTile wr && wr.IsRedSuited)
+                    {
+                        if (!tiles.IsAllContained(head, meld, meld1, meld2, wait))
+                        {
+                            removes.Add(wait);
+                        }
+                    }
+                }
+            }
+            removes.ToList().ForEach(x => icMelds.Remove(x));
+        }
+
         private static void RemoveDuplicateWaits(List<IncompletedMeld> icMelds)
         {
             var list = new List<Tile[]>();
@@ -1411,7 +1463,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
-        private static void CreateReadyHandWhenOneHeadCreated(List<ReadyHand> ret, TileCollection tiles, Meld head, Meld[] selectedMeld, IncompletedMeld wait)
+        private static void CreateReadyHandWhenOneHeadCreated(List<Tuple<string, ReadyHand>> ret, TileCollection tiles, Meld head, Meld[] selectedMeld, IncompletedMeld wait)
         {
             if (wait.MeldStatusType == IncompletedMeld.MeldStatus.WAIT)
             {
@@ -1420,9 +1472,12 @@ namespace Tenpai.Models.Yaku.Meld.Detector
 
             foreach (var wts in wait.WaitTiles)
             {
-                var ts = new TileCollection(new Tile[] { wts }, wait, selectedMeld[0], selectedMeld[1], selectedMeld[2]);
+                var ts = new TileCollection(new Tile[] { wts }, wait, head, selectedMeld[0], selectedMeld[1], selectedMeld[2]);
                 
                 if (ts.IsMoreThan4TilesOfTheSameType())
+                    continue;
+
+                if (ts.IsMoreThan1TilesOfTheSameTypeAndRedTile())
                     continue;
                 
                 if (wts is IRedSuitedTile r)
@@ -1440,7 +1495,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
 
                 //1雀頭・3面子完成済み，1搭子
-                ret.Add(new ManualWaitReadyHand(wts, (head as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2], wait.Clone(IncompletedMeld.MeldStatus.WAIT)));
+                ret.Add(new Tuple<string, ReadyHand>("OneHeadCreated", new ManualWaitReadyHand(wts, (head as IncompletedMeld).Clone(IncompletedMeld.MeldStatus.COMPLETED), selectedMeld[0], selectedMeld[1], selectedMeld[2], wait.Clone(IncompletedMeld.MeldStatus.WAIT))));
             }
         }
 

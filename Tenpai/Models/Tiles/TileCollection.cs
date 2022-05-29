@@ -281,5 +281,18 @@ namespace Tenpai.Models.Tiles
                 return new A(IsEnable, newcollection);
             }
         }
+
+        public bool IsMoreThan1TilesOfTheSameTypeAndRedTile()
+        {
+            var redTiles = this.Where(x => x is IRedSuitedTile r && r.IsRedSuited);
+            foreach (var redTile in redTiles)
+            {
+                if (redTiles.Count(x => x.EqualsConsiderCodeAndRed(redTile)) > 1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

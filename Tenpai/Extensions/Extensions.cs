@@ -11,7 +11,7 @@ namespace Tenpai.Extensions
         {
             foreach (var tile in collection)
             {
-                if (tile.Code == target.Code)
+                if (tile.Code == target.Code && ((tile is not IRedSuitedTile || target is not IRedSuitedTile) || (tile is IRedSuitedTile tr && target is IRedSuitedTile tarr && tr.IsRedSuited == tarr.IsRedSuited)))
                     return true;
             }
             return false;
