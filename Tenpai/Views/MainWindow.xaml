@@ -141,6 +141,18 @@
                               SelectedItem="{Binding WindOfTheRound.Value, Mode=OneWayToSource, Converter={StaticResource WindOfTheRoundConverter}}" />
                     <ComboBox ItemsSource="{Binding Source={StaticResource OnesOwnWindComboBox}}"
                               SelectedItem="{Binding OnesOwnWind.Value, Mode=OneWayToSource, Converter={StaticResource OnesOwnWindConverter}}" />
+                    <ComboBox ItemsSource="{Binding HonbaSu, Mode=OneWay}"
+                              SelectedItem="{Binding SelectedHonbaSu.Value, Mode=OneWayToSource}"
+                              Width="100">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding Mode=OneWay}" />
+                                    <Run Text="本場" />
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
             </DockPanel>
             <DockPanel DockPanel.Dock="Right">

@@ -94,7 +94,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             return ret.Distinct().ToArray();
         }
 
-        public static void CalcScore<T>(ref List<T> ret, OnesOwnWind onesOwnWind) where T : ReadyHand
+        public static void CalcScore<T>(ref List<T> ret, OnesOwnWind onesOwnWind, int honbaSu) where T : ReadyHand
         {
             foreach (var rh in ret)
             {
@@ -219,6 +219,8 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                         rh.Score = score.Scr;
                     }
                 }
+
+                rh.Score += honbaSu * 300;
             }
         }
 

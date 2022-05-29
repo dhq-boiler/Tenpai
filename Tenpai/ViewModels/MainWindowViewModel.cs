@@ -81,6 +81,8 @@ namespace Tenpai.ViewModels
         public ReactiveCommand ClosingCommand { get; } = new ReactiveCommand();
         public ReactivePropertySlim<WindOfTheRound> WindOfTheRound { get; } = new ReactivePropertySlim<WindOfTheRound>(ViewModels.WindOfTheRound.East);
         public ReactivePropertySlim<OnesOwnWind> OnesOwnWind { get; } = new ReactivePropertySlim<OnesOwnWind>(ViewModels.OnesOwnWind.East);
+        public ReactiveCollection<int> HonbaSu { get; } = new ReactiveCollection<int>();
+        public ReactivePropertySlim<int> SelectedHonbaSu { get; } = new ReactivePropertySlim<int>();
 
         private int sarashiCount = 0;
 
@@ -874,6 +876,15 @@ namespace Tenpai.ViewModels
                     ConstructHand();
                 }),
             });
+            for (int i = 0; i < 30; i++)
+            {
+                HonbaSu.Add(i);
+            }
+            SelectedHonbaSu.Subscribe(_ =>
+            {
+                ConstructHand();
+            })
+            .AddTo(_disposables);
         }
 
         private void ConstructHand()
@@ -901,7 +912,7 @@ namespace Tenpai.ViewModels
             readyHands.ToList().ForEach(x =>
             {
                 x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
-                MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value);
+                MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value, SelectedHonbaSu.Value);
             });
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands.OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum.Value));
@@ -915,7 +926,7 @@ namespace Tenpai.ViewModels
             readyHands.ToList().ForEach(x =>
             {
                 x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
-                MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value);
+                MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value, SelectedHonbaSu.Value);
             });
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHands.AddRange(readyHands.OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum.Value));
