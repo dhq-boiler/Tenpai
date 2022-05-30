@@ -138,11 +138,11 @@
                         </Style>
                     </StackPanel.Resources>
                     <ComboBox ItemsSource="{Binding Source={StaticResource WindOfTheRoundComboBox}}"
-                              SelectedItem="{Binding WindOfTheRound.Value, Mode=OneWayToSource, Converter={StaticResource WindOfTheRoundConverter}}" />
+                              SelectedItem="{Binding WindOfTheRound.Value, Mode=TwoWay, Converter={StaticResource WindOfTheRoundConverter}, UpdateSourceTrigger=PropertyChanged}" />
                     <ComboBox ItemsSource="{Binding Source={StaticResource OnesOwnWindComboBox}}"
-                              SelectedItem="{Binding OnesOwnWind.Value, Mode=OneWayToSource, Converter={StaticResource OnesOwnWindConverter}}" />
+                              SelectedItem="{Binding OnesOwnWind.Value, Mode=TwoWay, Converter={StaticResource OnesOwnWindConverter}, UpdateSourceTrigger=PropertyChanged}" />
                     <ComboBox ItemsSource="{Binding HonbaSu, Mode=OneWay}"
-                              SelectedItem="{Binding SelectedHonbaSu.Value, Mode=OneWayToSource}"
+                              SelectedItem="{Binding SelectedHonbaSu.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               Width="100">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -240,6 +240,10 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
+                    <Button Command="{Binding ClearCommand}"
+                            Width="75"
+                            Height="40"
+                            Content="クリア" />
                 </StackPanel>
             </DockPanel>
             <StackPanel Orientation="Horizontal">

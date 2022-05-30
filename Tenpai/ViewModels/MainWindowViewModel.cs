@@ -74,7 +74,7 @@ namespace Tenpai.ViewModels
         public ReactiveCommand<Call> DaiminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> ShouminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
-        public ReactiveCollection<Yaku> Yakus { get;} = new ReactiveCollection<Yaku>();
+        public ReactiveCollection<Yaku> Yakus { get; } = new ReactiveCollection<Yaku>();
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(13);
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
         public ReadOnlyReactivePropertySlim<int> AgariTypeAsInt { get; }
@@ -83,6 +83,7 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<OnesOwnWind> OnesOwnWind { get; } = new ReactivePropertySlim<OnesOwnWind>(ViewModels.OnesOwnWind.East);
         public ReactiveCollection<int> HonbaSu { get; } = new ReactiveCollection<int>();
         public ReactivePropertySlim<int> SelectedHonbaSu { get; } = new ReactivePropertySlim<int>();
+        public ReactiveCommand ClearCommand { get; } = new ReactiveCommand();
 
         private int sarashiCount = 0;
 
@@ -883,6 +884,45 @@ namespace Tenpai.ViewModels
             SelectedHonbaSu.Subscribe(_ =>
             {
                 ConstructHand();
+            })
+            .AddTo(_disposables);
+            ClearCommand.Subscribe(_ =>
+            {
+                Tile16.Value = Tile.CreateInstance<Dummy>();
+                Tile15.Value = Tile.CreateInstance<Dummy>();
+                Tile14.Value = Tile.CreateInstance<Dummy>();
+                Tile13.Value = Tile.CreateInstance<Dummy>();
+                Tile12.Value = Tile.CreateInstance<Dummy>();
+                Tile11.Value = Tile.CreateInstance<Dummy>();
+                Tile10.Value = Tile.CreateInstance<Dummy>();
+                Tile9.Value = Tile.CreateInstance<Dummy>();
+                Tile8.Value = Tile.CreateInstance<Dummy>();
+                Tile7.Value = Tile.CreateInstance<Dummy>();
+                Tile6.Value = Tile.CreateInstance<Dummy>();
+                Tile5.Value = Tile.CreateInstance<Dummy>();
+                Tile4.Value = Tile.CreateInstance<Dummy>();
+                Tile3.Value = Tile.CreateInstance<Dummy>();
+                Tile2.Value = Tile.CreateInstance<Dummy>();
+                Tile1.Value = Tile.CreateInstance<Dummy>();
+                Tile0.Value = Tile.CreateInstance<Dummy>();
+                AgariTile.Value = Tile.CreateInstance<Dummy>();
+                DoraDisplayTile0.Value = Tile.CreateInstance<Dummy>();
+                DoraDisplayTile1.Value = Tile.CreateInstance<Dummy>();
+                DoraDisplayTile2.Value = Tile.CreateInstance<Dummy>();
+                DoraDisplayTile3.Value = Tile.CreateInstance<Dummy>();
+                DoraDisplayTile4.Value = Tile.CreateInstance<Dummy>();
+                UraDoraDisplayTile0.Value = Tile.CreateInstance<Dummy>();
+                UraDoraDisplayTile1.Value = Tile.CreateInstance<Dummy>();
+                UraDoraDisplayTile2.Value = Tile.CreateInstance<Dummy>();
+                UraDoraDisplayTile3.Value = Tile.CreateInstance<Dummy>();
+                UraDoraDisplayTile4.Value = Tile.CreateInstance<Dummy>();
+                AgariType.Value = ViewModels.AgariType.Unspecified;
+                WindOfTheRound.Value = ViewModels.WindOfTheRound.East;
+                OnesOwnWind.Value = ViewModels.OnesOwnWind.East;
+                SelectedHonbaSu.Value = 0;
+                sarashiCount = 0;
+                tileCount.Value = 13;
+                sortflag = false;
             })
             .AddTo(_disposables);
         }
