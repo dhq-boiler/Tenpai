@@ -1,0 +1,857 @@
+﻿<Window x:Class="Tenpai.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:Tenpai.Converters"
+        xmlns:helper="clr-namespace:Tenpai.Helpers"
+        xmlns:views="clr-namespace:Tenpai.Views"
+        xmlns:meld="clr-namespace:Tenpai.Models.Yaku.Meld"
+        xmlns:tiles="clr-namespace:Tenpai.Models.Tiles"
+        xmlns:viewModels="clr-namespace:Tenpai.ViewModels"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+        xmlns:utils="clr-namespace:Tenpai.Utils"
+        mc:Ignorable="d"
+        Title="聴牌 β" Height="720" Width="1280">
+    <Window.Resources>
+        <converters:EnumConverter x:Key="Enum" />
+        <converters:HanCountToIntConverter x:Key="HanCountToInt" />
+        <converters:HanCountToStringConverter x:Key="HanCountToString" />
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type utils:EnumerationManager}" x:Key="WindOfTheRoundComboBox">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="viewModels:WindOfTheRound" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type utils:EnumerationManager}" x:Key="OnesOwnWindComboBox">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="viewModels:OnesOwnWind" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <converters:WindOfTheRoundConverter x:Key="WindOfTheRoundConverter" />
+        <converters:OnesOwnWindConverter x:Key="OnesOwnWindConverter" />
+        <converters:SlumConverter x:Key="CSlum" />
+        <converters:OneAndAHalfOfSlumConverter x:Key="COneAndHalfOfSlum" />
+        <converters:DoubleSlumConverter x:Key="CDoubleSlum" />
+        <converters:ThreeTimesofTheSlumConverter x:Key="CThreeTimesOfTheSlum" />
+        <converters:FullConverter x:Key="CFull" />
+        <converters:DoubleFullConverter x:Key="CDoubleFull" />
+        <converters:TripleFullConverter x:Key="CTripleFull" />
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <helper:EventToCommand Command="{Binding ClosingCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Right">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Yakus}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Content="{Binding Name}"
+                                          IsChecked="{Binding IsEnable.Value}"
+                                          VerticalAlignment="Center">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Checked">
+                                            <helper:EventToCommand Command="{Binding CheckedCommand}" />
+                                        </i:EventTrigger>
+                                        <i:EventTrigger EventName="Unchecked">
+                                            <helper:EventToCommand Command="{Binding UncheckedCommand}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </CheckBox>
+                                <Label VerticalAlignment="Center">
+                                    <TextBlock>
+                                        <Run>
+                                            <Run.Text>
+                                                <MultiBinding Converter="{StaticResource HanCountToString}" Mode="OneWay">
+                                                    <Binding />
+                                                    <Binding Path="DataContext.SarashiHai" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}" />
+                                                </MultiBinding>
+                                            </Run.Text>
+                                        </Run>
+                                    </TextBlock>
+                                </Label>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Top"
+                   Margin="30">
+            <DockPanel DockPanel.Dock="Top">
+                <StackPanel Orientation="Vertical"
+                            DockPanel.Dock="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile0.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile1.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile2.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile3.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding DoraDisplayTile4.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                DockPanel.Dock="Right">
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile0.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile1.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile2.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile3.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                        <views:TilePlaceholder TileType="{Binding UraDoraDisplayTile4.Value, Mode=TwoWay}"
+                                           SelectCommand="{Binding SelectCommand}"
+                                           Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="Width" Value="75" />
+                            <Setter Property="Height" Value="40" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="FontSize" Value="20" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource WindOfTheRoundComboBox}}"
+                              SelectedItem="{Binding WindOfTheRound.Value, Mode=TwoWay, Converter={StaticResource WindOfTheRoundConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox ItemsSource="{Binding Source={StaticResource OnesOwnWindComboBox}}"
+                              SelectedItem="{Binding OnesOwnWind.Value, Mode=TwoWay, Converter={StaticResource OnesOwnWindConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox ItemsSource="{Binding HonbaSu, Mode=OneWay}"
+                              SelectedItem="{Binding SelectedHonbaSu.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              Width="100">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding Mode=OneWay}" />
+                                    <Run Text="本場" />
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Right">
+                <StackPanel Orientation="Horizontal">
+                    <ItemsControl ItemsSource="{Binding SarashiHai}" VerticalAlignment="Center">
+                        <ItemsControl.ItemTemplateSelector>
+                            <helper:MeldItemTemplateSelector>
+                                <DataTemplate DataType="{x:Type meld:Run}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type meld:Triple}">
+                                    <StackPanel Orientation="Horizontal"
+                                                Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                                         ItemsSource="{Binding Tag.SarashiHaiTripleContextMenuItems, RelativeSource={RelativeSource Self}}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Opened">
+                                                        <helper:EventToCommand Command="{Binding Tag.SarashiHaiTripleContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="{Binding AllTiles[0]}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type meld:Quad}">
+                                    <ContentControl Content="{Binding}">
+                                        <ContentControl.Style>
+                                            <Style TargetType="ContentControl">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static meld:KongType.ConcealedKong}}" Value="True">
+                                                        <Setter Property="ContentTemplate">
+                                                            <Setter.Value>
+                                                                <DataTemplate>
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" BackVisibility="Visible" />
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" />
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[3]}" BackVisibility="Visible" />
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static meld:KongType.LargeMeldedKong}}" Value="True">
+                                                        <Setter Property="ContentTemplate">
+                                                            <Setter.Value>
+                                                                <DataTemplate>
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                                                        <views:TilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static meld:KongType.SmallMeldedKong}}" Value="True">
+                                                        <Setter Property="ContentTemplate">
+                                                            <Setter.Value>
+                                                                <DataTemplate>
+                                                                    <views:ShouminkanCandidate />
+                                                                </DataTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
+                                </DataTemplate>
+                            </helper:MeldItemTemplateSelector>
+                        </ItemsControl.ItemTemplateSelector>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                    <Button Command="{Binding ClearCommand}"
+                            Width="75"
+                            Height="40"
+                            Content="クリア" />
+                </StackPanel>
+            </DockPanel>
+            <StackPanel Orientation="Horizontal">
+                <views:TilePlaceholder TileType="{Binding Tile0.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile0.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="0"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile1.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile1.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="1"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile2.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile2.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="2"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile3.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile3.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="3"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile4.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile4.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="4"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile5.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile5.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="5"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile6.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile6.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="6"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile7.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile7.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="7"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile8.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile8.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="8"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile9.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile9.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="9"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile10.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile10.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="10"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile11.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile11.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="11"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile12.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile12.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="12"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile13.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile13.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="13"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile14.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile14.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="14"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile15.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile15.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="15"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding Tile16.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding Tile16.Value.Visibility.Value}">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="16"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <views:TilePlaceholder TileType="{Binding AgariTile.Value, Mode=TwoWay}"
+                                       SelectCommand="{Binding SelectAgariTileCommand}"
+                                       Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}"
+                                       Visibility="{Binding AgariTile.Value.Visibility.Value}"
+                                       Margin="10">
+                    <views:TilePlaceholder.ContextMenu>
+                        <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                     ItemsSource="{Binding Tag.ContextMenuItems, RelativeSource={RelativeSource Self}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Opened">
+                                    <helper:EventToCommand Command="{Binding Tag.ContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="17"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ContextMenu>
+                    </views:TilePlaceholder.ContextMenu>
+                </views:TilePlaceholder>
+                <ContentControl Content="{Binding}"
+                                VerticalAlignment="Center">
+                    <ContentControl.Style>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AgariTypeAsInt.Value, Converter={StaticResource Enum}, ConverterParameter={x:Static viewModels:AgariType.Unspecified}}" Value="True">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AgariTypeAsInt.Value, Converter={StaticResource Enum}, ConverterParameter={x:Static viewModels:AgariType.Tsumo}}" Value="True">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <DataTemplate.Resources>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="FontSize" Value="30" />
+                                                        <Setter Property="FontFamily" Value="HGS行書体" />
+                                                    </Style>
+                                                </DataTemplate.Resources>
+                                                <Label Content="ツモ" />
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AgariTypeAsInt.Value, Converter={StaticResource Enum}, ConverterParameter={x:Static viewModels:AgariType.Ron}}" Value="True">
+                                    <Setter Property="ContentTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <DataTemplate.Resources>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="FontSize" Value="30" />
+                                                        <Setter Property="FontFamily" Value="HGS行書体" />
+                                                    </Style>
+                                                </DataTemplate.Resources>
+                                                <Label Content="ロン" />
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+            </StackPanel>
+        </DockPanel>
+        <ScrollViewer>
+            <DockPanel Margin="30">
+                <ItemsControl ItemsSource="{Binding ReadyHands}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Top"
+                                            Orientation="Horizontal">
+                                    <ItemsControl ItemsSource="{Binding Melds}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplateSelector>
+                                            <helper:MeldItemTemplateSelector>
+                                                <DataTemplate DataType="{x:Type meld:OpenWait}">
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:ClosedWait}">
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:EdgeWait}">
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:ThirteenWait}">
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:Single}">
+                                                    <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:Double}">
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:Run}">
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:Triple}">
+                                                    <StackPanel Orientation="Horizontal" Margin="5"
+                                                    Tag="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}}">
+                                                        <StackPanel.ContextMenu>
+                                                            <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                                             ItemsSource="{Binding Tag.SarashiHaiTripleContextMenuItems, RelativeSource={RelativeSource Self}}">
+                                                                <i:Interaction.Triggers>
+                                                                    <i:EventTrigger EventName="Opened">
+                                                                        <helper:EventToCommand Command="{Binding Tag.SarashiHaiTripleContextMenuOpeningCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" CommandParameter="{Binding AllTiles[0]}"/>
+                                                                    </i:EventTrigger>
+                                                                </i:Interaction.Triggers>
+                                                            </ContextMenu>
+                                                        </StackPanel.ContextMenu>
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="{x:Type meld:Quad}">
+                                                    <ContentControl Content="{Binding}" Margin="5">
+                                                        <ContentControl.Style>
+                                                            <Style TargetType="ContentControl">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static meld:KongType.ConcealedKong}}" Value="True">
+                                                                        <Setter Property="ContentTemplate">
+                                                                            <Setter.Value>
+                                                                                <DataTemplate>
+                                                                                    <StackPanel Orientation="Horizontal">
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" BackVisibility="Visible" />
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" />
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[3]}" BackVisibility="Visible" />
+                                                                                    </StackPanel>
+                                                                                </DataTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static meld:KongType.LargeMeldedKong}}" Value="True">
+                                                                        <Setter Property="ContentTemplate">
+                                                                            <Setter.Value>
+                                                                                <DataTemplate>
+                                                                                    <StackPanel Orientation="Horizontal">
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[0]}" LayoutTransform="{Binding Tiles[0].Rotate}" />
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[1]}" LayoutTransform="{Binding Tiles[1].Rotate}" />
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[2]}" LayoutTransform="{Binding Tiles[2].Rotate}" />
+                                                                                        <views:TilePlaceholder TileType="{Binding Tiles[3]}" LayoutTransform="{Binding Tiles[3].Rotate}" />
+                                                                                    </StackPanel>
+                                                                                </DataTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding TypeAsInt, Converter={StaticResource Enum}, ConverterParameter={x:Static meld:KongType.SmallMeldedKong}}" Value="True">
+                                                                        <Setter Property="ContentTemplate">
+                                                                            <Setter.Value>
+                                                                                <DataTemplate>
+                                                                                    <views:ShouminkanCandidate />
+                                                                                </DataTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ContentControl.Style>
+                                                    </ContentControl>
+                                                </DataTemplate>
+                                            </helper:MeldItemTemplateSelector>
+                                        </ItemsControl.ItemTemplateSelector>
+                                    </ItemsControl>
+                                    <ItemsControl ItemsSource="{Binding WaitingTiles}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Margin="5">
+                                                    <views:TilePlaceholder TileType="{Binding}"
+                                                                           Opacity="0.5" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                                <StackPanel DockPanel.Dock="Right">
+                                    <StackPanel Orientation="Vertical">
+                                        <Label VerticalAlignment="Center"
+                                               HorizontalAlignment="Right">
+                                            <Label.Resources>
+                                                <TextBlock x:Key="Slum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="満貫" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="OneAndHalfSlum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="跳満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="DoubleSlum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="倍満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="TribleSlum">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="三倍満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="F">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="役満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="DF">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="二倍役満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="TF">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                    <Run Text="三倍役満" />
+                                                </TextBlock>
+                                                <TextBlock x:Key="N">
+                                                    <Run Text="{Binding HuSum.Value, Mode=OneWay}" />
+                                                    <Run Text="符" />
+                                                    <Run Text="{Binding SumHanCount, Mode=OneWay}" />
+                                                    <Run Text="翻" />
+                                                </TextBlock>
+                                            </Label.Resources>
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="FontSize" Value="50" />
+                                                    <Setter Property="FontFamily" Value="HGS行書体" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CSlum}}" Value="False">
+                                                            <Setter Property="Content" Value="{StaticResource N}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource Slum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource COneAndHalfOfSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource OneAndHalfSlum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CDoubleSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource DoubleSlum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CThreeTimesOfTheSlum}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource TribleSlum}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CFull}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource F}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CDoubleFull}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource DF}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SumHanCount, Mode=OneWay, Converter={StaticResource CTripleFull}}" Value="True">
+                                                            <Setter Property="Content" Value="{StaticResource TF}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Label.Style>
+                                        </Label>
+                                        <Label VerticalAlignment="Center"
+                                               HorizontalAlignment="Right">
+                                            <Label.Style>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="FontSize" Value="50" />
+                                                    <Setter Property="FontFamily" Value="HGS行書体" />
+                                                </Style>
+                                            </Label.Style>
+                                            <Label.Content>
+                                                <TextBlock>
+                                                    <Run Text="{Binding Score, Mode=OneWay}" />
+                                                    <Run Text="点" />
+                                                </TextBlock>
+                                            </Label.Content>
+                                        </Label>
+                                    </StackPanel>
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding Yakus}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Vertical" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.Resources>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="FontSize" Value="30" />
+                                                    <Setter Property="FontFamily" Value="HGS行書体" />
+                                                </Style>
+                                            </DataTemplate.Resources>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Label Content="{Binding Name}"
+                                                        FontSize="30" />
+                                                <Label>
+                                                    <TextBlock>
+                                                        <Run>
+                                                            <Run.Text>
+                                                                <MultiBinding Converter="{StaticResource HanCountToString}" Mode="OneWay">
+                                                                    <Binding />
+                                                                    <Binding Path="DataContext.SarashiHai" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}" />
+                                                                </MultiBinding>
+                                                            </Run.Text>
+                                                        </Run>
+                                                    </TextBlock>
+                                                </Label>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
