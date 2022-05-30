@@ -199,7 +199,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                 }
                 else
                 {
-                    var score = Score.Scores.Single(x => x.Equals(new Score(pOrC, rh.HuSum.Value, rh.SumHanCount)));
+                    var score = Score.Scores.SingleOrDefault(x => x.Equals(new Score(pOrC, rh.HuSum.Value, rh.SumHanCount)));
                     if (score is Slum) //満貫の時
                     {
                         switch (onesOwnWind)
@@ -214,7 +214,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                                 break;
                         }
                     }
-                    else //1翻～4翻まで（切り上げ満貫まで対応）
+                    else if (score is not null) //1翻～4翻まで（切り上げ満貫まで対応）
                     {
                         rh.Score = score.Scr;
                     }
