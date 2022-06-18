@@ -101,6 +101,12 @@ namespace Tenpai.Models
 
         protected void SetBitmapFromMat(Mat mat)
         {
+            if (Bitmap is null)
+            {
+                Bitmap = WriteableBitmapConverter.ToWriteableBitmap(mat);
+                return;
+            }
+
             try
             {
                 WriteableBitmapConverter.ToWriteableBitmap(mat, Bitmap);
