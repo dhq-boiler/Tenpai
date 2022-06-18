@@ -1,4 +1,7 @@
-﻿using Prism.Commands;
+﻿using Microsoft.Win32;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using Reactive.Bindings;
@@ -17,6 +20,7 @@ using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku;
 using Tenpai.Models.Yaku.Meld;
 using Tenpai.Models.Yaku.Meld.Detector;
+using Tenpai.Utils;
 using Tenpai.Views;
 using Unity;
 
@@ -84,16 +88,99 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<int> HonbaSu { get; } = new ReactiveCollection<int>();
         public ReactivePropertySlim<int> SelectedHonbaSu { get; } = new ReactivePropertySlim<int>();
         public ReactiveCommand ClearCommand { get; } = new ReactiveCommand();
+        public ReactivePropertySlim<ScreenShotSource> ScreenShotSource { get; } = new ReactivePropertySlim<ScreenShotSource>();
+        public ReactiveCollection<ProcessItem> ProcessItems { get; } = new ReactiveCollection<ProcessItem>();
+        public ReactivePropertySlim<ProcessItem> SelectedProcess { get; } = new ReactivePropertySlim<ProcessItem>();
+        public ReactiveCollection<ProcessItem.WindowInfo> WindowInfos { get; private set; } = new ReactiveCollection<ProcessItem.WindowInfo>();
+        public ReactivePropertySlim<ProcessItem.WindowInfo> SelectedWindowInfo { get; } = new ReactivePropertySlim<ProcessItem.WindowInfo>();
+        public ReactiveCommand DropDownOpenedCommand { get; } = new ReactiveCommand();
+        public ReactivePropertySlim<ScreenShotTarget> Target { get; } = new ReactivePropertySlim<ScreenShotTarget>();
+        public ReactivePropertySlim<PictureOrMovie> CapturingType { get; } = new ReactivePropertySlim<PictureOrMovie>();
+        public ReactiveCommand ResetBackgroundCommand { get; } = new ReactiveCommand();
+        public ReactivePropertySlim<bool> EnableToRenderAnalysisResult { get; } = new ReactivePropertySlim<bool>();
+        public ReactivePropertySlim<Mat> Pool { get; } = new ReactivePropertySlim<Mat>();
+        public ReactivePropertySlim<OpenCvSharp.Rect> ClientRect { get; } = new ReactivePropertySlim<OpenCvSharp.Rect>();
+        public ReactivePropertySlim<Mat> ClientRectPool { get; } = new ReactivePropertySlim<Mat>();
+        public ReactivePropertySlim<Mat> ClientRectOutput { get; } = new ReactivePropertySlim<Mat>();
+        public ReactivePropertySlim<Mat> ClientRectBackground { get; } = new ReactivePropertySlim<Mat>();
+        public ReactivePropertySlim<Mat> ClientRectMask { get; } = new ReactivePropertySlim<Mat>();
+        public ReactivePropertySlim<Mat> Output { get; } = new ReactivePropertySlim<Mat>();
+        public ReactiveCommand TakePictureOnClientRectCommand { get; } = new ReactiveCommand();
+        public ReactivePropertySlim<int> FrameCount { get; } = new ReactivePropertySlim<int>();
 
         private int sarashiCount = 0;
 
         public Tile[] Tiles { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value, AgariTile.Value }; } }
         public Tile[] TilesWithoutAgariTile { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value }; } }
 
+        private bool shotBackground = true;
+        private bool takePictureOnClientRect = false;
+        private string saveFileName = string.Empty;
         private bool sortflag = false;
 
         public MainWindowViewModel()
         {
+            DropDownOpenedCommand.Subscribe(_ =>
+            {
+                UpdateProcesses();
+            })
+            .AddTo(_disposables);
+            UpdateProcesses();
+            ScreenShotSource.Value = new ScreenShotSource("TEST");
+            Target.Value = ScreenShotTarget.Window;
+            CapturingType.Value = PictureOrMovie.Movie;
+            SelectedProcess.Subscribe(x =>
+            {
+                if (x != null)
+                    UpdateWindowInfos();
+            })
+            .AddTo(_disposables);
+            SelectedWindowInfo.Subscribe(x =>
+            {
+                if (SelectedProcess.Value != null)
+                {
+                    switch (Target.Value)
+                    {
+                        case ScreenShotTarget.Window:
+                            ScreenShotSource.Value.Area = new ScreenShotWindow(SelectedProcess.Value.Process);
+                            (ScreenShotSource.Value.Area as ScreenShotWindow).OnlyClientArea = true;
+                            (ScreenShotSource.Value.Area as ScreenShotWindow).SelectedWindowHandle = x.WindowHandle;
+                            break;
+                        default:
+                            throw new NotSupportedException();
+                    }
+                    ScreenShotSource.Value.Activate();
+                }
+            })
+            .AddTo(_disposables);
+            ResetBackgroundCommand.Subscribe(_ =>
+            {
+                shotBackground = true;
+            })
+            .AddTo(_disposables);
+            EnableToRenderAnalysisResult.Subscribe(x =>
+            {
+                SwitchOutput(x);
+                SwitchClientRectOutput(x);
+            })
+            .AddTo(_disposables);
+            TakePictureOnClientRectCommand.Subscribe(_ =>
+            {
+                var dialog = new SaveFileDialog();
+                dialog.Filter = "すべてのファイル|*.*|JPEGファイル|*.jpg;*.jpeg|PNGファイル|*.png";
+
+                if (dialog.ShowDialog() == true)
+                {
+                    takePictureOnClientRect = true;
+                    saveFileName = dialog.FileName;
+                }
+            })
+            .AddTo(_disposables);
+            SwitchOutput(EnableToRenderAnalysisResult.Value);
+            SwitchClientRectOutput(EnableToRenderAnalysisResult.Value);
+            ScreenShotSource.Value.Tick += Value_Tick;
+
+
             ContextMenuOpeningCommand.Subscribe(args =>
             {
                 ContextMenuItems.Clear();
@@ -927,6 +1014,190 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
         }
 
+        private void Value_Tick(ScreenShotSource.MatEventArgs args)
+        {
+            FrameCount.Value++;
+            OpenCvSharp.Point[][] contours;
+            HierarchyIndex[] hierarchyIndexes;
+
+            if (args.Mat is null && args.Bitmap is not null)
+            {
+                args.Mat = args.Bitmap.ToMat();
+            }
+
+            using (var mat = args.Mat.Clone())
+            using (var sub = new Mat())
+            {
+                if (shotBackground)
+                {
+                    ClientRectBackground.Value = mat.Clone();
+                    ClientRectMask.Value = new Mat(mat.Rows, mat.Cols, MatType.CV_8UC4);
+                }
+
+                Cv2.Subtract(ClientRectBackground.Value, mat, sub);
+                Cv2.Add(sub, ClientRectMask.Value, ClientRectMask.Value);
+                if (!shotBackground)
+                {
+                    using (var m = new Mat())
+                    {
+                        Cv2.CvtColor(ClientRectMask.Value, m, ColorConversionCodes.BGRA2GRAY);
+                        Cv2.FindContours(m, out contours, out hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+                        ClientRect.Value = Cv2.BoundingRect(contours[0]);
+                        ClientRectOutput.Value = new Mat(mat, ClientRect.Value);
+
+                        if (takePictureOnClientRect)
+                        {
+                            ClientRectOutput.Value.SaveImage(saveFileName);
+                        }
+                    }
+
+                    if (EnableToRenderAnalysisResult.Value)
+                    {
+                        var clientRectPool = new Mat(mat, ClientRect.Value);
+
+                        using (var c = new Mat())
+                        {
+                            Cv2.CvtColor(ClientRectOutput.Value, c, ColorConversionCodes.BGRA2GRAY);
+                            Cv2.Threshold(c, c, byte.MaxValue * 0.7, byte.MaxValue, ThresholdTypes.Binary);
+                            using (var filled = Fill(c, 0, 550, true, new Scalar(0, 0, 0)))
+                            {
+                                Cv2.ImShow("filled", filled);
+                                Cv2.FindContours(filled, out contours, out hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+                                int i = 0;
+                                foreach (var contour in contours)
+                                {
+                                    Trace.WriteLine($"Process contour[{i}] : {string.Join(",", contour)}");
+                                    NewMethod(args, contours, clientRectPool, contour);
+                                    Trace.WriteLine($"Processed contour[{i}] : {string.Join(",", contour)}");
+                                    i++;
+                                }
+                            }
+                        }
+
+                        ClientRectPool.Value = clientRectPool;
+                    }
+                }
+                shotBackground = false;
+                takePictureOnClientRect = false;
+            }
+        }
+
+        private void NewMethod(ScreenShotSource.MatEventArgs args, OpenCvSharp.Point[][] contours, Mat clientRectPool, OpenCvSharp.Point[] contour)
+        {
+            var list = new List<OpenCvSharp.Point>();
+            foreach (var cx in contour)
+            {
+                list.Add(new OpenCvSharp.Point(cx.X + ClientRect.Value.X, cx.Y + ClientRect.Value.Y));
+            }
+            var rect = Cv2.BoundingRect(list);
+
+            foreach (var template in Templates)
+            {
+                using (var temp = new Mat())
+                {
+                    Cv2.Resize(template.Mat.Value, temp, new OpenCvSharp.Size(rect.Width, rect.Height));
+
+                    Cv2.ImShow("template", temp);
+                    Cv2.WaitKey(1);
+                    using (var result = new Mat())
+                    using (var bgr = new Mat(args.Mat, rect))
+                    {
+                        Cv2.ImShow("bbb", bgr);
+                        Cv2.CvtColor(bgr, bgr, ColorConversionCodes.BGRA2BGR);
+                        Cv2.MatchTemplate(bgr, temp, result, TemplateMatchModes.CCoeffNormed);
+                        //Cv2.Threshold(result, result, 0.8, 1.0, ThresholdTypes.Binary);
+
+                        Cv2.ImShow("ccc", result);
+                        Cv2.MinMaxLoc(result, out double minVal, out double maxVal);
+
+                        if (maxVal >= 0.10)
+                        {
+                            Cv2.DrawContours(clientRectPool, new OpenCvSharp.Point[][] { contour }, -1, new Scalar(0, 0, 255, 255), 2);
+                            Trace.WriteLine($"=> {template.Name.Value} DrawContours HIT");
+                        }
+                        else
+                        {
+                            Trace.WriteLine($"=> {template.Name.Value} DrawContours NO HIT");
+                        }
+
+                        Cv2.ImShow("aaa", clientRectPool);
+                        Cv2.WaitKey(1);
+                    }
+                }
+            }
+        }
+
+        private void SwitchOutput(bool x)
+        {
+            if (x)
+            {
+                this.ObserveProperty(x => x.Pool.Value)
+                    .Where(x => x != null)
+                    .Subscribe(x => Output.Value = x)
+                    .AddTo(_disposables);
+            }
+            else
+            {
+                this.ObserveProperty(x => x.ScreenShotSource.Value.Mat)
+                    .Subscribe(x => Output.Value = x)
+                    .AddTo(_disposables);
+            }
+        }
+
+        private void SwitchClientRectOutput(bool x)
+        {
+            if (x)
+            {
+                this.ObserveProperty(x => x.ClientRectPool.Value)
+                    .Select(_ => this.ClientRectPool.Value)
+                    .Where(x => x != null)
+                    .Subscribe(x =>
+                    {
+                        ClientRectOutput.Value = x;
+                    })
+                    .AddTo(_disposables);
+            }
+            else
+            {
+                this.ObserveProperty(x => x.ScreenShotSource.Value.Mat)
+                    .Where(x => x != null)
+                    .Subscribe(x =>
+                    {
+                        ClientRectOutput.Value = new Mat(x, ClientRect.Value);
+                    })
+                    .AddTo(_disposables);
+            }
+        }
+
+        public void UpdateProcesses()
+        {
+            ProcessItems.Clear();
+            foreach (var p in Process.GetProcesses())
+            {
+                if (p.MainWindowTitle.Count() == 0) continue;
+                ProcessItems.Add(new ProcessItem(p));
+            }
+        }
+
+        public void UpdateWindowInfos()
+        {
+            if (SelectedProcess == null)
+                return;
+            var wis = ScreenShotWindow.EnumWindows(SelectedProcess.Value.Process);
+            WindowInfos.Clear();
+            foreach (var w in wis)
+            {
+                WindowInfos.Add(w);
+            }
+        }
+
+        public void SelectMainWindowHandle()
+        {
+            if (SelectedProcess == null)
+                return;
+            SelectedWindowInfo.Value = WindowInfos.Where(a => a.WindowHandle.Equals(SelectedProcess.Value.Process.MainWindowHandle)).Single();
+        }
+
         private void ConstructHand()
         {
             if (tileCount.Value + 1 == Tiles.Where(x => x is not Dummy).Count())
@@ -995,11 +1266,11 @@ namespace Tenpai.ViewModels
             });
         }
 
-        public static Point GetMousePosition()
+        public static System.Windows.Point GetMousePosition()
         {
             Utils.NativeMethods.Win32Point w32Mouse = new Utils.NativeMethods.Win32Point();
             Utils.NativeMethods.GetCursorPos(ref w32Mouse);
-            return new Point(w32Mouse.X, w32Mouse.Y);
+            return new System.Windows.Point(w32Mouse.X, w32Mouse.Y);
         }
 
         private void SwitchIsEnable<T>(bool isEnable)
@@ -1421,7 +1692,7 @@ namespace Tenpai.ViewModels
             }
         }
 
-        private static unsafe void Paste(OpenCvSharp.Mat target, OpenCvSharp.Mat pasting, Rect rect)
+        private static unsafe void Paste(OpenCvSharp.Mat target, OpenCvSharp.Mat pasting, OpenCvSharp.Rect rect)
         {
             Debug.Assert(pasting.Width == rect.Width);
             Debug.Assert(pasting.Height == rect.Height);
@@ -1621,14 +1892,10 @@ namespace Tenpai.ViewModels
             return ret;
         }
 
-        private static TemplateCollection _Templates;
-
         private TemplateCollection Templates
         {
             get
             {
-                if (_Templates != null)
-                    return _Templates;
                 var templateCollection = new TemplateCollection();
                 templateCollection.Add(new Template("m1", "Assets/m1.png"));
                 templateCollection.Add(new Template("m2", "Assets/m2.png"));
@@ -1660,14 +1927,124 @@ namespace Tenpai.ViewModels
                 templateCollection.Add(new Template("s7", "Assets/s7.png"));
                 templateCollection.Add(new Template("s8", "Assets/s8.png"));
                 templateCollection.Add(new Template("s9", "Assets/s9.png"));
-                templateCollection.Add(new Template("中", "Assets/中.png"));
-                templateCollection.Add(new Template("北", "Assets/北.png"));
-                templateCollection.Add(new Template("南", "Assets/南.png"));
-                templateCollection.Add(new Template("東", "Assets/東.png"));
-                templateCollection.Add(new Template("發", "Assets/發.png"));
-                templateCollection.Add(new Template("白", "Assets/白.png"));
-                templateCollection.Add(new Template("西", "Assets/西.png"));
-                _Templates = templateCollection;
+                templateCollection.Add(new Template("chun", "Assets/chun.png"));
+                templateCollection.Add(new Template("pe", "Assets/pe.png"));
+                templateCollection.Add(new Template("nan", "Assets/nan.png"));
+                templateCollection.Add(new Template("ton", "Assets/ton.png"));
+                templateCollection.Add(new Template("hatsu", "Assets/hatsu.png"));
+                templateCollection.Add(new Template("haku", "Assets/haku.png"));
+                templateCollection.Add(new Template("sha", "Assets/sha.png"));
+                //templateCollection.Add(new Template("m1", "Assets/h_m1.png"));
+                //templateCollection.Add(new Template("m2", "Assets/h_m2.png"));
+                //templateCollection.Add(new Template("m3", "Assets/h_m3.png"));
+                //templateCollection.Add(new Template("m4", "Assets/h_m4.png"));
+                //templateCollection.Add(new Template("m5", "Assets/h_m5.png"));
+                //templateCollection.Add(new Template("m5r", "Assets/h_m5r.png"));
+                //templateCollection.Add(new Template("m6", "Assets/h_m6.png"));
+                //templateCollection.Add(new Template("m7", "Assets/h_m7.png"));
+                //templateCollection.Add(new Template("m8", "Assets/h_m8.png"));
+                //templateCollection.Add(new Template("m9", "Assets/h_m9.png"));
+                //templateCollection.Add(new Template("p1", "Assets/h_p1.png"));
+                //templateCollection.Add(new Template("p2", "Assets/h_p2.png"));
+                //templateCollection.Add(new Template("p3", "Assets/h_p3.png"));
+                //templateCollection.Add(new Template("p4", "Assets/h_p4.png"));
+                //templateCollection.Add(new Template("p5", "Assets/h_p5.png"));
+                //templateCollection.Add(new Template("p5r", "Assets/h_p5r.png"));
+                //templateCollection.Add(new Template("p6", "Assets/h_p6.png"));
+                //templateCollection.Add(new Template("p7", "Assets/h_p7.png"));
+                //templateCollection.Add(new Template("p8", "Assets/h_p8.png"));
+                //templateCollection.Add(new Template("p9", "Assets/h_p9.png"));
+                //templateCollection.Add(new Template("s1", "Assets/h_s1.png"));
+                //templateCollection.Add(new Template("s2", "Assets/h_s2.png"));
+                //templateCollection.Add(new Template("s3", "Assets/h_s3.png"));
+                //templateCollection.Add(new Template("s4", "Assets/h_s4.png"));
+                //templateCollection.Add(new Template("s5", "Assets/h_s5.png"));
+                //templateCollection.Add(new Template("s5r", "Assets/h_s5r.png"));
+                //templateCollection.Add(new Template("s6", "Assets/h_s6.png"));
+                //templateCollection.Add(new Template("s7", "Assets/h_s7.png"));
+                //templateCollection.Add(new Template("s8", "Assets/h_s8.png"));
+                //templateCollection.Add(new Template("s9", "Assets/h_s9.png"));
+                //templateCollection.Add(new Template("chun", "Assets/h_chun.png"));
+                //templateCollection.Add(new Template("pe", "Assets/h_pe.png"));
+                //templateCollection.Add(new Template("nan", "Assets/h_nan.png"));
+                //templateCollection.Add(new Template("ton", "Assets/h_ton.png"));
+                //templateCollection.Add(new Template("hatsu", "Assets/h_hatsu.png"));
+                //templateCollection.Add(new Template("haku", "Assets/h_haku.png"));
+                //templateCollection.Add(new Template("sha", "Assets/h_sha.png"));
+                templateCollection.Add(new Template("s_m1", "Assets/s_m1.png"));
+                templateCollection.Add(new Template("s_m2", "Assets/s_m2.png"));
+                templateCollection.Add(new Template("s_m3", "Assets/s_m3.png"));
+                templateCollection.Add(new Template("s_m4", "Assets/s_m4.png"));
+                templateCollection.Add(new Template("s_m5", "Assets/s_m5.png"));
+                templateCollection.Add(new Template("s_m5r", "Assets/s_m5r.png"));
+                templateCollection.Add(new Template("s_m6", "Assets/s_m6.png"));
+                templateCollection.Add(new Template("s_m7", "Assets/s_m7.png"));
+                templateCollection.Add(new Template("s_m8", "Assets/s_m8.png"));
+                templateCollection.Add(new Template("s_m9", "Assets/s_m9.png"));
+                templateCollection.Add(new Template("s_p1", "Assets/s_p1.png"));
+                templateCollection.Add(new Template("s_p2", "Assets/s_p2.png"));
+                templateCollection.Add(new Template("s_p3", "Assets/s_p3.png"));
+                templateCollection.Add(new Template("s_p4", "Assets/s_p4.png"));
+                templateCollection.Add(new Template("s_p5", "Assets/s_p5.png"));
+                templateCollection.Add(new Template("s_p5r", "Assets/s_p5r.png"));
+                templateCollection.Add(new Template("s_p6", "Assets/s_p6.png"));
+                templateCollection.Add(new Template("s_p7", "Assets/s_p7.png"));
+                templateCollection.Add(new Template("s_p8", "Assets/s_p8.png"));
+                templateCollection.Add(new Template("s_p9", "Assets/s_p9.png"));
+                templateCollection.Add(new Template("s_s1", "Assets/s_s1.png"));
+                templateCollection.Add(new Template("s_s2", "Assets/s_s2.png"));
+                templateCollection.Add(new Template("s_s3", "Assets/s_s3.png"));
+                templateCollection.Add(new Template("s_s4", "Assets/s_s4.png"));
+                templateCollection.Add(new Template("s_s5", "Assets/s_s5.png"));
+                templateCollection.Add(new Template("s_s5r", "Assets/s_s5r.png"));
+                templateCollection.Add(new Template("s_s6", "Assets/s_s6.png"));
+                templateCollection.Add(new Template("s_s7", "Assets/s_s7.png"));
+                templateCollection.Add(new Template("s_s8", "Assets/s_s8.png"));
+                templateCollection.Add(new Template("s_s9", "Assets/s_s9.png"));
+                templateCollection.Add(new Template("s_chun", "Assets/s_chun.png"));
+                templateCollection.Add(new Template("s_pe", "Assets/s_pe.png"));
+                templateCollection.Add(new Template("s_nan", "Assets/s_nan.png"));
+                templateCollection.Add(new Template("s_ton", "Assets/s_ton.png"));
+                templateCollection.Add(new Template("s_hatsu", "Assets/s_hatsu.png"));
+                templateCollection.Add(new Template("s_haku", "Assets/s_haku.png"));
+                templateCollection.Add(new Template("s_sha", "Assets/s_sha.png"));
+                templateCollection.Add(new Template("y_m1", "Assets/y_m1.png"));
+                templateCollection.Add(new Template("y_m2", "Assets/y_m2.png"));
+                templateCollection.Add(new Template("y_m3", "Assets/y_m3.png"));
+                templateCollection.Add(new Template("y_m4", "Assets/y_m4.png"));
+                templateCollection.Add(new Template("y_m5", "Assets/y_m5.png"));
+                templateCollection.Add(new Template("y_m5r", "Assets/y_m5r.png"));
+                templateCollection.Add(new Template("y_m6", "Assets/y_m6.png"));
+                templateCollection.Add(new Template("y_m7", "Assets/y_m7.png"));
+                templateCollection.Add(new Template("y_m8", "Assets/y_m8.png"));
+                templateCollection.Add(new Template("y_m9", "Assets/y_m9.png"));
+                templateCollection.Add(new Template("y_p1", "Assets/y_p1.png"));
+                templateCollection.Add(new Template("y_p2", "Assets/y_p2.png"));
+                templateCollection.Add(new Template("y_p3", "Assets/y_p3.png"));
+                templateCollection.Add(new Template("y_p4", "Assets/y_p4.png"));
+                templateCollection.Add(new Template("y_p5", "Assets/y_p5.png"));
+                templateCollection.Add(new Template("y_p5r", "Assets/y_p5r.png"));
+                templateCollection.Add(new Template("y_p6", "Assets/y_p6.png"));
+                templateCollection.Add(new Template("y_p7", "Assets/y_p7.png"));
+                templateCollection.Add(new Template("y_p8", "Assets/y_p8.png"));
+                templateCollection.Add(new Template("y_p9", "Assets/y_p9.png"));
+                templateCollection.Add(new Template("y_s1", "Assets/y_s1.png"));
+                templateCollection.Add(new Template("y_s2", "Assets/y_s2.png"));
+                templateCollection.Add(new Template("y_s3", "Assets/y_s3.png"));
+                templateCollection.Add(new Template("y_s4", "Assets/y_s4.png"));
+                templateCollection.Add(new Template("y_s5", "Assets/y_s5.png"));
+                templateCollection.Add(new Template("y_s5r", "Assets/y_s5r.png"));
+                templateCollection.Add(new Template("y_s6", "Assets/y_s6.png"));
+                templateCollection.Add(new Template("y_s7", "Assets/y_s7.png"));
+                templateCollection.Add(new Template("y_s8", "Assets/y_s8.png"));
+                templateCollection.Add(new Template("y_s9", "Assets/y_s9.png"));
+                templateCollection.Add(new Template("y_chun", "Assets/y_chun.png"));
+                templateCollection.Add(new Template("y_pe", "Assets/y_pe.png"));
+                templateCollection.Add(new Template("y_nan", "Assets/y_nan.png"));
+                templateCollection.Add(new Template("y_ton", "Assets/y_ton.png"));
+                templateCollection.Add(new Template("y_hatsu", "Assets/y_hatsu.png"));
+                templateCollection.Add(new Template("y_haku", "Assets/y_haku.png"));
+                templateCollection.Add(new Template("y_sha", "Assets/y_sha.png"));
                 return templateCollection;
             }
         }
