@@ -18,7 +18,8 @@ namespace Tenpai.Models
         public Template(string name, string path)
         {
             Name.Value = name;
-            Mat.Value = new Mat(path);
+            //Mat.Value = new Mat(path, ImreadModes.AnyColor);
+            Mat.Value = new Mat(path, ImreadModes.Unchanged);
         }
 
         protected virtual void Dispose(bool disposing)

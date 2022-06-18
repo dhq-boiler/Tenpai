@@ -1045,10 +1045,10 @@
                 </DockPanel.Resources>
                 <TabControl DockPanel.Dock="Right">
                     <TabItem Header="Output">
-                        <Image MaxWidth="200" Source="{Binding Output.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MatToBitmap}}" />
+                        <Image MaxWidth="400" Source="{Binding Output.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MatToBitmap}}" />
                     </TabItem>
                     <TabItem Header="ClientRect">
-                        <Image MaxWidth="200" Source="{Binding ClientRectOutput.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MatToBitmap}}" />
+                        <Image MaxWidth="400" Source="{Binding ClientRectOutput.Value, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MatToBitmap}}" />
                     </TabItem>
                 </TabControl>
                 <ItemsControl ItemsSource="{Binding ReadyHands}">

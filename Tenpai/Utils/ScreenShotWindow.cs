@@ -9,14 +9,14 @@ using static Tenpai.Utils.NativeMethods;
 
 namespace Tenpai.Utils
 {
-    internal class ScreenShotWindow : ScreenShotArea
+    public class ScreenShotWindow : ScreenShotArea
     {
         internal Process SelectedProcess { get; set; }
         internal bool OnlyClientArea { get; set; }
 
         internal IntPtr SelectedWindowHandle { get; set; }
 
-        internal ScreenShotWindow()
+        public ScreenShotWindow()
         { }
 
         internal ScreenShotWindow(Process selectedProcess)
@@ -53,7 +53,7 @@ namespace Tenpai.Utils
             }
         }
 
-        private static Bitmap GetWindowBitmap(IntPtr hWnd)
+        public static Bitmap GetWindowBitmap(IntPtr hWnd)
         {
             IntPtr hdcScreen = IntPtr.Zero;
             IntPtr hdcCompatible = IntPtr.Zero;
@@ -106,7 +106,7 @@ namespace Tenpai.Utils
 
         private const int SRCCOPY = 13369376;
 
-        private static Bitmap GetWindowClientBitmap(IntPtr hWnd)
+        public static Bitmap GetWindowClientBitmap(IntPtr hWnd)
         {
             IntPtr hdcScreen = IntPtr.Zero;
             IntPtr hdcCompatible = IntPtr.Zero;

@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -107,6 +109,7 @@ namespace Tenpai.ViewModels
         public ReactivePropertySlim<Mat> Output { get; } = new ReactivePropertySlim<Mat>();
         public ReactiveCommand TakePictureOnClientRectCommand { get; } = new ReactiveCommand();
         public ReactivePropertySlim<int> FrameCount { get; } = new ReactivePropertySlim<int>();
+        public ReactiveCommand<string> TestByOneImageCommand { get; } = new ReactiveCommand<string>();
 
         private int sarashiCount = 0;
 
@@ -173,6 +176,25 @@ namespace Tenpai.ViewModels
                 {
                     takePictureOnClientRect = true;
                     saveFileName = dialog.FileName;
+                }
+            })
+            .AddTo(_disposables);
+            TestByOneImageCommand.Subscribe(path =>
+            {
+                if (path is not null)
+                {
+                    TickByFile(path);
+                }
+                else
+                {
+                    var dialog = new OpenFileDialog();
+                    dialog.Filter = "すべてのファイル|*.*|JPEGファイル|*.jpg;*.jpeg|PNGファイル|*.png";
+
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var filename = dialog.FileName;
+                        TickByFile(filename);
+                    }
                 }
             })
             .AddTo(_disposables);
@@ -975,43 +997,82 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             ClearCommand.Subscribe(_ =>
             {
-                Tile16.Value = Tile.CreateInstance<Dummy>();
-                Tile15.Value = Tile.CreateInstance<Dummy>();
-                Tile14.Value = Tile.CreateInstance<Dummy>();
-                Tile13.Value = Tile.CreateInstance<Dummy>();
-                Tile12.Value = Tile.CreateInstance<Dummy>();
-                Tile11.Value = Tile.CreateInstance<Dummy>();
-                Tile10.Value = Tile.CreateInstance<Dummy>();
-                Tile9.Value = Tile.CreateInstance<Dummy>();
-                Tile8.Value = Tile.CreateInstance<Dummy>();
-                Tile7.Value = Tile.CreateInstance<Dummy>();
-                Tile6.Value = Tile.CreateInstance<Dummy>();
-                Tile5.Value = Tile.CreateInstance<Dummy>();
-                Tile4.Value = Tile.CreateInstance<Dummy>();
-                Tile3.Value = Tile.CreateInstance<Dummy>();
-                Tile2.Value = Tile.CreateInstance<Dummy>();
-                Tile1.Value = Tile.CreateInstance<Dummy>();
-                Tile0.Value = Tile.CreateInstance<Dummy>();
-                AgariTile.Value = Tile.CreateInstance<Dummy>();
-                DoraDisplayTile0.Value = Tile.CreateInstance<Dummy>();
-                DoraDisplayTile1.Value = Tile.CreateInstance<Dummy>();
-                DoraDisplayTile2.Value = Tile.CreateInstance<Dummy>();
-                DoraDisplayTile3.Value = Tile.CreateInstance<Dummy>();
-                DoraDisplayTile4.Value = Tile.CreateInstance<Dummy>();
-                UraDoraDisplayTile0.Value = Tile.CreateInstance<Dummy>();
-                UraDoraDisplayTile1.Value = Tile.CreateInstance<Dummy>();
-                UraDoraDisplayTile2.Value = Tile.CreateInstance<Dummy>();
-                UraDoraDisplayTile3.Value = Tile.CreateInstance<Dummy>();
-                UraDoraDisplayTile4.Value = Tile.CreateInstance<Dummy>();
-                AgariType.Value = ViewModels.AgariType.Unspecified;
-                WindOfTheRound.Value = ViewModels.WindOfTheRound.East;
-                OnesOwnWind.Value = ViewModels.OnesOwnWind.East;
-                SelectedHonbaSu.Value = 0;
-                sarashiCount = 0;
-                tileCount.Value = 13;
-                sortflag = false;
+                Clear();
             })
             .AddTo(_disposables);
+        }
+
+        private void Clear()
+        {
+            Tile16.Value = Tile.CreateInstance<Dummy>();
+            Tile15.Value = Tile.CreateInstance<Dummy>();
+            Tile14.Value = Tile.CreateInstance<Dummy>();
+            Tile13.Value = Tile.CreateInstance<Dummy>();
+            Tile12.Value = Tile.CreateInstance<Dummy>();
+            Tile11.Value = Tile.CreateInstance<Dummy>();
+            Tile10.Value = Tile.CreateInstance<Dummy>();
+            Tile9.Value = Tile.CreateInstance<Dummy>();
+            Tile8.Value = Tile.CreateInstance<Dummy>();
+            Tile7.Value = Tile.CreateInstance<Dummy>();
+            Tile6.Value = Tile.CreateInstance<Dummy>();
+            Tile5.Value = Tile.CreateInstance<Dummy>();
+            Tile4.Value = Tile.CreateInstance<Dummy>();
+            Tile3.Value = Tile.CreateInstance<Dummy>();
+            Tile2.Value = Tile.CreateInstance<Dummy>();
+            Tile1.Value = Tile.CreateInstance<Dummy>();
+            Tile0.Value = Tile.CreateInstance<Dummy>();
+            AgariTile.Value = Tile.CreateInstance<Dummy>();
+            DoraDisplayTile0.Value = Tile.CreateInstance<Dummy>();
+            DoraDisplayTile1.Value = Tile.CreateInstance<Dummy>();
+            DoraDisplayTile2.Value = Tile.CreateInstance<Dummy>();
+            DoraDisplayTile3.Value = Tile.CreateInstance<Dummy>();
+            DoraDisplayTile4.Value = Tile.CreateInstance<Dummy>();
+            UraDoraDisplayTile0.Value = Tile.CreateInstance<Dummy>();
+            UraDoraDisplayTile1.Value = Tile.CreateInstance<Dummy>();
+            UraDoraDisplayTile2.Value = Tile.CreateInstance<Dummy>();
+            UraDoraDisplayTile3.Value = Tile.CreateInstance<Dummy>();
+            UraDoraDisplayTile4.Value = Tile.CreateInstance<Dummy>();
+            AgariType.Value = ViewModels.AgariType.Unspecified;
+            WindOfTheRound.Value = ViewModels.WindOfTheRound.East;
+            OnesOwnWind.Value = ViewModels.OnesOwnWind.East;
+            SelectedHonbaSu.Value = 0;
+            sarashiCount = 0;
+            tileCount.Value = 13;
+            sortflag = false;
+        }
+
+        public void TickByFile(string filename)
+        {
+            FrameCount.Value = 0;
+            switch (Path.GetExtension(filename))
+            {
+                case ".jpg":
+                case ".jpeg":
+                case ".png":
+                    Value_Tick(new Models.ScreenShotSource.MatEventArgs() { Bitmap = (Bitmap)Bitmap.FromFile(filename) });
+                    break;
+                case ".gif":
+                case ".mp4":
+                    using (VideoCapture capture = new VideoCapture(filename))
+                    {
+                        while (capture.IsOpened())
+                        {
+                            using (Mat mat = new Mat())
+                            {
+                                if (capture.Read(mat))
+                                {
+                                    ScreenShotSource.Value.Load(mat);
+                                    Cv2.WaitKey(1);
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
         }
 
         private void Value_Tick(ScreenShotSource.MatEventArgs args)
@@ -1063,11 +1124,72 @@ namespace Tenpai.ViewModels
                             {
                                 Cv2.ImShow("filled", filled);
                                 Cv2.FindContours(filled, out contours, out hierarchyIndexes, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+
+                                //int j = 0;
+                                //foreach (var contour in contours)
+                                //{
+                                //    var list = new List<OpenCvSharp.Point>();
+                                //    foreach (var cx in contour)
+                                //    {
+                                //        list.Add(new OpenCvSharp.Point(cx.X + ClientRect.Value.X, cx.Y + ClientRect.Value.Y));
+                                //    }
+                                //    var rect = Cv2.BoundingRect(list);
+
+                                //    using (var x = new Mat(mat, rect))
+                                //    {
+                                //        if (!Directory.Exists("tmp"))
+                                //            Directory.CreateDirectory("tmp");
+                                //        x.SaveImage($"tmp/{j++}.png");
+                                //    }
+                                //}
+
                                 int i = 0;
+                                Clear();
+                                var sarashihai = new ObservableCollection<Tile>();
+                                sarashihai.ToObservable().Subscribe(add =>
+                                {
+                                    if (sarashihai.Count(x => x.GetType() == add.GetType()) == 4)
+                                    {
+                                        var a = sarashihai.First(x => x.GetType() == add.GetType());
+                                        sarashihai.Remove(a);
+                                        var b = sarashihai.First(x => x.GetType() == add.GetType());
+                                        sarashihai.Remove(b);
+                                        var c = sarashihai.First(x => x.GetType() == add.GetType());
+                                        sarashihai.Remove(c);
+                                        var d = sarashihai.First(x => x.GetType() == add.GetType());
+                                        sarashihai.Remove(d);
+                                        SarashiHai.Add(new Quad(d, c, b, a));
+                                    }
+                                    else if (sarashihai.Count() == 3)
+                                    {
+                                        var a = sarashihai.First(x => x.GetType() == add.GetType());
+                                        sarashihai.Remove(a);
+                                        var b = sarashihai.First(x => x.GetType() == add.GetType());
+                                        sarashihai.Remove(b);
+                                        var c = sarashihai.First(x => x.GetType() == add.GetType());
+                                        sarashihai.Remove(c);
+                                        SarashiHai.Add(new Triple(c, b, a));
+                                    }
+                                    else
+                                    {
+                                        var a = sarashihai.First(x => x.GetType() == add.GetType());
+                                        var b = sarashihai.First(x => x.GetType() == add.GetType());
+                                        var c = sarashihai.First(x => x.GetType() == add.GetType());
+
+                                        if ((a.GetHashCode() + c.GetHashCode()) / 2 == b.GetHashCode())
+                                        {
+                                            sarashihai.Remove(a);
+                                            sarashihai.Remove(b);
+                                            sarashihai.Remove(c);
+                                            SarashiHai.Add(new Run(c, b, a));
+                                        }
+                                    }
+                                })
+                                .AddTo(_disposables);
                                 foreach (var contour in contours)
                                 {
                                     Trace.WriteLine($"Process contour[{i}] : {string.Join(",", contour)}");
-                                    NewMethod(args, contours, clientRectPool, contour);
+                                    NewMethod(args, contours, clientRectPool, contour, sarashihai);
                                     Trace.WriteLine($"Processed contour[{i}] : {string.Join(",", contour)}");
                                     i++;
                                 }
@@ -1079,10 +1201,11 @@ namespace Tenpai.ViewModels
                 }
                 shotBackground = false;
                 takePictureOnClientRect = false;
+                Pool.Value = mat.Clone();
             }
         }
 
-        private void NewMethod(ScreenShotSource.MatEventArgs args, OpenCvSharp.Point[][] contours, Mat clientRectPool, OpenCvSharp.Point[] contour)
+        private void NewMethod(ScreenShotSource.MatEventArgs args, OpenCvSharp.Point[][] contours, Mat clientRectPool, OpenCvSharp.Point[] contour, ObservableCollection<Tile> sarashihai)
         {
             var list = new List<OpenCvSharp.Point>();
             foreach (var cx in contour)
@@ -1091,40 +1214,452 @@ namespace Tenpai.ViewModels
             }
             var rect = Cv2.BoundingRect(list);
 
+            if (rect.Width * rect.Height < 1980)
+                return;
+
+            var results = new List<MatchResult>();
+
             foreach (var template in Templates)
             {
                 using (var temp = new Mat())
                 {
+                    if (rect.Width > rect.Height && template.Mat.Value.Width < template.Mat.Value.Height)
+                    {
+                        Trace.WriteLine($"Skip template {template.Name.Value} {template.Mat.Value.Width}x{template.Mat.Value.Height}");
+                        continue;
+                    }
+                    if (rect.Width < rect.Height && template.Mat.Value.Width > template.Mat.Value.Height)
+                    {
+                        Trace.WriteLine($"Skip template {template.Name.Value} {template.Mat.Value.Width}x{template.Mat.Value.Height}");
+                        continue;
+                    }
+                    //if (rect.Width < template.Mat.Value.Width || rect.Height < template.Mat.Value.Height)
+                    //{
+                    //    Trace.WriteLine($"Skip template {template.Name.Value} {template.Mat.Value.Width}x{template.Mat.Value.Height}");
+                    //    continue;
+                    //}
+                    //double re_h = 0, re_w = 0;
+                    //double re_length = Math.Max(rect.Width, rect.Height);
+                    //re_h = re_w = re_length / Math.Max(template.Mat.Value.Width, template.Mat.Value.Height);
+                    //Cv2.Resize(template.Mat.Value, temp, OpenCvSharp.Size.Zero, re_w, re_h);
                     Cv2.Resize(template.Mat.Value, temp, new OpenCvSharp.Size(rect.Width, rect.Height));
 
                     Cv2.ImShow("template", temp);
                     Cv2.WaitKey(1);
                     using (var result = new Mat())
                     using (var bgr = new Mat(args.Mat, rect))
+                    using (var mask = temp.Clone())
                     {
                         Cv2.ImShow("bbb", bgr);
                         Cv2.CvtColor(bgr, bgr, ColorConversionCodes.BGRA2BGR);
-                        Cv2.MatchTemplate(bgr, temp, result, TemplateMatchModes.CCoeffNormed);
-                        //Cv2.Threshold(result, result, 0.8, 1.0, ThresholdTypes.Binary);
+                        Cv2.CvtColor(temp, temp, ColorConversionCodes.BGRA2BGR);
+                        Cv2.MatchTemplate(bgr, temp, result, TemplateMatchModes.CCoeffNormed, Mask(mask));
+                        Cv2.ImShow("mask", Mask(mask));
 
                         Cv2.ImShow("ccc", result);
                         Cv2.MinMaxLoc(result, out double minVal, out double maxVal);
-
-                        if (maxVal >= 0.10)
+                        Tile tile = null;
+                        switch (template.Name.Value)
                         {
-                            Cv2.DrawContours(clientRectPool, new OpenCvSharp.Point[][] { contour }, -1, new Scalar(0, 0, 255, 255), 2);
-                            Trace.WriteLine($"=> {template.Name.Value} DrawContours HIT");
+                            case "m1":
+                                tile = new Character_1();
+                                break;
+                            case "m2":
+                                tile = new Character_2();
+                                break;
+                            case "m3":
+                                tile = new Character_3();
+                                break;
+                            case "m4":
+                                tile = new Character_4();
+                                break;
+                            case "m5":
+                                tile = new Character_5();
+                                break;
+                            case "m5r":
+                                tile = new Character_5R();
+                                break;
+                            case "m6":
+                                tile = new Character_6();
+                                break;
+                            case "m7":
+                                tile = new Character_7();
+                                break;
+                            case "m8":
+                                tile = new Character_8();
+                                break;
+                            case "m9":
+                                tile = new Character_9();
+                                break;
+                            case "p1":
+                                tile = new Dot_1();
+                                break;
+                            case "p2":
+                                tile = new Dot_2();
+                                break;
+                            case "p3":
+                                tile = new Dot_3();
+                                break;
+                            case "p4":
+                                tile = new Dot_4();
+                                break;
+                            case "p5":
+                                tile = new Dot_5();
+                                break;
+                            case "p5r":
+                                tile = new Dot_5R();
+                                break;
+                            case "p6":
+                                tile = new Dot_6();
+                                break;
+                            case "p7":
+                                tile = new Dot_7();
+                                break;
+                            case "p8":
+                                tile = new Dot_8();
+                                break;
+                            case "p9":
+                                tile = new Dot_9();
+                                break;
+                            case "s1":
+                                tile = new Bamboo_1();
+                                break;
+                            case "s2":
+                                tile = new Bamboo_2();
+                                break;
+                            case "s3":
+                                tile = new Bamboo_3();
+                                break;
+                            case "s4":
+                                tile = new Bamboo_4();
+                                break;
+                            case "s5":
+                                tile = new Bamboo_5();
+                                break;
+                            case "s5r":
+                                tile = new Bamboo_5R();
+                                break;
+                            case "s6":
+                                tile = new Bamboo_6();
+                                break;
+                            case "s7":
+                                tile = new Bamboo_7();
+                                break;
+                            case "s8":
+                                tile = new Bamboo_8();
+                                break;
+                            case "s9":
+                                tile = new Bamboo_9();
+                                break;
+                            case "chun":
+                                tile = new Red();
+                                break;
+                            case "pe":
+                                tile = new North();
+                                break;
+                            case "nan":
+                                tile = new South();
+                                break;
+                            case "ton":
+                                tile = new East();
+                                break;
+                            case "hatsu":
+                                tile = new Green();
+                                break;
+                            case "haku":
+                                tile = new White();
+                                break;
+                            case "sha":
+                                tile = new West();
+                                break;
+                            case "s_m1":
+                                tile = new Character_1();
+                                break;
+                            case "s_m2":
+                                tile = new Character_2();
+                                break;
+                            case "s_m3":
+                                tile = new Character_3();
+                                break;
+                            case "s_m4":
+                                tile = new Character_4();
+                                break;
+                            case "s_m5":
+                                tile = new Character_5();
+                                break;
+                            case "s_m5r":
+                                tile = new Character_5R();
+                                break;
+                            case "s_m6":
+                                tile = new Character_6();
+                                break;
+                            case "s_m7":
+                                tile = new Character_7();
+                                break;
+                            case "s_m8":
+                                tile = new Character_8();
+                                break;
+                            case "s_m9":
+                                tile = new Character_9();
+                                break;
+                            case "s_p1":
+                                tile = new Dot_1();
+                                break;
+                            case "s_p2":
+                                tile = new Dot_2();
+                                break;
+                            case "s_p3":
+                                tile = new Dot_3();
+                                break;
+                            case "s_p4":
+                                tile = new Dot_4();
+                                break;
+                            case "s_p5":
+                                tile = new Dot_5();
+                                break;
+                            case "s_p5r":
+                                tile = new Dot_5R();
+                                break;
+                            case "s_p6":
+                                tile = new Dot_6();
+                                break;
+                            case "s_p7":
+                                tile = new Dot_7();
+                                break;
+                            case "s_p8":
+                                tile = new Dot_8();
+                                break;
+                            case "s_p9":
+                                tile = new Dot_9();
+                                break;
+                            case "s_s1":
+                                tile = new Bamboo_1();
+                                break;
+                            case "s_s2":
+                                tile = new Bamboo_2();
+                                break;
+                            case "s_s3":
+                                tile = new Bamboo_3();
+                                break;
+                            case "s_s4":
+                                tile = new Bamboo_4();
+                                break;
+                            case "s_s5":
+                                tile = new Bamboo_5();
+                                break;
+                            case "s_s5r":
+                                tile = new Bamboo_5R();
+                                break;
+                            case "s_s6":
+                                tile = new Bamboo_6();
+                                break;
+                            case "s_s7":
+                                tile = new Bamboo_7();
+                                break;
+                            case "s_s8":
+                                tile = new Bamboo_8();
+                                break;
+                            case "s_s9":
+                                tile = new Bamboo_9();
+                                break;
+                            case "s_chun":
+                                tile = new Red();
+                                break;
+                            case "s_pe":
+                                tile = new North();
+                                break;
+                            case "s_nan":
+                                tile = new South();
+                                break;
+                            case "s_ton":
+                                tile = new East();
+                                break;
+                            case "s_hatsu":
+                                tile = new Green();
+                                break;
+                            case "s_haku":
+                                tile = new White();
+                                break;
+                            case "s_sha":
+                                tile = new West();
+                                break;
+                            case "y_m1":
+                                tile = new Character_1();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m2":
+                                tile = new Character_2();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m3":
+                                tile = new Character_3();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m4":
+                                tile = new Character_4();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m5":
+                                tile = new Character_5();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m5r":
+                                tile = new Character_5R();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m6":
+                                tile = new Character_6();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m7":
+                                tile = new Character_7();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m8":
+                                tile = new Character_8();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_m9":
+                                tile = new Character_9();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p1":
+                                tile = new Dot_1();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p2":
+                                tile = new Dot_2();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p3":
+                                tile = new Dot_3();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p4":
+                                tile = new Dot_4();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p5":
+                                tile = new Dot_5();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p5r":
+                                tile = new Dot_5R();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p6":
+                                tile = new Dot_6();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p7":
+                                tile = new Dot_7();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p8":
+                                tile = new Dot_8();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_p9":
+                                tile = new Dot_9();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s1":
+                                tile = new Bamboo_1();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s2":
+                                tile = new Bamboo_2();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s3":
+                                tile = new Bamboo_3();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s4":
+                                tile = new Bamboo_4();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s5":
+                                tile = new Bamboo_5();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s5r":
+                                tile = new Bamboo_5R();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s6":
+                                tile = new Bamboo_6();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s7":
+                                tile = new Bamboo_7();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s8":
+                                tile = new Bamboo_8();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_s9":
+                                tile = new Bamboo_9();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_chun":
+                                tile = new Red();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_pe":
+                                tile = new North();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_nan":
+                                tile = new South();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_ton":
+                                tile = new East();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_hatsu":
+                                tile = new Green();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_haku":
+                                tile = new White();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "y_sha":
+                                tile = new West();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
                         }
-                        else
-                        {
-                            Trace.WriteLine($"=> {template.Name.Value} DrawContours NO HIT");
-                        }
-
-                        Cv2.ImShow("aaa", clientRectPool);
-                        Cv2.WaitKey(1);
+                        results.Add(new MatchResult(maxVal, template.Name.Value, tile));
                     }
                 }
             }
+
+            var ordered = results.OrderByDescending(x => x.Score);
+            var top1 = ordered.First();
+            if (top1.identifier.StartsWith("s_") || top1.identifier.StartsWith("y_"))
+            {
+                sarashihai.Add(top1.MatchTile);
+            }
+            else if (top1.Score >= 0.7)
+            {
+                UpdateTile(new Dummy(), top1.MatchTile, 1);
+            }
+            else
+            {
+                Trace.WriteLine($"Skip top1 {top1}");
+            }
+            Cv2.DrawContours(Pool.Value, new OpenCvSharp.Point[][] { contour }, -1, new Scalar(0, 0, 255, 255), 2);
+            Cv2.DrawContours(clientRectPool, new OpenCvSharp.Point[][] { contour }, -1, new Scalar(0, 0, 255, 255), 2);
+            Cv2.ImShow("aaa", clientRectPool);
+            Cv2.WaitKey(1);
+        }
+
+        private Mat Mask(Mat temp)
+        {
+            return temp.ExtractChannel(3);
         }
 
         private void SwitchOutput(bool x)
@@ -1359,7 +1894,7 @@ namespace Tenpai.ViewModels
         private void UpdateTile(Tile replaced, Tile target, int count)
         {
             int processedCount = 0;
-            for (int j = 0; j < Tiles.Count(); j++)
+            for (int j = 0; j < Tiles.Count() - 1; j++)
             {
                 var tile = GetTile(j);
                 if (tile is null || tile.Visibility.Value == Visibility.Collapsed)
@@ -1596,7 +2131,7 @@ namespace Tenpai.ViewModels
         {
             for (int i = 0; i < Tiles.Count(); i++)
             {
-                Tile0.Value = null;
+                Tile0.Value = new Dummy();
             }
         }
 
@@ -1934,43 +2469,43 @@ namespace Tenpai.ViewModels
                 templateCollection.Add(new Template("hatsu", "Assets/hatsu.png"));
                 templateCollection.Add(new Template("haku", "Assets/haku.png"));
                 templateCollection.Add(new Template("sha", "Assets/sha.png"));
-                //templateCollection.Add(new Template("m1", "Assets/h_m1.png"));
-                //templateCollection.Add(new Template("m2", "Assets/h_m2.png"));
-                //templateCollection.Add(new Template("m3", "Assets/h_m3.png"));
-                //templateCollection.Add(new Template("m4", "Assets/h_m4.png"));
-                //templateCollection.Add(new Template("m5", "Assets/h_m5.png"));
-                //templateCollection.Add(new Template("m5r", "Assets/h_m5r.png"));
-                //templateCollection.Add(new Template("m6", "Assets/h_m6.png"));
-                //templateCollection.Add(new Template("m7", "Assets/h_m7.png"));
-                //templateCollection.Add(new Template("m8", "Assets/h_m8.png"));
-                //templateCollection.Add(new Template("m9", "Assets/h_m9.png"));
-                //templateCollection.Add(new Template("p1", "Assets/h_p1.png"));
-                //templateCollection.Add(new Template("p2", "Assets/h_p2.png"));
-                //templateCollection.Add(new Template("p3", "Assets/h_p3.png"));
-                //templateCollection.Add(new Template("p4", "Assets/h_p4.png"));
-                //templateCollection.Add(new Template("p5", "Assets/h_p5.png"));
-                //templateCollection.Add(new Template("p5r", "Assets/h_p5r.png"));
-                //templateCollection.Add(new Template("p6", "Assets/h_p6.png"));
-                //templateCollection.Add(new Template("p7", "Assets/h_p7.png"));
-                //templateCollection.Add(new Template("p8", "Assets/h_p8.png"));
-                //templateCollection.Add(new Template("p9", "Assets/h_p9.png"));
-                //templateCollection.Add(new Template("s1", "Assets/h_s1.png"));
-                //templateCollection.Add(new Template("s2", "Assets/h_s2.png"));
-                //templateCollection.Add(new Template("s3", "Assets/h_s3.png"));
-                //templateCollection.Add(new Template("s4", "Assets/h_s4.png"));
-                //templateCollection.Add(new Template("s5", "Assets/h_s5.png"));
-                //templateCollection.Add(new Template("s5r", "Assets/h_s5r.png"));
-                //templateCollection.Add(new Template("s6", "Assets/h_s6.png"));
-                //templateCollection.Add(new Template("s7", "Assets/h_s7.png"));
-                //templateCollection.Add(new Template("s8", "Assets/h_s8.png"));
-                //templateCollection.Add(new Template("s9", "Assets/h_s9.png"));
-                //templateCollection.Add(new Template("chun", "Assets/h_chun.png"));
-                //templateCollection.Add(new Template("pe", "Assets/h_pe.png"));
-                //templateCollection.Add(new Template("nan", "Assets/h_nan.png"));
-                //templateCollection.Add(new Template("ton", "Assets/h_ton.png"));
-                //templateCollection.Add(new Template("hatsu", "Assets/h_hatsu.png"));
-                //templateCollection.Add(new Template("haku", "Assets/h_haku.png"));
-                //templateCollection.Add(new Template("sha", "Assets/h_sha.png"));
+                templateCollection.Add(new Template("h_m1", "Assets/h_m1.png"));
+                templateCollection.Add(new Template("h_m2", "Assets/h_m2.png"));
+                templateCollection.Add(new Template("h_m3", "Assets/h_m3.png"));
+                templateCollection.Add(new Template("h_m4", "Assets/h_m4.png"));
+                templateCollection.Add(new Template("h_m5", "Assets/h_m5.png"));
+                templateCollection.Add(new Template("h_m5r", "Assets/h_m5r.png"));
+                templateCollection.Add(new Template("h_m6", "Assets/h_m6.png"));
+                templateCollection.Add(new Template("h_m7", "Assets/h_m7.png"));
+                templateCollection.Add(new Template("h_m8", "Assets/h_m8.png"));
+                templateCollection.Add(new Template("h_m9", "Assets/h_m9.png"));
+                templateCollection.Add(new Template("h_p1", "Assets/h_p1.png"));
+                templateCollection.Add(new Template("h_p2", "Assets/h_p2.png"));
+                templateCollection.Add(new Template("h_p3", "Assets/h_p3.png"));
+                templateCollection.Add(new Template("h_p4", "Assets/h_p4.png"));
+                templateCollection.Add(new Template("h_p5", "Assets/h_p5.png"));
+                templateCollection.Add(new Template("h_p5r", "Assets/h_p5r.png"));
+                templateCollection.Add(new Template("h_p6", "Assets/h_p6.png"));
+                templateCollection.Add(new Template("h_p7", "Assets/h_p7.png"));
+                templateCollection.Add(new Template("h_p8", "Assets/h_p8.png"));
+                templateCollection.Add(new Template("h_p9", "Assets/h_p9.png"));
+                templateCollection.Add(new Template("h_s1", "Assets/h_s1.png"));
+                templateCollection.Add(new Template("h_s2", "Assets/h_s2.png"));
+                templateCollection.Add(new Template("h_s3", "Assets/h_s3.png"));
+                templateCollection.Add(new Template("h_s4", "Assets/h_s4.png"));
+                templateCollection.Add(new Template("h_s5", "Assets/h_s5.png"));
+                templateCollection.Add(new Template("h_s5r", "Assets/h_s5r.png"));
+                templateCollection.Add(new Template("h_s6", "Assets/h_s6.png"));
+                templateCollection.Add(new Template("h_s7", "Assets/h_s7.png"));
+                templateCollection.Add(new Template("h_s8", "Assets/h_s8.png"));
+                templateCollection.Add(new Template("h_s9", "Assets/h_s9.png"));
+                templateCollection.Add(new Template("h_chun", "Assets/h_chun.png"));
+                templateCollection.Add(new Template("h_pe", "Assets/h_pe.png"));
+                templateCollection.Add(new Template("h_nan", "Assets/h_nan.png"));
+                templateCollection.Add(new Template("h_ton", "Assets/h_ton.png"));
+                templateCollection.Add(new Template("h_hatsu", "Assets/h_hatsu.png"));
+                templateCollection.Add(new Template("h_haku", "Assets/h_haku.png"));
+                templateCollection.Add(new Template("h_sha", "Assets/h_sha.png"));
                 templateCollection.Add(new Template("s_m1", "Assets/s_m1.png"));
                 templateCollection.Add(new Template("s_m2", "Assets/s_m2.png"));
                 templateCollection.Add(new Template("s_m3", "Assets/s_m3.png"));
@@ -2046,6 +2581,25 @@ namespace Tenpai.ViewModels
                 templateCollection.Add(new Template("y_haku", "Assets/y_haku.png"));
                 templateCollection.Add(new Template("y_sha", "Assets/y_sha.png"));
                 return templateCollection;
+            }
+        }
+
+        class MatchResult
+        {
+            public MatchResult(double score, string id, Tile matchTile)
+            {
+                Score = score;
+                identifier = id;
+                MatchTile = matchTile;
+            }
+
+            public string identifier { get; set; } 
+            public Tile MatchTile { get; set; }
+            public double Score { get; set; }
+
+            public override string ToString()
+            {
+                return $"{identifier} {Score}";
             }
         }
     }
