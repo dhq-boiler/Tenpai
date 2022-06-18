@@ -1032,6 +1032,7 @@ namespace Tenpai.ViewModels
             UraDoraDisplayTile2.Value = Tile.CreateInstance<Dummy>();
             UraDoraDisplayTile3.Value = Tile.CreateInstance<Dummy>();
             UraDoraDisplayTile4.Value = Tile.CreateInstance<Dummy>();
+            SarashiHai.Clear();
             AgariType.Value = ViewModels.AgariType.Unspecified;
             WindOfTheRound.Value = ViewModels.WindOfTheRound.East;
             OnesOwnWind.Value = ViewModels.OnesOwnWind.East;
@@ -1145,47 +1146,7 @@ namespace Tenpai.ViewModels
 
                                 int i = 0;
                                 Clear();
-                                var sarashihai = new ObservableCollection<Tile>();
-                                sarashihai.ToObservable().Subscribe(add =>
-                                {
-                                    if (sarashihai.Count(x => x.GetType() == add.GetType()) == 4)
-                                    {
-                                        var a = sarashihai.First(x => x.GetType() == add.GetType());
-                                        sarashihai.Remove(a);
-                                        var b = sarashihai.First(x => x.GetType() == add.GetType());
-                                        sarashihai.Remove(b);
-                                        var c = sarashihai.First(x => x.GetType() == add.GetType());
-                                        sarashihai.Remove(c);
-                                        var d = sarashihai.First(x => x.GetType() == add.GetType());
-                                        sarashihai.Remove(d);
-                                        SarashiHai.Add(new Quad(d, c, b, a));
-                                    }
-                                    else if (sarashihai.Count() == 3)
-                                    {
-                                        var a = sarashihai.First(x => x.GetType() == add.GetType());
-                                        sarashihai.Remove(a);
-                                        var b = sarashihai.First(x => x.GetType() == add.GetType());
-                                        sarashihai.Remove(b);
-                                        var c = sarashihai.First(x => x.GetType() == add.GetType());
-                                        sarashihai.Remove(c);
-                                        SarashiHai.Add(new Triple(c, b, a));
-                                    }
-                                    else
-                                    {
-                                        var a = sarashihai.First(x => x.GetType() == add.GetType());
-                                        var b = sarashihai.First(x => x.GetType() == add.GetType());
-                                        var c = sarashihai.First(x => x.GetType() == add.GetType());
-
-                                        if ((a.GetHashCode() + c.GetHashCode()) / 2 == b.GetHashCode())
-                                        {
-                                            sarashihai.Remove(a);
-                                            sarashihai.Remove(b);
-                                            sarashihai.Remove(c);
-                                            SarashiHai.Add(new Run(c, b, a));
-                                        }
-                                    }
-                                })
-                                .AddTo(_disposables);
+                                var sarashihai = new ObservableCollection<MatchResult>();
                                 foreach (var contour in contours)
                                 {
                                     Trace.WriteLine($"Process contour[{i}] : {string.Join(",", contour)}");
@@ -1205,7 +1166,7 @@ namespace Tenpai.ViewModels
             }
         }
 
-        private void NewMethod(ScreenShotSource.MatEventArgs args, OpenCvSharp.Point[][] contours, Mat clientRectPool, OpenCvSharp.Point[] contour, ObservableCollection<Tile> sarashihai)
+        private void NewMethod(ScreenShotSource.MatEventArgs args, OpenCvSharp.Point[][] contours, Mat clientRectPool, OpenCvSharp.Point[] contour, ObservableCollection<MatchResult> sarashihai)
         {
             var list = new List<OpenCvSharp.Point>();
             foreach (var cx in contour)
@@ -1631,17 +1592,219 @@ namespace Tenpai.ViewModels
                                 tile = new West();
                                 tile.Rotate = new System.Windows.Media.RotateTransform(90);
                                 break;
+                            case "h_m1":
+                                tile = new Character_1();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m2":
+                                tile = new Character_2();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m3":
+                                tile = new Character_3();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m4":
+                                tile = new Character_4();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m5":
+                                tile = new Character_5();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m5r":
+                                tile = new Character_5R();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m6":
+                                tile = new Character_6();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m7":
+                                tile = new Character_7();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m8":
+                                tile = new Character_8();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_m9":
+                                tile = new Character_9();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p1":
+                                tile = new Dot_1();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p2":
+                                tile = new Dot_2();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p3":
+                                tile = new Dot_3();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p4":
+                                tile = new Dot_4();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p5":
+                                tile = new Dot_5();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p5r":
+                                tile = new Dot_5R();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p6":
+                                tile = new Dot_6();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p7":
+                                tile = new Dot_7();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p8":
+                                tile = new Dot_8();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_p9":
+                                tile = new Dot_9();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s1":
+                                tile = new Bamboo_1();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s2":
+                                tile = new Bamboo_2();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s3":
+                                tile = new Bamboo_3();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s4":
+                                tile = new Bamboo_4();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s5":
+                                tile = new Bamboo_5();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s5r":
+                                tile = new Bamboo_5R();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s6":
+                                tile = new Bamboo_6();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s7":
+                                tile = new Bamboo_7();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s8":
+                                tile = new Bamboo_8();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_s9":
+                                tile = new Bamboo_9();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_chun":
+                                tile = new Red();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_pe":
+                                tile = new North();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_nan":
+                                tile = new South();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_ton":
+                                tile = new East();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_hatsu":
+                                tile = new Green();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_haku":
+                                tile = new White();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
+                            case "h_sha":
+                                tile = new West();
+                                tile.Rotate = new System.Windows.Media.RotateTransform(90);
+                                break;
                         }
                         results.Add(new MatchResult(maxVal, template.Name.Value, tile));
                     }
                 }
             }
 
-            var ordered = results.OrderByDescending(x => x.Score);
-            var top1 = ordered.First();
-            if (top1.identifier.StartsWith("s_") || top1.identifier.StartsWith("y_"))
+            IEnumerable<MatchResult> ordered = results.OrderByDescending(x => x.Score);
+            var s = ordered.First().identifier;
+            if (s.StartsWith("h_"))
             {
-                sarashihai.Add(top1.MatchTile);
+                s = s.Substring(2);
+            }
+            if (s.StartsWith("y_"))
+            {
+                s = s.Substring(2);
+            }
+            while ((sarashihai.Select(x => x.identifier).Contains("h_" + s) || sarashihai.Select(x => x.identifier).Contains("y_" + s)) && (ordered.First().identifier.StartsWith("h_") || ordered.First().identifier.StartsWith("y_")))
+            {
+                ordered = ordered.Skip(1);
+            }
+            var top1 = ordered.First();
+            if (top1.identifier.StartsWith("h_") || top1.identifier.StartsWith("s_") || top1.identifier.StartsWith("y_"))
+            {
+                sarashihai.Add(top1);
+                var add = top1.MatchTile;
+                if (sarashihai.Count(x => x.MatchTile.EqualsConsiderCodeAndRed(add)) == 4)
+                {
+                    var a = sarashihai.First(x => x.MatchTile.EqualsConsiderCodeAndRed(add));
+                    sarashihai.Remove(a);
+                    var b = sarashihai.First(x => x.MatchTile.EqualsConsiderCodeAndRed(add));
+                    sarashihai.Remove(b);
+                    var c = sarashihai.First(x => x.MatchTile.EqualsConsiderCodeAndRed(add));
+                    sarashihai.Remove(c);
+                    var d = sarashihai.First(x => x.MatchTile.EqualsConsiderCodeAndRed(add));
+                    sarashihai.Remove(d);
+                    SarashiHai.Add(new Quad(d.MatchTile, c.MatchTile, b.MatchTile, a.MatchTile));
+                }
+                else if (sarashihai.Count(x => x.MatchTile.EqualsConsiderCodeAndRed(add)) == 3)
+                {
+                    var a = sarashihai.First(x => x.MatchTile.EqualsConsiderCodeAndRed(add));
+                    sarashihai.Remove(a);
+                    var b = sarashihai.First(x => x.MatchTile.EqualsConsiderCodeAndRed(add));
+                    sarashihai.Remove(b);
+                    var c = sarashihai.First(x => x.MatchTile.EqualsConsiderCodeAndRed(add));
+                    sarashihai.Remove(c);
+                    SarashiHai.Add(new Triple(c.MatchTile, b.MatchTile, a.MatchTile));
+                }
+                else
+                {
+                    if (sarashihai.Count() >= 3)
+                    {
+                        var a = sarashihai.Take(1).First();
+                        var b = sarashihai.Skip(1).Take(1).First();
+                        var c = sarashihai.Skip(2).Take(1).First();
+
+                        if (!a.MatchTile.EqualsConsiderCodeAndRed(b.MatchTile) && !b.MatchTile.EqualsConsiderCodeAndRed(c.MatchTile) && !c.MatchTile.EqualsConsiderCodeAndRed(a.MatchTile)
+                            && (a.GetHashCode() + c.GetHashCode()) / 2 == b.GetHashCode())
+                        {
+                            sarashihai.Remove(a);
+                            sarashihai.Remove(b);
+                            sarashihai.Remove(c);
+                            SarashiHai.Add(new Run(c.MatchTile, b.MatchTile, a.MatchTile));
+                        }
+                    }
+                }
             }
             else if (top1.Score >= 0.7)
             {
