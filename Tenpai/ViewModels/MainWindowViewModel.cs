@@ -1813,6 +1813,8 @@ namespace Tenpai.ViewModels
             {
                 Trace.WriteLine($"Skip top1 {top1}");
             }
+            Cv2.PutText(Pool.Value, top1.identifier, new OpenCvSharp.Point(contour.Average(x => x.X) - 20, contour.Average(x => x.Y) - 30), HersheyFonts.HersheySimplex, 0.5, Scalar.Red, 1);
+            Cv2.PutText(clientRectPool, top1.identifier, new OpenCvSharp.Point(contour.Average(x => x.X) - 20, contour.Average(x => x.Y) - 30), HersheyFonts.HersheySimplex, 0.5, Scalar.Red, 1);
             Cv2.DrawContours(Pool.Value, new OpenCvSharp.Point[][] { contour }, -1, new Scalar(0, 0, 255, 255), 2);
             Cv2.DrawContours(clientRectPool, new OpenCvSharp.Point[][] { contour }, -1, new Scalar(0, 0, 255, 255), 2);
             Cv2.ImShow("aaa", clientRectPool);
