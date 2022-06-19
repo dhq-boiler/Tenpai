@@ -174,8 +174,7 @@ namespace Tenpai.ViewModels
 
                 if (dialog.ShowDialog() == true)
                 {
-                    takePictureOnClientRect = true;
-                    saveFileName = dialog.FileName;
+                    ClientRectOutput.Value.SaveImage(dialog.FileName);
                 }
             })
             .AddTo(_disposables);
