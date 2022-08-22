@@ -5,14 +5,9 @@
 
 ## DEMO
 
-![2022-05-18](https://user-images.githubusercontent.com/7916855/169081796-a9f23b08-260f-44f8-b7a2-81204b32e1ab.png)
-![2022-05-18 (2)](https://user-images.githubusercontent.com/7916855/169081694-faef92f3-630c-4235-ba20-eb6bb2c8a6d2.png)
-![2022-05-18 (3)](https://user-images.githubusercontent.com/7916855/169081751-734b96d0-e4e2-4c28-94d9-0a7493c36b64.png)
-![2022-05-18 (4)](https://user-images.githubusercontent.com/7916855/169081772-809440e0-ca1b-4d05-93d9-51afb3487f53.png)
-![2022-05-18 (5)](https://user-images.githubusercontent.com/7916855/169081787-389928a9-a204-43ae-a3d1-cc7162215225.png)
-![2022-05-19 (2)](https://user-images.githubusercontent.com/7916855/169081815-38ede3e0-a7a6-4c17-a311-60eb76319c8a.png)
-![2022-05-19 (3)](https://user-images.githubusercontent.com/7916855/169081826-c51a72c6-10f4-4cfe-aeab-b7244d3b1e6f.png)
-![2022-05-19 (4)](https://user-images.githubusercontent.com/7916855/169081837-477e363b-3bd7-4d51-b00f-09b784e29abe.png)
+![2022-08-22](https://github.com/dhq-boiler/Tenpai/blob/develop/WebComponents/2022-08-22.png?raw=true)
+![2022-08-22(1)](https://github.com/dhq-boiler/Tenpai/blob/develop/WebComponents/2022-08-22%20(1).png?raw=true)
+![2022-08-22(2)](https://github.com/dhq-boiler/Tenpai/blob/develop/WebComponents/2022-08-22%20(2).png?raw=true)
 
 ## 進捗状況
 
