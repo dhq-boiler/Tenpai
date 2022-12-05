@@ -74,6 +74,7 @@ namespace Tenpai.ViewModels
         public ReactiveCommand<Call> DaiminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> ShouminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
+        public ReactiveCollection<ReadyHand> ReadyHandsForQuiz { get; } = new ReactiveCollection<ReadyHand>();
         public ReactiveCollection<Yaku> Yakus { get; } = new ReactiveCollection<Yaku>();
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(13);
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
@@ -941,6 +942,26 @@ namespace Tenpai.ViewModels
             {
                 ReadyHands.Clear();
             }
+
+            Question();
+        }
+
+        private void Question()
+        {
+            if (tileCount.Value + 1 > Tiles.Where(x => x is not Dummy).Count())
+            {
+                return;
+            }
+            SortIf();
+            ReadyHandsForQuiz.Clear();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
+            readyHands.ToList().ForEach(x =>
+            {
+                x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
+                MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value, SelectedHonbaSu.Value);
+            });
+            RemoveUnder12HanYakuFromYakuList(readyHands);
+            ReadyHandsForQuiz.AddRange(readyHands.OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum.Value));
         }
 
         private void ConstructCompleteHands()
