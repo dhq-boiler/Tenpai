@@ -1100,7 +1100,9 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var m1Avg = meld1.Tiles.Cast<Suits>().Average(x => x.Number);
             var m2Avg = meld2.Tiles.Cast<Suits>().Average(x => x.Number);
             var m3Avg = meld3.Tiles.Cast<Suits>().Average(x => x.Number);
-            if (m1Avg == m2Avg && m1Avg == m3Avg)
+            var meldArray = new Meld[] { meld1, meld2, meld3 };
+            var types = new Type[] { typeof(Bamboos), typeof(Characters), typeof(Dots) };
+            if (m1Avg == m2Avg && m1Avg == m3Avg && types.All(t => meldArray.Any(md => md.AllTiles.All(tile => t.IsInstanceOfType(tile)))))
             {
                 return true;
             }
