@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
+using Tenpai.Models.Yaku;
 using Tenpai.Models.Yaku.Meld;
 using Tenpai.Models.Yaku.Meld.Detector;
 using Tenpai.ViewModels;
@@ -2666,6 +2667,104 @@ namespace Tenpai.Test
                                                            new Triple<East>(),
                                                            new Triple<White>(),
                                                            new Double<Red>())))
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
+                else
+                {
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
+            }
+        }
+
+        [Test]
+        public void 三色同順()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+            });
+            var melds = new Meld[]
+            {
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            Assert.That(completedHands, Has.Length.EqualTo(1));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Run<Character_1, Character_2, Character_3>(),
+                                                           new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
+                                                           new Run<Dot_1, Dot_2, Dot_3>(),
+                                                           new Run<Dot_7, Dot_8, Dot_9>(),
+                                                           new Double<Character_9>()))
+                    && completedHand.Yakus.Contains(new ThreeColorRuns()))
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
+                else
+                {
+                    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
+            }
+        }
+
+        [Test]
+        public void 三色同順ではない()
+        {
+            var tiles = new TileCollection(new Tile[]
+            {
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+            });
+            var melds = new Meld[]
+            {
+            };
+            var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            Assert.That(completedHands, Has.Length.EqualTo(2));
+            foreach (var completedHand in completedHands)
+            {
+                if (completedHand.Equals(new CompletedHand(new Run<Character_1, Character_2, Character_3>(),
+                                                           new Run<Character_1, Character_2, Character_3>(),
+                                                           new Run<Character_1, Character_2, Character_3>(),
+                                                           new Run<Dot_7, Dot_8, Dot_9>(),
+                                                           new Double<Character_9>()))
+                    && !completedHand.Yakus.Contains(new ThreeColorRuns())
+                    && completedHand.Yakus.Contains(new PureOutsideHand()))
+                {
+                    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                }
+                else if (completedHand.Equals(new CompletedHand(new Triple<Character_1>(),
+                                                                new Triple<Character_2>(),
+                                                                new Triple<Character_3>(),
+                                                                new Run<Dot_7, Dot_8, Dot_9>(),
+                                                                new Double<Character_9>()))
+                         && !completedHand.Yakus.Contains(new ThreeColorRuns())
+                         && !completedHand.Yakus.Contains(new PureOutsideHand())
+                         && completedHand.Yakus.Contains(new ThreeConcealedTriples()))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
