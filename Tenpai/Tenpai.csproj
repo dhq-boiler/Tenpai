@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,10 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="CalcBinding" Version="2.5.2" />
-    <PackageReference Include="GitVersion.MsBuild" Version="5.10.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="GitInfo" Version="2.3.0" />
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.5.5.20211231" />
     <PackageReference Include="OpenCvSharp4.Windows" Version="4.5.5.20211231" />
     <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.5.5.20211231" />
