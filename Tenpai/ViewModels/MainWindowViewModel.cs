@@ -4,6 +4,7 @@ using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -95,6 +96,7 @@ namespace Tenpai.ViewModels
         public ReactiveCommand ClearCommand { get; } = new ReactiveCommand();
         public ReactivePropertySlim<int> AnswerHanCount { get; } = new ReactivePropertySlim<int>();
         public ReactiveCommand AnswerElementaryLevelCommand { get; } = new ReactiveCommand();
+        public ReactiveCommand RandomQuestionCommand { get; } = new ReactiveCommand();
 
         private int sarashiCount = 0;
 
@@ -552,6 +554,75 @@ namespace Tenpai.ViewModels
                 dialogService.ShowDialog(nameof(CheckAnswer), param, ret => result = ret);
             })
             .AddTo(_disposables);
+            RandomQuestionCommand.Subscribe(() =>
+            {
+                ClearCommand.Execute();
+                var melds = CreateMeldsRandomly();
+                int index = 0;
+                foreach (var tile in melds.SelectMany(x => x.Tiles))
+                {
+                    if (melds.SelectMany(x => x.Tiles).Count() == index + 1)
+                    {
+                        AgariTile.Value = tile;
+                        break;
+                    }
+                    switch (index++)
+                    {
+                        case 0:
+                            Tile0.Value = tile;
+                            break;
+                        case 1:
+                            Tile1.Value = tile;
+                            break;
+                        case 2:
+                            Tile2.Value = tile;
+                            break;
+                        case 3:
+                            Tile3.Value = tile;
+                            break;
+                        case 4:
+                            Tile4.Value = tile;
+                            break;
+                        case 5:
+                            Tile5.Value = tile;
+                            break;
+                        case 6:
+                            Tile6.Value = tile;
+                            break;
+                        case 7:
+                            Tile7.Value = tile;
+                            break;
+                        case 8:
+                            Tile8.Value = tile;
+                            break;
+                        case 9:
+                            Tile9.Value = tile;
+                            break;
+                        case 10:
+                            Tile10.Value = tile;
+                            break;
+                        case 11:
+                            Tile11.Value = tile;
+                            break;
+                        case 12:
+                            Tile12.Value = tile;
+                            break;
+                        case 13:
+                            Tile13.Value = tile;
+                            break;
+                        case 14:
+                            Tile14.Value = tile;
+                            break;
+                        case 15:
+                            Tile15.Value = tile;
+                            break;
+                        case 16:
+                            Tile16.Value = tile;
+                            break;
+                    }
+                }
+            })
+            .AddTo(_disposables);
             Tile0.Subscribe(_ =>
             {
                 SortIf();
@@ -946,6 +1017,277 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
         }
 
+        private Meld[] CreateMeldsRandomly()
+        {
+            var ret = new List<Meld>();
+            var types = new List<Type>();
+            for (int i = 0; i < 4*4*4; i++)
+            {
+                types.Add(typeof(Run));
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                types.Add(typeof(Triple));
+            }
+            types.Add(typeof(Quad));
+            var rand = new Random();
+
+            var yama = new TileCollection()
+            {
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_5>(),
+                Tile.CreateInstance<Character_5>(),
+                Tile.CreateInstance<Character_5>(),
+                Tile.CreateInstance<Character_5R>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_5>(),
+                Tile.CreateInstance<Dot_5>(),
+                Tile.CreateInstance<Dot_5>(),
+                Tile.CreateInstance<Dot_5R>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_5>(),
+                Tile.CreateInstance<Bamboo_5>(),
+                Tile.CreateInstance<Bamboo_5>(),
+                Tile.CreateInstance<Bamboo_5R>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_9>(),
+                Tile.CreateInstance<Bamboo_9>(),
+                Tile.CreateInstance<Bamboo_9>(),
+                Tile.CreateInstance<Bamboo_9>(),
+
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                GenerateFourMelds(ret, types, rand, yama);
+            }
+
+            GenerateDouble(ret, rand, yama);
+
+            return ret.ToArray();
+        }
+
+        private static void GenerateDouble(List<Meld> ret, Random rand, TileCollection yama)
+        {
+            while (true)
+            {
+                var yamaIndex = rand.Next(yama.Count);
+                var tile = yama[yamaIndex];
+                var tile2 = Tile.CreateInstance(tile.Code, Visibility.Visible, null);
+                if (!tile.EqualsRedSuitedTileIncluding(tile2))
+                {
+                    continue;
+                }
+                if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 1)
+                {
+                    continue;
+                }
+                if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile2)) < 1)
+                {
+                    continue;
+                }
+                yama.Remove(tile);
+                yama.Remove(tile2);
+                var meld = new Models.Yaku.Meld.Double(tile, tile2);
+                ret.Add(meld);
+                return;
+            }
+        }
+
+        private static void GenerateFourMelds(List<Meld> ret, List<Type> types, Random rand, TileCollection yama)
+        {
+            while (true)
+            {
+                var typesIndex = rand.Next(types.Count - 1);
+                var type = types[typesIndex];
+                if (type == typeof(Run))
+                {
+                    int i = 0;
+                    while (i < 3)
+                    {
+                        var yamaIndex = rand.Next(yama.Count);
+                        var tile = yama[yamaIndex];
+                        if (!(tile is Suits))
+                            continue;
+                        var tile2 = Tile.CreateInstance(tile.Code + 1, Visibility.Visible, null);
+                        var tile3 = Tile.CreateInstance(tile.Code + 2, Visibility.Visible, null);
+                        if (!tile.IsSameType(tile2) || !tile.IsSameType(tile3))
+                        {
+                            continue;
+                        }
+                        if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 1)
+                        {
+                            continue;
+                        }
+                        if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile2)) < 1)
+                        {
+                            continue;
+                        }
+                        if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile3)) < 1)
+                        {
+                            continue;
+                        }
+                        yama.Remove(tile);
+                        yama.Remove(tile2);
+                        yama.Remove(tile3);
+                        var meld = new Run(tile, tile2, tile3);
+                        ret.Add(meld);
+                        return;
+                    }
+                }
+                else if (type == typeof(Triple))
+                {
+                    var yamaIndex = rand.Next(yama.Count);
+                    var tile = yama[yamaIndex];
+
+                    if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 3)
+                        continue;
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        yama.Remove(tile);
+                    }
+                    var meld = new Triple(tile, tile, tile);
+                    ret.Add(meld);
+                    return;
+                }
+                else if (type == typeof(Quad))
+                {
+                    var yamaIndex = rand.Next(yama.Count);
+                    var tile = yama[yamaIndex];
+
+                    if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 4)
+                        continue;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        yama.Remove(tile);
+                    }
+                    var meld = new Quad(tile, tile, tile, tile);
+                    ret.Add(meld);
+                    return;
+                }
+            }
+        }
+
         private void ConstructHand()
         {
             if (tileCount.Value + 1 == Tiles.Where(x => x is not Dummy).Count())
@@ -1000,6 +1342,10 @@ namespace Tenpai.ViewModels
 
         private void ConstructReadyHands()
         {
+            if (TilesWithoutAgariTile.Where(x => !(x is Dummy)).Count() < 13)
+            {
+                return;
+            }
             SortIf();
             ReadyHands.Clear();
             var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();

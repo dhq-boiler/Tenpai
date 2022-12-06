@@ -873,6 +873,7 @@
                             Width="150"
                             Height="45"
                             Margin="5"
+                            Command="{Binding RandomQuestionCommand}"
                             Content="ランダム出題"
                             FontSize="26" />
                     </WrapPanel>
