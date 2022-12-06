@@ -76,6 +76,14 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
         public ReactiveCollection<ReadyHand> ReadyHandsForQuiz { get; } = new ReactiveCollection<ReadyHand>();
         public ReactiveCollection<Yaku> Yakus { get; } = new ReactiveCollection<Yaku>();
+        public ReactiveCollection<Yaku> EnabledYakus
+        {
+            get {
+                var ret = new ReactiveCollection<Yaku>();
+                ret.AddRange(Yakus.Where(x => x.IsEnable.Value));
+                return ret;
+            }
+        }
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(13);
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
         public ReadOnlyReactivePropertySlim<int> AgariTypeAsInt { get; }
@@ -85,6 +93,8 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<int> HonbaSu { get; } = new ReactiveCollection<int>();
         public ReactivePropertySlim<int> SelectedHonbaSu { get; } = new ReactivePropertySlim<int>();
         public ReactiveCommand ClearCommand { get; } = new ReactiveCommand();
+        public ReactivePropertySlim<int> AnswerHanCount { get; } = new ReactivePropertySlim<int>();
+        public ReactiveCommand AnswerElementaryLevelCommand { get; } = new ReactiveCommand();
 
         private int sarashiCount = 0;
 
@@ -534,6 +544,14 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+            AnswerElementaryLevelCommand.Subscribe(() =>
+            {
+                DialogParameters param = new DialogParameters();
+                param.Add("Judge", AnswerHanCount.Value == ReadyHandsForQuiz[0].Yakus.Sum(x => x.HanCount(false)));
+                IDialogResult result = null;
+                dialogService.ShowDialog(nameof(CheckAnswer), param, ret => result = ret);
+            })
+            .AddTo(_disposables);
             Tile0.Subscribe(_ =>
             {
                 SortIf();
@@ -962,6 +980,7 @@ namespace Tenpai.ViewModels
             });
             RemoveUnder12HanYakuFromYakuList(readyHands);
             ReadyHandsForQuiz.AddRange(readyHands.OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum.Value));
+            RaisePropertyChanged(nameof(EnabledYakus));
         }
 
         private void ConstructCompleteHands()

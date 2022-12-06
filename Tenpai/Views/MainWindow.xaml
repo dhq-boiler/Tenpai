@@ -870,24 +870,28 @@
                 <DockPanel>
                     <WrapPanel DockPanel.Dock="Top">
                         <Button
-                            Width="75"
-                            Height="25"
+                            Width="150"
+                            Height="45"
                             Margin="5"
-                            Content="ランダム出題" />
+                            Content="ランダム出題"
+                            FontSize="26" />
                     </WrapPanel>
                     <GroupBox
                         Width="300"
                         Margin="10"
                         DockPanel.Dock="Bottom"
+                        FontSize="26"
                         Header="解答欄">
                         <DockPanel>
                             <Button
                                 Margin="5"
+                                Command="{Binding AnswerElementaryLevelCommand}"
                                 Content="回答する"
-                                DockPanel.Dock="Bottom" />
+                                DockPanel.Dock="Bottom"
+                                FontSize="26" />
                             <DockPanel Margin="5">
-                                <Label DockPanel.Dock="Left">翻数：</Label>
-                                <TextBox HorizontalContentAlignment="Right" Text="{Binding HanCount.Value, Mode=TwoWay}" />
+                                <Label DockPanel.Dock="Left" FontSize="26">翻数：</Label>
+                                <TextBox HorizontalContentAlignment="Right" Text="{Binding AnswerHanCount.Value, Mode=TwoWay}" />
                             </DockPanel>
                         </DockPanel>
                     </GroupBox>
@@ -1018,9 +1022,9 @@
                         </ContentPresenter>
                         <views:TilePlaceholder TileType="{Binding AgariTile.Value, Mode=TwoWay}" Visibility="{Binding AgariTile.Value.Visibility.Value}" />
                     </StackPanel>
-                    <GroupBox Header="条件">
+                    <GroupBox FontSize="26" Header="条件">
                         <WrapPanel Orientation="Vertical">
-                            <ItemsControl ItemsSource="{Binding Yakus}">
+                            <ItemsControl ItemsSource="{Binding EnabledYakus, UpdateSourceTrigger=PropertyChanged}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical" />
@@ -1036,18 +1040,6 @@
                                         </DataTemplate.Resources>
                                         <StackPanel Orientation="Horizontal">
                                             <Label Content="{Binding Name}" FontSize="30" />
-                                            <Label>
-                                                <TextBlock>
-                                                    <Run>
-                                                        <Run.Text>
-                                                            <MultiBinding Converter="{StaticResource HanCountToString}" Mode="OneWay">
-                                                                <Binding />
-                                                                <Binding Path="DataContext.SarashiHai" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=views:MainWindow}" />
-                                                            </MultiBinding>
-                                                        </Run.Text>
-                                                    </Run>
-                                                </TextBlock>
-                                            </Label>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
