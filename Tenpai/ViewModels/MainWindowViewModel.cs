@@ -104,6 +104,7 @@ namespace Tenpai.ViewModels
         public Tile[] TilesWithoutAgariTile { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value }; } }
 
         private bool sortflag = false;
+        private Meld[] melds;
 
         public MainWindowViewModel()
         {
@@ -557,13 +558,14 @@ namespace Tenpai.ViewModels
             RandomQuestionCommand.Subscribe(() =>
             {
                 ClearCommand.Execute();
-                var melds = CreateMeldsRandomly();
+                melds = CreateMeldsRandomly();
                 int index = 0;
-                foreach (var tile in melds.SelectMany(x => x.Tiles))
+                var tileList = melds.SelectMany(x => x.Tiles).ToList();
+                foreach (var tile in tileList)
                 {
                     if (melds.SelectMany(x => x.Tiles).Count() == index + 1)
                     {
-                        AgariTile.Value = tile;
+                        AgariTile.Value = melds.OfType<Models.Yaku.Meld.Double>().First().Tiles[0];
                         break;
                     }
                     switch (index++)
@@ -1175,6 +1177,7 @@ namespace Tenpai.ViewModels
                 Tile.CreateInstance<Red>(),
             };
 
+
             for (int i = 0; i < 4; i++)
             {
                 GenerateFourMelds(ret, types, rand, yama);
@@ -1321,7 +1324,7 @@ namespace Tenpai.ViewModels
                 MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value, SelectedHonbaSu.Value);
             });
             RemoveUnder12HanYakuFromYakuList(readyHands);
-            ReadyHandsForQuiz.AddRange(readyHands.OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum.Value));
+            ReadyHandsForQuiz.AddRange(readyHands.Where(x => x.WaitingTiles.First().EqualsRedSuitedTileIncluding(AgariTile.Value)).OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum.Value));
             RaisePropertyChanged(nameof(EnabledYakus));
         }
 
