@@ -340,7 +340,8 @@ namespace Tenpai.ViewModels
                 UpdateTile(new Dummy(), rotate, 1);
                 UpdateTileVisibilityToCollapsed(rotate.Code, 3);
                 var updateOrderList = Tiles.Where(x => x.Code.Equals(rotate.Code) && x.Order >= rotate.Order && x.CallFrom != rotate.CallFrom).ToList();
-                updateOrderList.ForEach(x => x.Order++);
+                var index = 0;
+                updateOrderList.ForEach(x => x.Order += ++index);
 
                 SortIf();
                 
@@ -1646,6 +1647,23 @@ namespace Tenpai.ViewModels
         {
             var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value }.ToList();
             tiles.Sort();
+            Tile16.Value = Tile.CreateInstance<Dummy>();
+            Tile15.Value = Tile.CreateInstance<Dummy>();
+            Tile14.Value = Tile.CreateInstance<Dummy>();
+            Tile13.Value = Tile.CreateInstance<Dummy>();
+            Tile12.Value = Tile.CreateInstance<Dummy>();
+            Tile11.Value = Tile.CreateInstance<Dummy>();
+            Tile10.Value = Tile.CreateInstance<Dummy>();
+            Tile9.Value = Tile.CreateInstance<Dummy>();
+            Tile8.Value = Tile.CreateInstance<Dummy>();
+            Tile7.Value = Tile.CreateInstance<Dummy>();
+            Tile6.Value = Tile.CreateInstance<Dummy>();
+            Tile5.Value = Tile.CreateInstance<Dummy>();
+            Tile4.Value = Tile.CreateInstance<Dummy>();
+            Tile3.Value = Tile.CreateInstance<Dummy>();
+            Tile2.Value = Tile.CreateInstance<Dummy>();
+            Tile1.Value = Tile.CreateInstance<Dummy>();
+            Tile0.Value = Tile.CreateInstance<Dummy>();
             Tile0.Value = tiles[0];
             Tile1.Value = tiles[1];
             Tile2.Value = tiles[2];
