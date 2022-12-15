@@ -624,6 +624,20 @@ namespace Tenpai.ViewModels
                             break;
                     }
                 }
+                var rand = new Random();
+                foreach (var yaku in Yakus)
+                {
+                    var arrIndex = rand.Next(0, yaku.AppearanceProbabilityTable.Count());
+                    if (yaku.AppearanceProbabilityTable[arrIndex])
+                    {
+                        yaku.IsEnable.Value = true;
+                    }
+                    else
+                    {
+                        yaku.IsEnable.Value = false;
+                    }
+                }
+                RaisePropertyChanged(nameof(EnabledYakus));
             })
             .AddTo(_disposables);
             Tile0.Subscribe(_ =>

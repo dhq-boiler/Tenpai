@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{2B96D0BA-998C-4A97-A8DA-61576D90B577}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{EB133A9F-C828-4B97-B382-DED9045A7226}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB133A9F-C828-4B97-B382-DED9045A7226}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB133A9F-C828-4B97-B382-DED9045A7226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B96D0BA-998C-4A97-A8DA-61576D90B577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B96D0BA-998C-4A97-A8DA-61576D90B577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B96D0BA-998C-4A97-A8DA-61576D90B577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B96D0BA-998C-4A97-A8DA-61576D90B577}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
