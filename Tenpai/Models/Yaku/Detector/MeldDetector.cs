@@ -837,7 +837,8 @@ namespace Tenpai.Models.Yaku.Meld.Detector
                                          : (rh.Melds.Count(x => x is Single) == 1
                                          ? !rh.Melds.First(x => x is Single).HasYaku(windOfTheRound, onesOwnWind)
                                          : false);
-                    if (isMenzen && runsAreThree && allRuns && headIsNotYakuhai)
+                    var hasHead = rh.Melds.Count(x => x is Double) == 1;
+                    if (isMenzen && runsAreThree && allRuns && headIsNotYakuhai && hasHead)
                     {
                         //平和
                         rh.Yakus.Add(new AllRuns());
