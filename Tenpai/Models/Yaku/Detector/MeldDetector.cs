@@ -87,7 +87,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             var heads = FindDoubles(hand);
             var singles = FindSingles(hand);
 
-            AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, agariTile, windOfTheRound, onesOwnWind);
             AddDora(ref ret, new TileCollection(hand), exposed, doras, uraDoras);
             CalcHu(ref ret, exposed, windOfTheRound, onesOwnWind, agariType);
 
@@ -516,7 +516,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             //4面子1雀頭
             ReadyHandsBasicForm(hand, exposed, ref ret, runs, triples, heads, singles, quads);
 
-            AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, windOfTheRound, onesOwnWind);
+            AddYaku(ref ret, new TileCollection(hand), exposed, runs, triples, heads, singles, agariType, agariTile: null, windOfTheRound, onesOwnWind);
             AddDora(ref ret, new TileCollection(hand), exposed, doras, uraDoras);
             CalcHu(ref ret, exposed, windOfTheRound, onesOwnWind, agariType);
 
@@ -584,7 +584,7 @@ namespace Tenpai.Models.Yaku.Meld.Detector
             }
         }
 
-        private static void AddYaku<T>(ref List<T> ret, TileCollection hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind) where T : ReadyHand
+        private static void AddYaku<T>(ref List<T> ret, TileCollection hand, Meld[] exposed, Meld[] runs, Meld[] triples, Meld[] heads, Meld[] singles, ViewModels.AgariType agariType, Tile agariTile, ViewModels.WindOfTheRound windOfTheRound, ViewModels.OnesOwnWind onesOwnWind) where T : ReadyHand
         {
             foreach (var rh in ret)
             {
