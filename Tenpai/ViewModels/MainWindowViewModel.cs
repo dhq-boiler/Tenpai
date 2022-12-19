@@ -12,6 +12,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Tenpai.Extensions;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku;
@@ -558,14 +559,19 @@ namespace Tenpai.ViewModels
             RandomQuestionCommand.Subscribe(() =>
             {
                 ClearCommand.Execute();
+                AgariTile.Value = Tile.CreateInstance<Dummy>();
                 melds = CreateMeldsRandomly();
                 int index = 0;
                 var tileList = melds.SelectMany(x => x.Tiles).ToList();
                 foreach (var tile in tileList)
                 {
-                    if (melds.SelectMany(x => x.Tiles).Count() == index + 1)
+                    var tileCount = melds.SelectMany(x => x.Tiles).Count();
+                    if (tileCount == index + 1)
                     {
-                        AgariTile.Value = melds.OfType<Models.Yaku.Meld.Double>().First().Tiles[0];
+                        var rand2 = new Random();
+                        var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount - 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).ToList();
+                        var IDX = rand2.Next(0, readyHands.SelectMany(x => x.WaitingTiles).Count());
+                        AgariTile.Value = readyHands.SelectMany(x => x.WaitingTiles).ElementAt(IDX);
                         break;
                     }
                     switch (index++)
@@ -636,114 +642,98 @@ namespace Tenpai.ViewModels
                         yaku.IsEnable.Value = false;
                     }
                 }
+                ConstructHand();
                 RaisePropertyChanged(nameof(EnabledYakus));
             })
             .AddTo(_disposables);
             Tile0.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile1.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile2.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile3.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile4.Subscribe(_ =>
             {
-                SortIf();
-                ConstructHand();
+                SortIf();    
             })
             .AddTo(_disposables);
             Tile5.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile6.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile7.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile8.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile9.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile10.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile11.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile12.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile13.Subscribe(_ =>
             {
-                SortIf();
-                ConstructHand();
+                SortIf();    
             })
             .AddTo(_disposables);
             Tile14.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile15.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile16.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             DoraDisplayTile0.Subscribe(_ =>
             {
-                ConstructHand();
+                ConstructHand();    
             })
             .AddTo(_disposables);
             DoraDisplayTile1.Subscribe(_ =>
@@ -793,7 +783,6 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             AgariTile.Subscribe(_ =>
             {
-                ConstructHand();
             })
             .AddTo(_disposables);
             IsArrangingTiles.Subscribe(flag =>
@@ -1191,13 +1180,13 @@ namespace Tenpai.ViewModels
                 Tile.CreateInstance<Red>(),
             };
 
+            GenerateDouble(ret, rand, yama);
 
             for (int i = 0; i < 4; i++)
             {
                 GenerateFourMelds(ret, types, rand, yama);
             }
 
-            GenerateDouble(ret, rand, yama);
 
             return ret.ToArray();
         }
@@ -1330,14 +1319,17 @@ namespace Tenpai.ViewModels
                 return;
             }
             ReadyHandsForQuiz.Clear();
-            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).ToList();
+            readyHands = readyHands.Where(x => x.WaitingTiles.ContainsRedSuitedTileIncluding(AgariTile.Value)).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x =>
             {
                 x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
                 MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value, SelectedHonbaSu.Value);
             });
             RemoveUnder12HanYakuFromYakuList(readyHands);
-            ReadyHandsForQuiz.AddRange(readyHands.Where(x => x.WaitingTiles.First().EqualsRedSuitedTileIncluding(AgariTile.Value)).OrderByDescending(x => x.Score).ThenByDescending(x => x.SumHanCount).ThenByDescending(x => x.HuSum.Value));
+            var rand = new Random();
+            int index = rand.Next(0, readyHands.Count());
+            ReadyHandsForQuiz.Add(readyHands[index]);
             RaisePropertyChanged(nameof(EnabledYakus));
         }
 
@@ -1363,7 +1355,7 @@ namespace Tenpai.ViewModels
             }
             SortIf();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => x is not Dummy).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => x is not Dummy).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x =>
             {
                 x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
@@ -1820,21 +1812,25 @@ namespace Tenpai.ViewModels
                     Console.WriteLine($"Tile{i}: {Tile13.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile13.Value.Description} = {tile.Description}");
                     Tile13.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
                 case 14:
                     Console.WriteLine($"Tile{i}: {Tile14.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile14.Value.Description} = {tile.Description}");
                     Tile14.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
                 case 15:
                     Console.WriteLine($"Tile{i}: {Tile15.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile15.Value.Description} = {tile.Description}");
                     Tile15.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
                 case 16:
                     Console.WriteLine($"Tile{i}: {Tile16.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile16.Value.Description} = {tile.Description}");
                     Tile16.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
             }
         }

@@ -1,4 +1,5 @@
-﻿using Tenpai.Extensions;
+﻿using System.Linq;
+using Tenpai.Extensions;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Models.Yaku.Meld
@@ -13,10 +14,17 @@ namespace Tenpai.Models.Yaku.Meld
             : base(melds)
         { }
 
-        public ManualWaitReadyHand(Tile wait, params Meld[] melds)
+        public ManualWaitReadyHand(IncompletedMeld waitForm, Tile waitingTile, params Meld[] melds)
             : base(melds)
         {
-            WaitingTiles = new Tile[] { wait };
+            WaitingTiles = new Tile[] { waitingTile };
+            WaitForm = new Meld[] { waitForm };
+        }
+        public ManualWaitReadyHand(Tile waitingTile, params Meld[] melds)
+            : base(melds)
+        {
+            WaitingTiles = new Tile[] { waitingTile };
+            WaitForm = melds.Where(x => x is IncompletedMeld).ToArray();
         }
 
         public ManualWaitReadyHand(Tile wait1, Tile wait2, params Meld[] melds)
@@ -25,10 +33,18 @@ namespace Tenpai.Models.Yaku.Meld
             WaitingTiles = new Tile[] { wait1, wait2 };
         }
 
+        public ManualWaitReadyHand(IncompletedMeld waitForm, Tile[] waitTiles, params Meld[] melds)
+            : base(melds)
+        {
+            WaitingTiles = waitTiles;
+            WaitForm = new Meld[] { waitForm };
+        }
+
         public ManualWaitReadyHand(Tile[] waitTiles, params Meld[] melds)
             : base(melds)
         {
             WaitingTiles = waitTiles;
+            WaitForm = melds.Where(x => x is IncompletedMeld).ToArray();
         }
 
         private Tile[] _WaitTiles;

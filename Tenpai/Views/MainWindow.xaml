@@ -621,7 +621,7 @@
                                                                     <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
                                                                 </StackPanel>
                                                             </DataTemplate>
-                                                            <DataTemplate DataType="{x:Type meld:ThirteenWait}" />
+                                                            <DataTemplate DataType="{x:Type meld:ThirteenSingleWait}" />
                                                             <DataTemplate DataType="{x:Type meld:Single}">
                                                                 <views:TilePlaceholder TileType="{Binding Tiles[0]}" />
                                                             </DataTemplate>
@@ -928,7 +928,7 @@
                                                                 <views:TilePlaceholder TileType="{Binding Tiles[1]}" />
                                                             </StackPanel>
                                                         </DataTemplate>
-                                                        <DataTemplate DataType="{x:Type meld:ThirteenWait}" />
+                                                        <DataTemplate DataType="{x:Type meld:ThirteenSingleWait}" />
                                                         <DataTemplate DataType="{x:Type meld:Single}">
                                                             <StackPanel Margin="5" Orientation="Horizontal">
                                                                 <views:TilePlaceholder TileType="{Binding Tiles[0]}" />

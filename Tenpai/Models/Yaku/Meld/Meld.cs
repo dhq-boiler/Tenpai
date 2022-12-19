@@ -113,7 +113,7 @@ namespace Tenpai.Models.Yaku.Meld
             {
                 return 2;
             }
-            else if (this is ClosedWait || this is EdgeWait || this is Single || this is ThirteenWait)
+            else if (this is ClosedWait || this is EdgeWait || this is Single || this is ThirteenSingleWait)
             {
                 return 2;
             }
@@ -269,7 +269,7 @@ namespace Tenpai.Models.Yaku.Meld
             {
                 return new Double(s.Tiles[0], tile);
             }
-            else if (meld is ThirteenWait t)
+            else if (meld is ThirteenSingleWait t)
             {
                 return new Single(tile);
             }

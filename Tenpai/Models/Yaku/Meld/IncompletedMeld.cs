@@ -206,7 +206,7 @@ namespace Tenpai.Models.Yaku.Meld
             {
                 return new Double(s.Tiles[0], tile);
             }
-            else if (incompletedMeld is ThirteenWait tw)
+            else if (incompletedMeld is ThirteenSingleWait tw)
             {
                 return new Single(MeldStatus.COMPLETED, tw.WaitTiles.Single());
             }
