@@ -192,7 +192,7 @@ namespace Tenpai.Test
                                                            new Run<Character_4,Character_5,Character_6>(),
                                                            new Run<Dot_3,Dot_4,Dot_5>(),
                                                            new Double<Dot_1>(),
-                                                           new Run<Bamboo_4, Bamboo_5, Bamboo_6>())))
+                                                           new OpenWait<Bamboo_3, Bamboo_4, Bamboo_5, Bamboo_6>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -229,7 +229,7 @@ namespace Tenpai.Test
             {
                 if (completedHand.Equals(new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
                                                         new Run<Dot_5, Dot_6, Dot_7>(),
-                                                        new Double<Bamboo_6>(),
+                                                        new Single<Bamboo_6>(),
                                                         new Triple<Bamboo_7>(),
                                                         new Run<Character_6, Character_7, Character_8>())))
                 {
@@ -270,7 +270,7 @@ namespace Tenpai.Test
                                                            new Triple<Character_3>(),
                                                            new Triple<Character_4>(),
                                                            new Triple<Dot_5>(),
-                                                           new Double<Character_8>())))
+                                                           new Single<Character_8>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -278,7 +278,7 @@ namespace Tenpai.Test
                                                                 new Run<Character_2, Character_3, Character_4>(),
                                                                 new Run<Character_2, Character_3, Character_4>(),
                                                                 new Triple<Dot_5>(),
-                                                                new Double<Character_8>())))
+                                                                new Single<Character_8>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -287,7 +287,7 @@ namespace Tenpai.Test
                     Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
             }
-            Assert.That(completedHands, Has.Length.EqualTo(2));
+            Assert.That(completedHands, Has.Length.EqualTo(1));
         }
 
         [Test]
@@ -320,7 +320,7 @@ namespace Tenpai.Test
                                                            new Double<Dot_5>(),
                                                            new Double<Character_8>(),
                                                            new Double<East>(),
-                                                           new Double<White>())))
+                                                           new Single<White>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -378,8 +378,16 @@ namespace Tenpai.Test
                     {
                         Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
+                    if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
+                                                       new EdgeWait<Bamboo_1, Bamboo_2, Bamboo_3>(),
+                                                       new Run<Bamboo_3, Bamboo_4, Bamboo_5>(),
+                                                       new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
+                                                       new Triple<Bamboo_9>())))
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
-                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
+                                                            new OpenWait<Bamboo_1, Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Double<Bamboo_9>())))
@@ -426,7 +434,47 @@ namespace Tenpai.Test
                     {
                         Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
-                    else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
+                    else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
+                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
+                                                            new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
+                                                            new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
+                                                            new Double<Bamboo_9>())))
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
+                    else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
+                                                            new OpenWait<Bamboo_1, Bamboo_2, Bamboo_3, Bamboo_4>(),
+                                                            new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
+                                                            new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
+                                                            new Triple<Bamboo_9>())))
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
+                    else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
+                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
+                                                            new OpenWait<Bamboo_4, Bamboo_5, Bamboo_6, Bamboo_7>(),
+                                                            new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
+                                                            new Triple<Bamboo_9>())))
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
+                    else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
+                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
+                                                            new OpenWait<Bamboo_3, Bamboo_4, Bamboo_5, Bamboo_6>(),
+                                                            new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
+                                                            new Triple<Bamboo_9>())))
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
+                    else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
+                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
+                                                            new Run<Bamboo_4, Bamboo_5, Bamboo_6>(),
+                                                            new OpenWait<Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9>(),
+                                                            new Triple<Bamboo_9>())))
+                    {
+                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    }
+                    else if (completedHand.Equals(new CompletedHand(new Double<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                             new Run<Bamboo_8, Bamboo_9, Bamboo_7>(),
@@ -444,7 +492,7 @@ namespace Tenpai.Test
                     }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
-                                                            new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
+                                                            new OpenWait<Bamboo_4, Bamboo_5, Bamboo_6, Bamboo_7>(),
                                                             new Run<Bamboo_7, Bamboo_8, Bamboo_9>(),
                                                             new Double<Bamboo_9>())))
                     {
@@ -467,7 +515,7 @@ namespace Tenpai.Test
                         Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
-                                                            new Double<Bamboo_2>(),
+                                                            new Single<Bamboo_2>(),
                                                             new Run<Bamboo_3, Bamboo_4, Bamboo_5>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
@@ -476,7 +524,7 @@ namespace Tenpai.Test
                     }
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
-                                                            new Double<Bamboo_5>(),
+                                                            new Single<Bamboo_5>(),
                                                             new Run<Bamboo_6, Bamboo_7, Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
                     {
@@ -485,7 +533,7 @@ namespace Tenpai.Test
                     else if (completedHand.Equals(new CompletedHand(new Triple<Bamboo_1>(),
                                                             new Run<Bamboo_2, Bamboo_3, Bamboo_4>(),
                                                             new Run<Bamboo_5, Bamboo_6, Bamboo_7>(),
-                                                            new Double<Bamboo_8>(),
+                                                            new Single<Bamboo_8>(),
                                                             new Triple<Bamboo_9>())))
                     {
                         Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
@@ -539,224 +587,444 @@ namespace Tenpai.Test
                 TileCollection addedTiles = new TileCollection(tiles);
                 addedTiles.Add(add);
                 Console.WriteLine(addedTiles);
-                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Bamboo_1>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+                var completedHands = MeldDetector.FindCompletedHands(addedTiles, null, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance(add), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
                 Assert.AreEqual(1, completedHands.Count());
                 foreach (var completedHand in completedHands)
                 {
-                    if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                               new Double<Character_9>(),
-                                                               new Single<Dot_1>(),
-                                                               new Single<Dot_9>(),
-                                                               new Single<Bamboo_1>(),
-                                                               new Single<Bamboo_9>(),
-                                                               new Single<East>(),
-                                                               new Single<South>(),
-                                                               new Single<West>(),
-                                                               new Single<North>(),
-                                                               new Single<White>(),
-                                                               new Single<Green>(),
-                                                               new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Double<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Double<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Double<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Double<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Double<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Double<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Double<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Double<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Double<White>(),
-                                                           new Single<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Double<Green>(),
-                                                           new Single<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
-                                                           new Single<Character_9>(),
-                                                           new Single<Dot_1>(),
-                                                           new Single<Dot_9>(),
-                                                           new Single<Bamboo_1>(),
-                                                           new Single<Bamboo_9>(),
-                                                           new Single<East>(),
-                                                           new Single<South>(),
-                                                           new Single<West>(),
-                                                           new Single<North>(),
-                                                           new Single<White>(),
-                                                           new Single<Green>(),
-                                                           new Double<Red>())))
-                    {
-                        Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
-                    else
-                    {
-                        Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
-                    }
+                    BruteForce(addTiles, completedHand);
+                    //if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                        new ThirteenWait<Character_9>(),
+                    //                                        new Single<Dot_1>(),
+                    //                                        new Single<Dot_9>(),
+                    //                                        new Single<Bamboo_1>(),
+                    //                                        new Single<Bamboo_9>(),
+                    //                                        new Single<East>(),
+                    //                                        new Single<South>(),
+                    //                                        new Single<West>(),
+                    //                                        new Single<North>(),
+                    //                                        new Single<White>(),
+                    //                                        new Single<Green>(),
+                    //                                        new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new ThirteenWait<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new ThirteenWait<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new ThirteenWait<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new ThirteenWait<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new ThirteenWait<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new ThirteenWait<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new ThirteenWait<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new ThirteenWait<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new ThirteenWait<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new ThirteenWait<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new ThirteenWait<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Double<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                           new Double<Character_9>(),
+                    //                                           new Single<Dot_1>(),
+                    //                                           new Single<Dot_9>(),
+                    //                                           new Single<Bamboo_1>(),
+                    //                                           new Single<Bamboo_9>(),
+                    //                                           new Single<East>(),
+                    //                                           new Single<South>(),
+                    //                                           new Single<West>(),
+                    //                                           new Single<North>(),
+                    //                                           new Single<White>(),
+                    //                                           new Single<Green>(),
+                    //                                           new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Double<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Double<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Double<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Double<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Double<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Double<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Double<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Double<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Double<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Double<Green>(),
+                    //                                       new Single<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else if (completedHand.Equals(new CompletedHand(new Single<Character_1>(),
+                    //                                       new Single<Character_9>(),
+                    //                                       new Single<Dot_1>(),
+                    //                                       new Single<Dot_9>(),
+                    //                                       new Single<Bamboo_1>(),
+                    //                                       new Single<Bamboo_9>(),
+                    //                                       new Single<East>(),
+                    //                                       new Single<South>(),
+                    //                                       new Single<West>(),
+                    //                                       new Single<North>(),
+                    //                                       new Single<White>(),
+                    //                                       new Single<Green>(),
+                    //                                       new Double<Red>())))
+                    //{
+                    //    Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
+                    //else
+                    //{
+                    //    Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                    //}
                 }
             }
+        }
+
+        private static void BruteForce(TileCollection addTiles, CompletedHand completedHand)
+        {
+            foreach (var add1 in addTiles)
+            {
+                var melds = new List<Meld>();
+                melds.Add(new ThirteenSingleWait(add1));
+                foreach (var add2 in addTiles.Except(new Tile[] { add1 })) //単騎
+                {
+                    melds.Add(new Models.Yaku.Meld.Single(add2));
+                    foreach (var add3 in addTiles.Except(new Tile[] { add1, add2 }))
+                    {
+                        melds.Add(new Models.Yaku.Meld.Double(add3));
+                        var cloneCompletedHand = new CompletedHand(melds.ToArray());
+                        if (completedHand.Equals(cloneCompletedHand))
+                        {
+                            Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
+                            return;
+                        }
+                        melds.Remove(new Models.Yaku.Meld.Double(add3));
+                    }
+                    melds.Remove(new Models.Yaku.Meld.Single(add2));
+                }
+            }
+
+            Assert.Fail($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
         }
 
         [Test]
@@ -800,7 +1068,7 @@ namespace Tenpai.Test
                                                                new Run<Character_3, Character_4, Character_5>(),
                                                                new Double<Dot_1>(),
                                                                new Run<Dot_6, Dot_7, Dot_8>(),
-                                                               new Run<Bamboo_6, Bamboo_7, Bamboo_8>())))
+                                                               new OpenWait<Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9>())))
                     {
                         Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
@@ -808,7 +1076,7 @@ namespace Tenpai.Test
                                                                     new Run<Character_3, Character_4, Character_5>(),
                                                                     new Double<Dot_1>(),
                                                                     new Run<Dot_6, Dot_7, Dot_8>(),
-                                                                    new Run<Bamboo_6, Bamboo_7, Bamboo_8>())))
+                                                                    new OpenWait<Bamboo_6, Bamboo_7, Bamboo_8, Bamboo_9>())))
                     {
                         Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                     }
@@ -842,7 +1110,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_6>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_4>(),
@@ -892,7 +1160,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_7>(),
                     Tile.CreateInstance<Character_8>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_6>(),
@@ -942,7 +1210,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Character_8>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
             Console.WriteLine("=========================================");
             foreach (var readyHand in readyHands)
             {
@@ -1010,7 +1278,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<White>(),
                     Tile.CreateInstance<Dummy>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<White>(),
@@ -1051,7 +1319,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Bamboo_9>(),
                     Tile.CreateInstance<Bamboo_9>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection()).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection()).OrderBy(x => x.WaitingTiles.ElementAt(0).ToString());
             foreach (var readyHand in readyHands)
             {
                 if (readyHand.Equals(new ManualWaitReadyHand(Tile.CreateInstance<Bamboo_1>(),
@@ -1216,7 +1484,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Green>(),
                     Tile.CreateInstance<Red>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
             Assert.AreEqual(13, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
@@ -1469,7 +1737,7 @@ namespace Tenpai.Test
                     Tile.CreateInstance<Red>(),
                     Tile.CreateInstance<Red>(),
                 });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
             Assert.AreEqual(1, readyHands.Count());
             foreach (var readyHand in readyHands)
             {
@@ -1723,7 +1991,7 @@ namespace Tenpai.Test
             {
                 if (completedHand.Equals(new CompletedHand(new Run<Character_2, Character_3, Character_4>(),
                                                            new Run<Character_2, Character_3, Character_4>(),
-                                                           new Run<Character_3, Character_4, Character_5>(),
+                                                           new OpenWait<Character_2, Character_3, Character_4, Character_5>(),
                                                            new Run<Dot_7, Dot_8, Dot_9>(),
                                                            new Double<Bamboo_6>())))
                 { }
@@ -1753,7 +2021,7 @@ namespace Tenpai.Test
                 Tile.CreateInstance<Bamboo_6>(),
                 Tile.CreateInstance<Bamboo_6>(),
             });
-            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
+            var readyHands = MeldDetector.FindReadyHands(tiles, null, 13, ViewModels.AgariType.Tsumo, null, ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
             Console.WriteLine("=========================================");
             foreach (var readyHand in readyHands)
             {
@@ -1838,7 +2106,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Triple<Red>(),
                                                            new Triple<North>(),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -1882,7 +2150,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Triple<Red>(),
                                                            new Quad<North>(KongType.LargeMeldedKong),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -1926,7 +2194,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Triple<Red>(),
                                                            new Quad<North>(KongType.ConcealedKong),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -1966,7 +2234,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Triple<Character_1>(),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
-                                                           new Double<Dot_9>())))
+                                                           new Single<Dot_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2010,7 +2278,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Triple<Character_1>(),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
-                                                           new Double<Dot_9>())))
+                                                           new Single<Dot_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2055,7 +2323,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Quad<Character_1>(KongType.ConcealedKong),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
-                                                           new Double<Dot_9>())))
+                                                           new Single<Dot_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2100,7 +2368,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Quad<Character_1>(KongType.LargeMeldedKong),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
-                                                           new Double<Dot_9>())))
+                                                           new Single<Dot_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2145,7 +2413,7 @@ namespace Tenpai.Test
                                                            new Run<Character_7, Character_8, Character_9>(),
                                                            new Quad<Character_1>(KongType.SmallMeldedKong),
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
-                                                           new Double<Dot_9>())))
+                                                           new Single<Dot_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2185,7 +2453,7 @@ namespace Tenpai.Test
                                                            new Triple<Character_9>(),
                                                            new Triple<Red>(),
                                                            new Triple<North>(),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2229,7 +2497,7 @@ namespace Tenpai.Test
                                                            new Triple<Character_9>(),
                                                            new Triple<Red>(),
                                                            new Triple<North>(),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2274,7 +2542,7 @@ namespace Tenpai.Test
                                                            new Triple<Character_9>(),
                                                            new Quad<Red>(KongType.ConcealedKong),
                                                            new Triple<North>(),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2319,7 +2587,7 @@ namespace Tenpai.Test
                                                            new Triple<Character_9>(),
                                                            new Quad<Red>(KongType.LargeMeldedKong),
                                                            new Triple<North>(),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2364,7 +2632,7 @@ namespace Tenpai.Test
                                                            new Triple<Character_9>(),
                                                            new Quad<Red>(KongType.SmallMeldedKong),
                                                            new Triple<North>(),
-                                                           new Double<East>())))
+                                                           new Single<East>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2403,7 +2671,7 @@ namespace Tenpai.Test
                                                            new Triple<Dot_9>(),
                                                            new Triple<Bamboo_1>(),
                                                            new Triple<Character_1>(),
-                                                           new Double<Character_9>())))
+                                                           new Single<Character_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2446,7 +2714,7 @@ namespace Tenpai.Test
                                                            new Triple<Dot_9>(),
                                                            new Triple<Bamboo_1>(),
                                                            new Triple<Character_1>(),
-                                                           new Double<Character_9>())))
+                                                           new Single<Character_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2490,7 +2758,7 @@ namespace Tenpai.Test
                                                            new Triple<Dot_9>(),
                                                            new Quad<Bamboo_1>(KongType.ConcealedKong),
                                                            new Triple<Character_1>(),
-                                                           new Double<Character_9>())))
+                                                           new Single<Character_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2534,7 +2802,7 @@ namespace Tenpai.Test
                                                            new Triple<Dot_9>(),
                                                            new Quad<Bamboo_1>(KongType.LargeMeldedKong),
                                                            new Triple<Character_1>(),
-                                                           new Double<Character_9>())))
+                                                           new Single<Character_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2578,7 +2846,7 @@ namespace Tenpai.Test
                                                            new Triple<Dot_9>(),
                                                            new Quad<Bamboo_1>(KongType.SmallMeldedKong),
                                                            new Triple<Character_1>(),
-                                                           new Double<Character_9>())))
+                                                           new Single<Character_9>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2622,7 +2890,7 @@ namespace Tenpai.Test
                                                            new Triple<Bamboo_2>(),
                                                            new Triple<Bamboo_3>(),
                                                            new Triple<White>(),
-                                                           new Double<Red>())))
+                                                           new Single<Red>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2666,7 +2934,7 @@ namespace Tenpai.Test
                                                            new Triple<Bamboo_1>(),
                                                            new Triple<East>(),
                                                            new Triple<White>(),
-                                                           new Double<Red>())))
+                                                           new Single<Red>())))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
                 }
@@ -2708,7 +2976,7 @@ namespace Tenpai.Test
                                                            new Run<Bamboo_1, Bamboo_2, Bamboo_3>(),
                                                            new Run<Dot_1, Dot_2, Dot_3>(),
                                                            new Run<Dot_7, Dot_8, Dot_9>(),
-                                                           new Double<Character_9>()))
+                                                           new Single<Character_9>()))
                     && completedHand.Yakus.Contains(new ThreeColorRuns()))
                 {
                     Console.WriteLine($"{completedHand} {Convert.ToString(completedHand.GetHashCode(), 2).PadLeft(32, '0')}");
@@ -2744,14 +3012,14 @@ namespace Tenpai.Test
             {
             };
             var completedHands = MeldDetector.FindCompletedHands(tiles, melds, 14, ViewModels.AgariType.Tsumo, Tile.CreateInstance<Character_9>(), ViewModels.WindOfTheRound.East, ViewModels.OnesOwnWind.East, new DoraDisplayTileCollection(), new DoraDisplayTileCollection());
-            Assert.That(completedHands, Has.Length.EqualTo(2));
+            Assert.That(completedHands, Has.Length.EqualTo(1));
             foreach (var completedHand in completedHands)
             {
                 if (completedHand.Equals(new CompletedHand(new Run<Character_1, Character_2, Character_3>(),
                                                            new Run<Character_1, Character_2, Character_3>(),
                                                            new Run<Character_1, Character_2, Character_3>(),
                                                            new Run<Dot_7, Dot_8, Dot_9>(),
-                                                           new Double<Character_9>()))
+                                                           new Single<Character_9>()))
                     && !completedHand.Yakus.Contains(new ThreeColorRuns())
                     && completedHand.Yakus.Contains(new PureOutsideHand()))
                 {
@@ -2761,7 +3029,7 @@ namespace Tenpai.Test
                                                                 new Triple<Character_2>(),
                                                                 new Triple<Character_3>(),
                                                                 new Run<Dot_7, Dot_8, Dot_9>(),
-                                                                new Double<Character_9>()))
+                                                                new Single<Character_9>()))
                          && !completedHand.Yakus.Contains(new ThreeColorRuns())
                          && !completedHand.Yakus.Contains(new PureOutsideHand())
                          && completedHand.Yakus.Contains(new ThreeConcealedTriples()))

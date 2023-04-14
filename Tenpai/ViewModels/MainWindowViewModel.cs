@@ -12,6 +12,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Tenpai.Extensions;
 using Tenpai.Models;
 using Tenpai.Models.Tiles;
 using Tenpai.Models.Yaku;
@@ -74,7 +75,16 @@ namespace Tenpai.ViewModels
         public ReactiveCommand<Call> DaiminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCommand<Call> ShouminkanCommand { get; } = new ReactiveCommand<Call>();
         public ReactiveCollection<ReadyHand> ReadyHands { get; } = new ReactiveCollection<ReadyHand>();
+        public ReactiveCollection<ReadyHand> ReadyHandsForQuiz { get; } = new ReactiveCollection<ReadyHand>();
         public ReactiveCollection<Yaku> Yakus { get; } = new ReactiveCollection<Yaku>();
+        public ReactiveCollection<Yaku> EnabledYakus
+        {
+            get {
+                var ret = new ReactiveCollection<Yaku>();
+                ret.AddRange(Yakus.Where(x => x.IsEnable.Value));
+                return ret;
+            }
+        }
         public ReactivePropertySlim<int> tileCount { get; } = new ReactivePropertySlim<int>(13);
         public ReactivePropertySlim<AgariType> AgariType { get; } = new ReactivePropertySlim<AgariType>();
         public ReadOnlyReactivePropertySlim<int> AgariTypeAsInt { get; }
@@ -84,6 +94,9 @@ namespace Tenpai.ViewModels
         public ReactiveCollection<int> HonbaSu { get; } = new ReactiveCollection<int>();
         public ReactivePropertySlim<int> SelectedHonbaSu { get; } = new ReactivePropertySlim<int>();
         public ReactiveCommand ClearCommand { get; } = new ReactiveCommand();
+        public ReactivePropertySlim<int> AnswerHanCount { get; } = new ReactivePropertySlim<int>();
+        public ReactiveCommand AnswerElementaryLevelCommand { get; } = new ReactiveCommand();
+        public ReactiveCommand RandomQuestionCommand { get; } = new ReactiveCommand();
 
         private int sarashiCount = 0;
 
@@ -91,6 +104,7 @@ namespace Tenpai.ViewModels
         public Tile[] TilesWithoutAgariTile { get { return new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value }; } }
 
         private bool sortflag = false;
+        private Meld[] melds;
 
         public MainWindowViewModel()
         {
@@ -326,7 +340,8 @@ namespace Tenpai.ViewModels
                 UpdateTile(new Dummy(), rotate, 1);
                 UpdateTileVisibilityToCollapsed(rotate.Code, 3);
                 var updateOrderList = Tiles.Where(x => x.Code.Equals(rotate.Code) && x.Order >= rotate.Order && x.CallFrom != rotate.CallFrom).ToList();
-                updateOrderList.ForEach(x => x.Order++);
+                var index = 0;
+                updateOrderList.ForEach(x => x.Order += ++index);
 
                 SortIf();
                 
@@ -487,7 +502,15 @@ namespace Tenpai.ViewModels
                 {
                     var newTile = dialogResult.Parameters.GetValue<Tile>("TileType");
                     newTile.Order = Tiles.Where(x => x.Code == newTile.Code).Count();
-                    tp.TileType = newTile;
+                    if (newTile is Dummy) //牌が削除された
+                    {
+                        tp.TileType = newTile;
+                        tileCount.Value--;
+                    }
+                    else
+                    {
+                        tp.TileType = newTile;
+                    }
                 }
             })
             .AddTo(_disposables);
@@ -533,111 +556,111 @@ namespace Tenpai.ViewModels
                 }
             })
             .AddTo(_disposables);
+            AnswerElementaryLevelCommand.Subscribe(() =>
+            {
+                DialogParameters param = new DialogParameters();
+                param.Add("Judge", AnswerHanCount.Value == ReadyHandsForQuiz[0].Yakus.Sum(x => x.HanCount(false)));
+                IDialogResult result = null;
+                dialogService.ShowDialog(nameof(CheckAnswer), param, ret => result = ret);
+            })
+            .AddTo(_disposables);
+            RandomQuestionCommand.Subscribe(() =>
+            {
+                while (true)
+                {
+                    RandomQuestionLoop();
+                    break;
+                }
+            })
+            .AddTo(_disposables);
             Tile0.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile1.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile2.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile3.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile4.Subscribe(_ =>
             {
-                SortIf();
-                ConstructHand();
+                SortIf();    
             })
             .AddTo(_disposables);
             Tile5.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile6.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile7.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile8.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile9.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile10.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile11.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile12.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile13.Subscribe(_ =>
             {
-                SortIf();
-                ConstructHand();
+                SortIf();    
             })
             .AddTo(_disposables);
             Tile14.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile15.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             Tile16.Subscribe(_ =>
             {
                 SortIf();
-                ConstructHand();
             })
             .AddTo(_disposables);
             DoraDisplayTile0.Subscribe(_ =>
             {
-                ConstructHand();
+                ConstructHand();    
             })
             .AddTo(_disposables);
             DoraDisplayTile1.Subscribe(_ =>
@@ -687,7 +710,6 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
             AgariTile.Subscribe(_ =>
             {
-                ConstructHand();
             })
             .AddTo(_disposables);
             IsArrangingTiles.Subscribe(flag =>
@@ -927,6 +949,372 @@ namespace Tenpai.ViewModels
             .AddTo(_disposables);
         }
 
+        private void RandomQuestionLoop()
+        {
+            ClearCommand.Execute();
+            AgariTile.Value = Tile.CreateInstance<Dummy>();
+            melds = CreateMeldsRandomly();
+            int index = 0;
+            var tileList = melds.SelectMany(x => x.Tiles).ToList();
+            foreach (var tile in tileList)
+            {
+                var tileCount = melds.SelectMany(x => x.Tiles).Count();
+                if (tileCount == index + 1)
+                {
+                    var rand2 = new Random();
+                    var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount - 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).ToList();
+                    if (!readyHands.Any())
+                    {
+                        return;
+                    }
+                    var IDX = rand2.Next(0, readyHands.SelectMany(x => x.WaitingTiles).Count());
+                    AgariTile.Value = readyHands.SelectMany(x => x.WaitingTiles).ElementAt(IDX);
+                    break;
+                }
+                switch (index++)
+                {
+                    case 0:
+                        Tile0.Value = tile;
+                        break;
+                    case 1:
+                        Tile1.Value = tile;
+                        break;
+                    case 2:
+                        Tile2.Value = tile;
+                        break;
+                    case 3:
+                        Tile3.Value = tile;
+                        break;
+                    case 4:
+                        Tile4.Value = tile;
+                        break;
+                    case 5:
+                        Tile5.Value = tile;
+                        break;
+                    case 6:
+                        Tile6.Value = tile;
+                        break;
+                    case 7:
+                        Tile7.Value = tile;
+                        break;
+                    case 8:
+                        Tile8.Value = tile;
+                        break;
+                    case 9:
+                        Tile9.Value = tile;
+                        break;
+                    case 10:
+                        Tile10.Value = tile;
+                        break;
+                    case 11:
+                        Tile11.Value = tile;
+                        break;
+                    case 12:
+                        Tile12.Value = tile;
+                        break;
+                    case 13:
+                        Tile13.Value = tile;
+                        break;
+                    case 14:
+                        Tile14.Value = tile;
+                        break;
+                    case 15:
+                        Tile15.Value = tile;
+                        break;
+                    case 16:
+                        Tile16.Value = tile;
+                        break;
+                }
+            }
+            var rand = new Random();
+            foreach (var yaku in Yakus)
+            {
+                var arrIndex = rand.Next(0, yaku.AppearanceProbabilityTable.Count());
+                if (yaku.AppearanceProbabilityTable[arrIndex])
+                {
+                    yaku.IsEnable.Value = true;
+                }
+                else
+                {
+                    yaku.IsEnable.Value = false;
+                }
+            }
+            ConstructHand();
+            RaisePropertyChanged(nameof(EnabledYakus));
+        }
+
+        private Meld[] CreateMeldsRandomly()
+        {
+            var ret = new List<Meld>();
+            var types = new List<Type>();
+            for (int i = 0; i < 4*4*4; i++)
+            {
+                types.Add(typeof(Run));
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                types.Add(typeof(Triple));
+            }
+            types.Add(typeof(Quad));
+            var rand = new Random();
+
+            var yama = new TileCollection()
+            {
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_1>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_2>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_3>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_4>(),
+                Tile.CreateInstance<Character_5>(),
+                Tile.CreateInstance<Character_5>(),
+                Tile.CreateInstance<Character_5>(),
+                Tile.CreateInstance<Character_5R>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_6>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_7>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_8>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+                Tile.CreateInstance<Character_9>(),
+
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_1>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_2>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_3>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_4>(),
+                Tile.CreateInstance<Dot_5>(),
+                Tile.CreateInstance<Dot_5>(),
+                Tile.CreateInstance<Dot_5>(),
+                Tile.CreateInstance<Dot_5R>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_6>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_7>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_8>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+                Tile.CreateInstance<Dot_9>(),
+
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_1>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_2>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_3>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_4>(),
+                Tile.CreateInstance<Bamboo_5>(),
+                Tile.CreateInstance<Bamboo_5>(),
+                Tile.CreateInstance<Bamboo_5>(),
+                Tile.CreateInstance<Bamboo_5R>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_6>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_7>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_8>(),
+                Tile.CreateInstance<Bamboo_9>(),
+                Tile.CreateInstance<Bamboo_9>(),
+                Tile.CreateInstance<Bamboo_9>(),
+                Tile.CreateInstance<Bamboo_9>(),
+
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<East>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<South>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<West>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<North>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<White>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Green>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+                Tile.CreateInstance<Red>(),
+            };
+
+            GenerateDouble(ret, rand, yama);
+
+            for (int i = 0; i < 4; i++)
+            {
+                GenerateFourMelds(ret, types, rand, yama);
+            }
+
+
+            return ret.ToArray();
+        }
+
+        private static void GenerateDouble(List<Meld> ret, Random rand, TileCollection yama)
+        {
+            while (true)
+            {
+                var yamaIndex = rand.Next(yama.Count);
+                var tile = yama[yamaIndex];
+                var tile2 = Tile.CreateInstance(tile.Code, Visibility.Visible, null);
+                if (!tile.EqualsRedSuitedTileIncluding(tile2))
+                {
+                    continue;
+                }
+                if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 1)
+                {
+                    continue;
+                }
+                if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile2)) < 1)
+                {
+                    continue;
+                }
+                yama.Remove(tile);
+                yama.Remove(tile2);
+                var meld = new Models.Yaku.Meld.Double(tile, tile2);
+                ret.Add(meld);
+                return;
+            }
+        }
+
+        private static void GenerateFourMelds(List<Meld> ret, List<Type> types, Random rand, TileCollection yama)
+        {
+            while (true)
+            {
+                var typesIndex = rand.Next(types.Count - 1);
+                var type = types[typesIndex];
+                if (type == typeof(Run))
+                {
+                    int i = 0;
+                    while (i < 3)
+                    {
+                        var yamaIndex = rand.Next(yama.Count);
+                        var tile = yama[yamaIndex];
+                        if (!(tile is Suits))
+                            continue;
+                        var tile2 = Tile.CreateInstance(tile.Code + 1, Visibility.Visible, null);
+                        var tile3 = Tile.CreateInstance(tile.Code + 2, Visibility.Visible, null);
+                        if (!tile.IsSameType(tile2) || !tile.IsSameType(tile3))
+                        {
+                            continue;
+                        }
+                        if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 1)
+                        {
+                            continue;
+                        }
+                        if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile2)) < 1)
+                        {
+                            continue;
+                        }
+                        if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile3)) < 1)
+                        {
+                            continue;
+                        }
+                        yama.Remove(tile);
+                        yama.Remove(tile2);
+                        yama.Remove(tile3);
+                        var meld = new Run(tile, tile2, tile3);
+                        ret.Add(meld);
+                        return;
+                    }
+                }
+                else if (type == typeof(Triple))
+                {
+                    var yamaIndex = rand.Next(yama.Count);
+                    var tile = yama[yamaIndex];
+
+                    if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 3)
+                        continue;
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        yama.Remove(tile);
+                    }
+                    var meld = new Triple(tile, tile, tile);
+                    ret.Add(meld);
+                    return;
+                }
+                else if (type == typeof(Quad))
+                {
+                    var yamaIndex = rand.Next(yama.Count);
+                    var tile = yama[yamaIndex];
+
+                    if (yama.Count(x => x.EqualsConsiderCodeAndRed(tile)) < 4)
+                        continue;
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        yama.Remove(tile);
+                    }
+                    var meld = new Quad(tile, tile, tile, tile);
+                    ret.Add(meld);
+                    return;
+                }
+            }
+        }
+
         private void ConstructHand()
         {
             if (tileCount.Value + 1 == Tiles.Where(x => x is not Dummy).Count())
@@ -941,14 +1329,36 @@ namespace Tenpai.ViewModels
             {
                 ReadyHands.Clear();
             }
+
+            Question();
+        }
+
+        private void Question()
+        {
+            if (tileCount.Value + 1 > Tiles.Where(x => x is not Dummy).Count())
+            {
+                return;
+            }
+            ReadyHandsForQuiz.Clear();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).ToList();
+            readyHands = readyHands.Where(x => x.WaitingTiles.ContainsRedSuitedTileIncluding(AgariTile.Value)).OrderBy(x => x.WaitingTiles[0]).ToList();
+            readyHands.ToList().ForEach(x =>
+            {
+                x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
+                MeldDetector.CalcScore(ref readyHands, OnesOwnWind.Value, SelectedHonbaSu.Value);
+            });
+            RemoveUnder12HanYakuFromYakuList(readyHands);
+            var rand = new Random();
+            int index = rand.Next(0, readyHands.Count());
+            ReadyHandsForQuiz.Add(readyHands[index]);
+            RaisePropertyChanged(nameof(EnabledYakus));
         }
 
         private void ConstructCompleteHands()
         {
-            SortIf();
             ReadyHands.Clear();
             var tiles = Tiles.Where(x => !(x is Dummy)).ToList();
-            var readyHands = MeldDetector.FindCompletedHands(tiles.ToArray(), SarashiHai.ToArray(), tileCount.Value + 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).ToList();
+            var readyHands = MeldDetector.FindCompletedHandsM(tiles.ToArray(), SarashiHai.ToArray(), tileCount.Value + 1, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).ToList();
             readyHands.ToList().ForEach(x =>
             {
                 x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
@@ -960,9 +1370,13 @@ namespace Tenpai.ViewModels
 
         private void ConstructReadyHands()
         {
+            if (TilesWithoutAgariTile.Where(x => !(x is Dummy)).Count() < 13)
+            {
+                return;
+            }
             SortIf();
             ReadyHands.Clear();
-            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => !(x is Dummy)).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
+            var readyHands = MeldDetector.FindReadyHands(TilesWithoutAgariTile.Where(x => x is not Dummy).ToArray(), SarashiHai.ToArray(), tileCount.Value, AgariType.Value, AgariTile.Value, WindOfTheRound.Value, OnesOwnWind.Value, new DoraDisplayTileCollection(new Tile[] { DoraDisplayTile0.Value, DoraDisplayTile1.Value, DoraDisplayTile2.Value, DoraDisplayTile3.Value, DoraDisplayTile4.Value }), new DoraDisplayTileCollection(new Tile[] { UraDoraDisplayTile0.Value, UraDoraDisplayTile1.Value, UraDoraDisplayTile2.Value, UraDoraDisplayTile3.Value, UraDoraDisplayTile4.Value })).OrderBy(x => x.WaitingTiles[0]).ToList();
             readyHands.ToList().ForEach(x =>
             {
                 x.Yakus.AddRange(this.Yakus.Where(y => y.IsEnable.Value));
@@ -1257,6 +1671,23 @@ namespace Tenpai.ViewModels
         {
             var tiles = new[] { Tile0.Value, Tile1.Value, Tile2.Value, Tile3.Value, Tile4.Value, Tile5.Value, Tile6.Value, Tile7.Value, Tile8.Value, Tile9.Value, Tile10.Value, Tile11.Value, Tile12.Value, Tile13.Value, Tile14.Value, Tile15.Value, Tile16.Value }.ToList();
             tiles.Sort();
+            Tile16.Value = Tile.CreateInstance<Dummy>();
+            Tile15.Value = Tile.CreateInstance<Dummy>();
+            Tile14.Value = Tile.CreateInstance<Dummy>();
+            Tile13.Value = Tile.CreateInstance<Dummy>();
+            Tile12.Value = Tile.CreateInstance<Dummy>();
+            Tile11.Value = Tile.CreateInstance<Dummy>();
+            Tile10.Value = Tile.CreateInstance<Dummy>();
+            Tile9.Value = Tile.CreateInstance<Dummy>();
+            Tile8.Value = Tile.CreateInstance<Dummy>();
+            Tile7.Value = Tile.CreateInstance<Dummy>();
+            Tile6.Value = Tile.CreateInstance<Dummy>();
+            Tile5.Value = Tile.CreateInstance<Dummy>();
+            Tile4.Value = Tile.CreateInstance<Dummy>();
+            Tile3.Value = Tile.CreateInstance<Dummy>();
+            Tile2.Value = Tile.CreateInstance<Dummy>();
+            Tile1.Value = Tile.CreateInstance<Dummy>();
+            Tile0.Value = Tile.CreateInstance<Dummy>();
             Tile0.Value = tiles[0];
             Tile1.Value = tiles[1];
             Tile2.Value = tiles[2];
@@ -1402,21 +1833,25 @@ namespace Tenpai.ViewModels
                     Console.WriteLine($"Tile{i}: {Tile13.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile13.Value.Description} = {tile.Description}");
                     Tile13.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
                 case 14:
                     Console.WriteLine($"Tile{i}: {Tile14.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile14.Value.Description} = {tile.Description}");
                     Tile14.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
                 case 15:
                     Console.WriteLine($"Tile{i}: {Tile15.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile15.Value.Description} = {tile.Description}");
                     Tile15.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
                 case 16:
                     Console.WriteLine($"Tile{i}: {Tile16.Value.Description} = {tile.Description}");
                     Trace.WriteLine($"Tile{i}: {Tile16.Value.Description} = {tile.Description}");
                     Tile16.Value = tile.Clone() as Tile;
+                    ConstructHand();
                     break;
             }
         }

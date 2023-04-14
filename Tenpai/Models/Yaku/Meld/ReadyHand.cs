@@ -23,6 +23,13 @@ namespace Tenpai.Models.Yaku.Meld
             Odd = odd;
         }
 
+        public ReadyHand(IncompletedMeld incompletedMeld, Tile[] odd, params Meld[] melds)
+            : base(melds)
+        {
+            WaitForm = new Meld[] { incompletedMeld };
+            Odd = odd;
+        }
+
         /// <summary>
         /// 合計翻数
         /// </summary>
@@ -69,6 +76,9 @@ namespace Tenpai.Models.Yaku.Meld
             {
             }
         }
+
+        public Meld[] WaitForm { get; set; }
+        public Tile AgariTile { get; internal set; }
 
         private IEnumerable<Meld[]> MakeRoundRobinCombinationByThirteenOrphans(Meld[] @base)
         {

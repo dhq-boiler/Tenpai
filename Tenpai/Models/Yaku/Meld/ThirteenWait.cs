@@ -1,66 +1,47 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Tenpai.Models.Tiles;
 
 namespace Tenpai.Models.Yaku.Meld
 {
     /// <summary>
-    /// 国士無双単騎待ち専用
+    /// 国士無双十三面待ち
     /// </summary>
     public class ThirteenWait : IncompletedMeld
     {
         public ThirteenWait()
             : base()
-        { }
+        {
+            SetWaits();
+        }
 
         public ThirteenWait(MeldStatus status)
             : base(status)
-        { }
-
-        public ThirteenWait(Tile wait)
-            : this()
         {
-            _Set.Add(wait);
-            _Waiting.Add(wait);
-        }
-        public override void ComputeWaitTiles()
-        {
-            _Waiting.Clear();
-            _Waiting.Add(_Set[0]);
+            SetWaits();
         }
 
-        public override void ComputeWaitTiles(TileCollection tiles2)
+        private void SetWaits()
         {
-            _Waiting.Clear(); 
-            var red = Tile.CreateRedInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
-            var normal = Tile.CreateInstance(_Set.First().Code, System.Windows.Visibility.Visible, null, tiles2.Count(x => x.EqualsRedSuitedTileIncluding(_Set.First())));
-
-            if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(red)).Count() == 0)
-            {
-                _Waiting.Add(red);
-            }
-            if (tiles2.Where(x => x.EqualsConsiderCodeAndRed(normal)).Count() <= 3)
-            {
-                _Waiting.Add(normal);
-            }
+            _Waiting.Add(Tile.CreateInstance<Character_1>());
+            _Waiting.Add(Tile.CreateInstance<Character_9>());
+            _Waiting.Add(Tile.CreateInstance<Dot_1>());
+            _Waiting.Add(Tile.CreateInstance<Dot_9>());
+            _Waiting.Add(Tile.CreateInstance<Bamboo_1>());
+            _Waiting.Add(Tile.CreateInstance<Bamboo_9>());
+            _Waiting.Add(Tile.CreateInstance<East>());
+            _Waiting.Add(Tile.CreateInstance<South>());
+            _Waiting.Add(Tile.CreateInstance<West>());
+            _Waiting.Add(Tile.CreateInstance<North>());
+            _Waiting.Add(Tile.CreateInstance<White>());
+            _Waiting.Add(Tile.CreateInstance<Green>());
+            _Waiting.Add(Tile.CreateInstance<Red>());
         }
 
-        public override bool Equals(object obj)
-        {
-            return obj is ThirteenWait
-                && _Waiting.SequenceEqual((obj as ThirteenWait)._Waiting);
-        }
-
-        public override int GetHashCode()
-        {
-            return _Waiting.Single().GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return "(" + _Waiting[0].ToString() + ")";
-        }
-        public override IncompletedMeld Clone(IncompletedMeld.MeldStatus status)
+        public override IncompletedMeld Clone(MeldStatus status)
         {
             var newObj = new ThirteenWait(status);
             newObj._Set = new TileCollection(_Set);
@@ -68,13 +49,5 @@ namespace Tenpai.Models.Yaku.Meld
             newObj._Waiting = new TileCollection(_Waiting);
             return newObj;
         }
-    }
-
-    public class ThirteenWait<W> : ThirteenWait
-        where W : Tile, new()
-    {
-        public ThirteenWait()
-            : base(Tile.CreateInstance<W>())
-        { }
     }
 }

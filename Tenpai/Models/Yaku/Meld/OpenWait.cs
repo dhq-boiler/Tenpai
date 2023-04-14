@@ -46,34 +46,34 @@ namespace Tenpai.Models.Yaku.Meld
             _Waiting.Clear();
             if (_Set[0].Code < _Set[1].Code)
             {
-                var tile1 = Tile.CreateInstance(_Set[0].Code - 1, Visibility.Visible, new RotateTransform(90));
+                var tile1 = Tile.CreateInstance(_Set[0].Code - 1, Visibility.Visible, null);
                 _Waiting.Add(tile1);
                 if (tile1 is IRedSuitedTile r1)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, null));
                 }
 
-                var tile2 = Tile.CreateInstance(_Set[1].Code + 1, Visibility.Visible, new RotateTransform(90));
+                var tile2 = Tile.CreateInstance(_Set[1].Code + 1, Visibility.Visible, null);
                 _Waiting.Add(tile2);
                 if (tile2 is IRedSuitedTile r2)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, null));
                 }
             }
             else
             {
-                var tile1 = Tile.CreateInstance(_Set[1].Code - 1, Visibility.Visible, new RotateTransform(90));
+                var tile1 = Tile.CreateInstance(_Set[1].Code - 1, Visibility.Visible, null);
                 _Waiting.Add(tile1);
                 if (tile1 is IRedSuitedTile r1)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, null));
                 }
 
-                var tile2 = Tile.CreateInstance(_Set[0].Code + 1, Visibility.Visible, new RotateTransform(90));
+                var tile2 = Tile.CreateInstance(_Set[0].Code + 1, Visibility.Visible, null);
                 _Waiting.Add(tile2);
                 if (tile2 is IRedSuitedTile r2)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, null));
                 }
             }
         }
@@ -87,34 +87,34 @@ namespace Tenpai.Models.Yaku.Meld
             _Waiting.Clear();
             if (_Set[0].Code < _Set[1].Code)
             {
-                var tile1 = Tile.CreateInstance(_Set[0].Code - 1, Visibility.Visible, new RotateTransform(90));
+                var tile1 = Tile.CreateInstance(_Set[0].Code - 1, Visibility.Visible, null);
                 _Waiting.Add(tile1);
                 if (tile1 is IRedSuitedTile r1)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, null));
                 }
 
-                var tile2 = Tile.CreateInstance(_Set[1].Code + 1, Visibility.Visible, new RotateTransform(90));
+                var tile2 = Tile.CreateInstance(_Set[1].Code + 1, Visibility.Visible, null);
                 _Waiting.Add(tile2);
                 if (tile2 is IRedSuitedTile r2)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, null));
                 }
             }
             else
             {
-                var tile1 = Tile.CreateInstance(_Set[1].Code - 1, Visibility.Visible, new RotateTransform(90));
+                var tile1 = Tile.CreateInstance(_Set[1].Code - 1, Visibility.Visible, null);
                 _Waiting.Add(tile1);
                 if (tile1 is IRedSuitedTile r1)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile1.Code, Visibility.Visible, null));
                 }
 
-                var tile2 = Tile.CreateInstance(_Set[0].Code + 1, Visibility.Visible, new RotateTransform(90));
+                var tile2 = Tile.CreateInstance(_Set[0].Code + 1, Visibility.Visible, null);
                 _Waiting.Add(tile2);
                 if (tile2 is IRedSuitedTile r2)
                 {
-                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, new RotateTransform(90)));
+                    _Waiting.Add(Tile.CreateRedInstance(tile2.Code, Visibility.Visible, null));
                 }
             }
         }
