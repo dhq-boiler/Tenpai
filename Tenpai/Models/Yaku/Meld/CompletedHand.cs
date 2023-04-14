@@ -17,9 +17,6 @@ namespace Tenpai.Models.Yaku.Meld
             : base(melds)
         { }
 
-        public Meld[] WaitForm { get; set; }
-        public Tile AgariTile { get; internal set; }
-
         public override bool Equals(object obj)
         {
             if (!(obj is CompletedHand))
@@ -36,6 +33,11 @@ namespace Tenpai.Models.Yaku.Meld
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} あがり：{AgariTile}";
         }
     }
 }

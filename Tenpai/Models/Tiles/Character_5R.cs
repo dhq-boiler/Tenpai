@@ -12,18 +12,5 @@ namespace Tenpai.Models.Tiles
         {
             IsRedSuited = true;
         }
-        public override int Number => 5;
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Character_5 b))
-                return false;
-            return IsRedSuited == b.IsRedSuited;
-        }
-
-        public override int GetHashCode()
-        {
-            return 4;
-        }
     }
 }

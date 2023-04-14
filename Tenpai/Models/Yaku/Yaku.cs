@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using Reactive.Bindings;
+using System;
 using System.Windows.Input;
 
 namespace Tenpai.Models.Yaku
@@ -52,6 +53,11 @@ namespace Tenpai.Models.Yaku
                 return CalledHanCount;
             else
                 return MenzenHanCount;
+        }
+
+        public virtual bool[] AppearanceProbabilityTable
+        {
+            get { return new bool[] { false }; }
         }
 
         public ICommand CheckedCommand { get; set; }
